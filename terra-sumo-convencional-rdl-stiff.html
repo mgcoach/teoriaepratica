@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script>(function(){var e=true;try{e=window.self!==window.top}catch(x){}if(e)document.documentElement.classList.add("embed")})();</script>
+<title>Variações do Levantamento Terra</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Animação interativa do terra sumô, convencional, RDL e stiff: torque no quadril, na lombar e no joelho e músculos de cada fase.">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: seletor das 4 variações; palco (vista lateral) ao lado do painel de torques e músculos da fase atual; curvas de torque comparando as 4; tabela-resumo e achados. Visual escuro deliberado (identidade MG COACH). */
+:root{
+  --bg:#0a0a0a;
+  --surface:#13110f;
+  --surface-2:#1b1815;
+  --line:#2c2622;
+  --fg:#f5efe8;
+  --muted:#9d9188;
+  --body:#5f5650;
+  --accent:#ff6b1a;
+  --hip:#ff6b1a;
+  --l5:#ffc24a;
+  --knee:#5cc6ff;
+  --display:"Big Shoulders Display", Impact, "Arial Narrow", sans-serif;
+  --text:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--fg)}
+html{-webkit-text-size-adjust:100%;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font-family:var(--text);font-size:15px;line-height:1.5}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));display:flex;flex-direction:column;gap:22px}
+.back{font-family:var(--mono);font-size:12px;color:var(--muted);text-decoration:none;align-self:flex-start;border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+.back:hover{color:var(--fg);border-color:var(--muted)}
+.embed .back{display:none}
+header{display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.eyebrow b{color:var(--accent);font-weight:600}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(40px,8vw,78px);line-height:.92;text-transform:uppercase;margin:0;text-wrap:balance}
+h1 em{font-style:normal;color:var(--accent)}
+.lede{margin:0;max-width:64ch;color:var(--muted);font-size:16px}
+.lede strong{color:var(--fg);font-weight:600}
+
+/* seletor */
+.picker{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.pick{display:flex;flex-direction:column;gap:2px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer;color:var(--fg);font:inherit;min-width:0}
+.pick b{font-family:var(--display);font-weight:700;font-size:24px;line-height:1;text-transform:uppercase;letter-spacing:.01em}
+.pick small{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.pick:hover{border-color:var(--muted)}
+.pick[aria-pressed="true"]{border-color:var(--accent);background:var(--surface-2);box-shadow:inset 0 -3px 0 var(--accent)}
+.pick[aria-pressed="true"] b{color:var(--accent)}
+
+/* palco + painel */
+.studio{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.stage-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.phase{display:flex;flex-direction:column;min-width:0}
+.phase b{font-family:var(--display);font-weight:700;font-size:22px;text-transform:uppercase;line-height:1.05}
+.phase small{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.btn{font:600 13px/1 var(--text);color:var(--fg);background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:9px 14px;cursor:pointer;min-width:92px}
+.btn:hover{border-color:var(--muted)}
+.canvas-box{position:relative;width:100%;aspect-ratio:140/176;max-width:100%}
+.canvas-box canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.scrub{padding:12px 14px 14px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
+.scrub label{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+.scrub output{font-family:var(--mono);color:var(--fg);font-variant-numeric:tabular-nums}
+.scrub .ends{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--body)}
+input[type=range]{width:100%;accent-color:var(--accent);margin:0}
+
+.side{display:flex;flex-direction:column;gap:14px;min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.panel h2,.panel h3{margin:0;font-family:var(--display);font-weight:700;font-size:24px;text-transform:uppercase;letter-spacing:.02em}
+.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.note{margin:0;color:var(--muted);font-size:14px;max-width:62ch}
+.kicker{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+
+.joints{display:flex;flex-direction:column;gap:12px}
+.joint{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;align-items:baseline}
+.joint .nm{display:flex;align-items:center;gap:8px;font-weight:600}
+.joint .nm i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.joint .val{font-family:var(--display);font-weight:700;font-size:26px;line-height:1;font-variant-numeric:tabular-nums;text-align:right}
+.joint .val small{font-size:14px;color:var(--muted);margin-left:2px}
+.joint .who{grid-column:1/-1;font-size:12.5px;color:var(--muted)}
+.meter{grid-column:1/-1;height:8px;border-radius:4px;background:var(--surface-2);position:relative;overflow:hidden;margin-top:4px}
+.meter i{position:absolute;top:0;bottom:0;left:0;width:0;border-radius:4px}
+.meter.bi::after{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--muted)}
+.bi-ends{grid-column:1/-1;display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--body)}
+
+.muscles{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.mus{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 10px;align-items:start;padding:9px 10px;border-radius:10px;background:var(--bg);border:1px solid var(--line)}
+.dots{display:flex;gap:3px;padding-top:6px}
+.dots span{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.dots span.on{background:var(--accent)}
+.mus b{font-weight:600;font-size:14.5px;line-height:1.3}
+.mus small{display:block;color:var(--muted);font-size:12.5px;line-height:1.35}
+.mus .ct{font-family:var(--mono);font-size:10.5px;color:var(--l5);text-transform:uppercase;letter-spacing:.04em;margin-left:6px}
+.legend-dots{display:flex;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+/* gráfico */
+.tabs{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--bg)}
+.tabs button{font:600 13px/1 var(--text);color:var(--muted);background:transparent;border:0;border-radius:999px;padding:8px 13px;cursor:pointer}
+.tabs button[aria-pressed="true"]{color:var(--bg)}
+.tabs button[data-j="hip"][aria-pressed="true"]{background:var(--hip)}
+.tabs button[data-j="l5"][aria-pressed="true"]{background:var(--l5)}
+.tabs button[data-j="knee"][aria-pressed="true"]{background:var(--knee)}
+.graph-box{position:relative;width:100%;aspect-ratio:600/280;max-width:100%}
+.graph-box canvas{position:absolute;inset:0;width:100%;height:100%}
+
+/* tabela */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:14px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td b{font-family:var(--display);font-size:19px;text-transform:uppercase;letter-spacing:.01em}
+
+.findings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:6px;min-width:0;background:var(--bg)}
+.card h4{margin:0;font-size:16.5px;font-weight:700;line-height:1.25}
+.card p{margin:0;color:var(--muted);font-size:14px}
+.card cite{font-style:normal;font-family:var(--mono);font-size:11.5px;color:var(--body)}
+.refs{margin:0;padding-left:18px;color:var(--muted);font-size:13px;display:flex;flex-direction:column;gap:4px}
+footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+footer b{color:var(--accent);font-weight:600}
+
+@media (max-width:860px){
+  .studio{grid-template-columns:minmax(0,1fr)}
+  .findings{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:560px){
+  .picker{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pick b{font-size:21px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./" target="_top">← Teoria e Prática</a>
+
+  <header>
+    <div class="eyebrow"><b>MG COACH</b> · Biomecânica do treino</div>
+    <h1>Levantamento terra: <em>4 variações, 4 perfis de torque</em></h1>
+    <p class="lede">Sumô, convencional, RDL e stiff movem a mesma barra, mas mudam a posição do quadril, do tronco e do joelho em relação à <strong>linha de ação da carga</strong>. Essa distância decide quanto torque cada articulação precisa produzir e quais músculos assumem o trabalho em cada fase.</p>
+  </header>
+
+  <noscript><p class="note">Esta animação precisa de JavaScript ativado para funcionar.</p></noscript>
+
+  <div class="picker" role="group" aria-label="Variação do terra" id="picker"></div>
+
+  <div class="studio">
+    <section class="stage" aria-label="Animação">
+      <div class="stage-head">
+        <div class="phase" aria-live="polite"><b id="phaseName">Saída do chão</b><small id="phaseType">concêntrica</small></div>
+        <button type="button" class="btn" id="play">Pausar</button>
+      </div>
+      <div class="canvas-box"><canvas id="stage" role="img" aria-label="Vista lateral do levantamento com linha de ação da carga e braços de momento"></canvas></div>
+      <div class="scrub">
+        <label for="pos">Altura da barra <output id="posOut">23 cm</output></label>
+        <input type="range" id="pos" min="0" max="1000" step="1" value="0">
+        <div class="ends"><span id="endLo">chão</span><span>bloqueio</span></div>
+      </div>
+    </section>
+
+    <div class="side">
+      <section class="panel" aria-label="Torque nas articulações">
+        <div class="panel-head"><h2>Torque agora</h2><span class="kicker">barra 100 kg · corpo 80 kg</span></div>
+        <p class="note" id="exNote"></p>
+        <div class="joints">
+          <div class="joint">
+            <span class="nm"><i style="background:var(--hip)"></i>Quadril</span>
+            <span class="val" id="vHip">0<small>N·m</small></span>
+            <div class="meter"><i id="mHip" style="background:var(--hip)"></i></div>
+            <span class="who" id="wHip">Extensores do quadril: glúteo máximo, isquiotibiais e adutor magno</span>
+          </div>
+          <div class="joint">
+            <span class="nm"><i style="background:var(--l5)"></i>Lombar (L5-S1)</span>
+            <span class="val" id="vL5">0<small>N·m</small></span>
+            <div class="meter"><i id="mL5" style="background:var(--l5)"></i></div>
+            <span class="who">Eretores da espinha, em isometria, para manter a coluna neutra</span>
+          </div>
+          <div class="joint">
+            <span class="nm"><i style="background:var(--knee)"></i>Joelho</span>
+            <span class="val" id="vKnee">0<small>N·m</small></span>
+            <div class="meter bi"><i id="mKnee" style="background:var(--knee)"></i></div>
+            <div class="bi-ends"><span>← flexores</span><span>extensores →</span></div>
+            <span class="who" id="wKnee"></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" aria-label="Músculos da fase">
+        <div class="panel-head"><h2>Músculos nesta fase</h2></div>
+        <div class="legend-dots"><span>●●● principal</span><span>●● importante</span><span>● estabiliza</span></div>
+        <ul class="muscles" id="muscles" aria-live="polite"></ul>
+      </section>
+    </div>
+  </div>
+
+  <section class="panel" aria-label="Curvas de torque">
+    <div class="panel-head">
+      <h3>Torque ao longo do movimento</h3>
+      <div class="tabs" role="group" aria-label="Articulação">
+        <button type="button" data-j="hip" aria-pressed="true">Quadril</button>
+        <button type="button" data-j="l5" aria-pressed="false">Lombar</button>
+        <button type="button" data-j="knee" aria-pressed="false">Joelho</button>
+      </div>
+    </div>
+    <div class="graph-box"><canvas id="graph" role="img" aria-label="Torque por altura da barra nas quatro variações"></canvas></div>
+    <p class="note" id="graphNote"></p>
+  </section>
+
+  <section class="panel" aria-label="Resumo">
+    <h3>Comparativo</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Variação</th><th>Tronco no ponto crítico</th><th>Quadril (pico)</th><th>Lombar (pico)</th><th>Joelho (pico)</th><th>Ênfase muscular</th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <p class="note">Valores do modelo, em N·m, para barra de 100 kg e corpo de 80 kg. Tronco medido em relação ao chão (0° = horizontal).</p>
+  </section>
+
+  <section class="panel" aria-label="O que dizem os estudos">
+    <h3>O que dizem os estudos</h3>
+    <div class="findings">
+      <article class="card">
+        <h4>Sumô × convencional: quadril parecido</h4>
+        <p>Na comparação 3D, o momento extensor do quadril não diferiu entre os estilos. O sumô teve tronco e coxa de 5° a 10° mais verticais, e as diferenças apareceram no joelho e no tornozelo.</p>
+        <cite>Escamilla et al., 2000</cite>
+      </article>
+      <article class="card">
+        <h4>Sumô puxa mais quadríceps</h4>
+        <p>O sumô mostrou mais atividade do vasto lateral, do vasto medial e do tibial anterior. O convencional teve mais atividade do gastrocnêmio medial.</p>
+        <cite>Escamilla et al., 2002</cite>
+      </article>
+      <article class="card">
+        <h4>Menos carga na lombar no sumô</h4>
+        <p>Com o tronco mais vertical, o momento na coluna lombar ficou cerca de 10% menor no sumô do que no convencional em cargas máximas.</p>
+        <cite>Cholewicki, McGill e Norman, 1991</cite>
+      </article>
+      <article class="card">
+        <h4>RDL × stiff: mesma dobradiça, outro joelho</h4>
+        <p>Os dois são dominantes de quadril. No stiff, o joelho mais estendido alonga mais os isquiotibiais, que são biarticulares, e o tronco chega mais perto da horizontal. Por isso o pico no quadril e na lombar é maior.</p>
+        <cite>Análise cinesiológica do modelo</cite>
+      </article>
+    </div>
+    <ol class="refs">
+      <li>Escamilla RF et al. A three-dimensional biomechanical analysis of sumo and conventional style deadlifts. Med Sci Sports Exerc, 2000.</li>
+      <li>Escamilla RF et al. An electromyographic analysis of sumo and conventional style deadlifts. Med Sci Sports Exerc, 2002.</li>
+      <li>Cholewicki J, McGill SM, Norman RW. Lumbar spine loads during the lifting of extremely heavy weights. Med Sci Sports Exerc, 1991.</li>
+    </ol>
+    <p class="note">Modelo didático em vista lateral e estático: barra sobre o meio do pé, coluna neutra, segmentos de um adulto de cerca de 1,78 m. No sumô, o joelho é calculado no plano do pé (pés abertos cerca de 40°), que é onde ele flexiona e estende. Os valores servem para comparar as variações, não como medida exata.</p>
+  </section>
+
+  <footer>
+    <span><b>MG COACH</b> · Matheus Garrido · @matheusgarrido</span>
+    <span>Teoria e Prática</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var css = getComputedStyle(document.documentElement);
+  function tok(n){ return css.getPropertyValue(n).trim(); }
+  var C = {bg:tok('--bg'), surface:tok('--surface'), surface2:tok('--surface-2'), line:tok('--line'), fg:tok('--fg'), muted:tok('--muted'),
+    body:tok('--body'), accent:tok('--accent'), hip:tok('--hip'), l5:tok('--l5'), knee:tok('--knee'), mono:tok('--mono')};
+
+  // ---------- modelo (cm; y para cima; atleta voltado para +x)
+  var ANK = {x:0, y:8}, COP = 7, LS = 44, LTR = 48, ARM = 60, BAR = 100, BODY = 80, G = 9.81/100;
+  var WS = {shank:.093*BODY, thigh:.2*BODY, pelvis:.142*BODY}, WT = BAR + BODY - .029*BODY;
+  function rad(d){ return d*Math.PI/180; }
+
+  // quadros-chave: [altura da barra, canela no plano do pé (°), ombro à frente da barra (cm)]
+  var EX = {
+    sumo:  {nome:'Sumô', sub:'base larga · mãos por dentro', LT:44, toe:40, floor:true,
+            keys:[[22.5,27,6],[35,23,5],[51,16,3],[65,9,2],[85,5,0]],
+            nota:'Base larga, pés abertos e mãos por dentro das pernas. O quadril fica mais perto da barra e o tronco mais vertical.'},
+    conv:  {nome:'Convencional', sub:'pés no quadril · mãos por fora', LT:45, toe:0, floor:true,
+            keys:[[22.5,20,8],[35,14,7],[51,6,5],[65,3,3],[85,5,0]],
+            nota:'Pés na largura do quadril e mãos por fora das pernas. O tronco sai mais inclinado e o quadril fica mais longe da linha da carga.'},
+    rdl:   {nome:'RDL', sub:'joelho levemente flexionado', LT:45, toe:0, floor:false,
+            keys:[[42,1,8],[56,2,6],[70,3,4],[85,5,0]],
+            nota:'Começa em pé. Joelhos levemente flexionados e fixos; o quadril vai para trás e a barra desce rente às coxas até a canela.'},
+    stiff: {nome:'Stiff', sub:'joelho quase estendido', LT:45, toe:0, floor:false,
+            keys:[[30,-12,8],[48,-10,6],[66,-6,4],[85,5,0]],
+            nota:'Joelhos quase estendidos. A canela inclina para trás, a barra desce mais e o tronco chega perto da horizontal.'}
+  };
+  var ORDER = ['sumo','conv','rdl','stiff'];
+
+  function pose(ex, h){
+    var k = ex.keys, i = 0;
+    if (h <= k[0][0]) i = 0; else { for (i=0; i<k.length-2 && h > k[i+1][0]; i++); }
+    var a = k[i], b = k[i+1], t = Math.max(0, Math.min(1, (h-a[0])/(b[0]-a[0])));
+    t = t*t*(3-2*t)*0.5 + t*0.5;
+    var alpha = a[1]+(b[1]-a[1])*t, off = a[2]+(b[2]-a[2])*t;
+    var c = Math.cos(rad(ex.toe)), LT = ex.LT;
+    var sa = Math.atan(Math.tan(rad(alpha))*c);
+    var K = {x:ANK.x+LS*Math.sin(sa), y:ANK.y+LS*Math.cos(sa)};
+    var bar = {x:COP*c, y:h};
+    var Sh = {x:bar.x+off, y:h+Math.sqrt(ARM*ARM-off*off)};
+    var dx = Sh.x-K.x, dy = Sh.y-K.y, D = Math.hypot(dx,dy), H;
+    if (D >= LT+LTR){ H = {x:K.x+dx*LT/D, y:K.y+dy*LT/D}; }
+    else {
+      var p = (LT*LT-LTR*LTR+D*D)/(2*D), q = Math.sqrt(Math.max(0, LT*LT-p*p));
+      var px = K.x+p*dx/D, py = K.y+p*dy/D;
+      var h1 = {x:px+q*dy/D, y:py-q*dx/D}, h2 = {x:px-q*dy/D, y:py+q*dx/D};
+      H = h1.x < h2.x ? h1 : h2;
+    }
+    var tr = {x:(Sh.x-H.x)/LTR, y:(Sh.y-H.y)/LTR};
+    var L5 = {x:H.x+tr.x*6, y:H.y+tr.y*6};
+    var copx = COP*c, shC = K.x*.57, thC = H.x+(K.x-H.x)*.43;
+    var hip = G*(WT*(copx-H.x) - WS.shank*(shC-H.x) - WS.thigh*(thC-H.x));
+    var l5 = G*(WT*(copx-L5.x) - WS.shank*(shC-L5.x) - WS.thigh*(thC-L5.x) - WS.pelvis*(H.x-L5.x));
+    var knee = G*(WT-WS.shank)*((K.x-copx)/c);
+    return {bar:bar, Sh:Sh, H:H, K:K, L5:L5, tr:tr, cop:copx, hip:hip, l5:l5, knee:knee,
+            armHip:copx-H.x, armL5:copx-L5.x, armKnee:(K.x-copx)/c,
+            trunk:Math.atan2(Sh.y-H.y, Sh.x-H.x)*180/Math.PI};
+  }
+  function hRange(ex){ return [ex.keys[0][0], ex.keys[ex.keys.length-1][0]]; }
+
+  // máximos para as escalas (todas as variações)
+  var MAX = {hip:1, l5:1, knee:1};
+  ORDER.forEach(function(id){
+    var ex = EX[id], r = hRange(ex);
+    for (var h=r[0]; h<=r[1]; h+=0.5){ var p = pose(ex,h);
+      MAX.hip = Math.max(MAX.hip, p.hip); MAX.l5 = Math.max(MAX.l5, p.l5); MAX.knee = Math.max(MAX.knee, Math.abs(p.knee)); }
+  });
+
+  // ---------- músculos por fase (3 principal, 2 importante, 1 estabiliza)
+  var M = {
+    quad:['Quadríceps (vastos)','estende o joelho'],
+    glu:['Glúteo máximo','estende o quadril'],
+    isq:['Isquiotibiais','estendem o quadril'],
+    add:['Adutor magno','porção posterior estende o quadril'],
+    adl:['Adutores','sustentam a base aberta e estendem o quadril'],
+    gmed:['Glúteo médio e rotadores externos','mantêm os joelhos alinhados com os pés'],
+    ere:['Eretores da espinha','isometria: coluna neutra'],
+    gas:['Gastrocnêmio','flexor do joelho e estabilizador do tornozelo'],
+    tib:['Tibial anterior','estabiliza o tornozelo com a canela vertical'],
+    lat:['Latíssimo do dorso','mantém a barra perto do corpo'],
+    trap:['Trapézio e romboides','isometria: escápulas firmes'],
+    grip:['Flexores do antebraço','pegada'],
+    core:['Abdômen e oblíquos','aumentam a pressão intra-abdominal']
+  };
+  function L(arr){ return arr.map(function(x){ return {k:x[0], n:x[1], ct:x[2]||''}; }); }
+  var PH = {
+    sumo: {
+      saida:L([['quad',3],['adl',3],['glu',3],['gmed',2],['ere',2],['tib',2],['isq',2],['lat',1],['grip',2]]),
+      baixo:L([['quad',3],['adl',3],['glu',3],['isq',2],['ere',2],['gmed',2],['lat',1],['grip',2]]),
+      joelho:L([['glu',3],['adl',3],['isq',2],['quad',2],['ere',2],['lat',1],['grip',2]]),
+      alto:L([['glu',3],['isq',2],['add',2],['ere',2],['quad',1],['trap',1],['grip',2]]),
+      topo:L([['glu',2],['ere',1],['trap',2],['core',1],['grip',2]]),
+      desce:L([['glu',3,'excêntrica'],['adl',2,'excêntrica'],['isq',2,'excêntrica'],['quad',2,'excêntrica'],['ere',2],['grip',2]])
+    },
+    conv: {
+      saida:L([['quad',3],['glu',3],['ere',3],['add',2],['isq',2],['lat',2],['gas',1],['grip',2]]),
+      baixo:L([['quad',3],['glu',3],['ere',3],['isq',2],['add',2],['lat',2],['grip',2]]),
+      joelho:L([['glu',3],['isq',3],['add',3],['ere',3],['gas',2],['quad',1],['lat',2],['grip',2]]),
+      alto:L([['glu',3],['isq',2],['add',2],['ere',2],['gas',1],['trap',1],['grip',2]]),
+      topo:L([['glu',2],['ere',1],['trap',2],['core',1],['grip',2]]),
+      desce:L([['glu',3,'excêntrica'],['isq',3,'excêntrica'],['ere',3],['add',2,'excêntrica'],['quad',2,'excêntrica'],['grip',2]])
+    },
+    rdl: {
+      topo:L([['glu',1],['ere',1],['trap',2],['core',1],['grip',2]]),
+      desce:L([['isq',3,'excêntrica'],['glu',3,'excêntrica'],['ere',3],['add',2,'excêntrica'],['lat',2],['quad',1],['grip',2]]),
+      fundo:L([['isq',3],['glu',3],['ere',3],['add',3],['lat',2],['gas',1],['grip',2]]),
+      sobe:L([['glu',3],['isq',3],['ere',3],['add',2],['lat',2],['grip',2]])
+    },
+    stiff: {
+      topo:L([['glu',1],['ere',1],['trap',2],['core',1],['grip',2]]),
+      desce:L([['isq',3,'excêntrica'],['ere',3],['glu',3,'excêntrica'],['gas',2],['add',2,'excêntrica'],['lat',2],['grip',2]]),
+      fundo:L([['isq',3],['ere',3],['glu',3],['gas',2],['add',2],['lat',2],['grip',2]]),
+      sobe:L([['isq',3],['glu',3],['ere',3],['gas',2],['add',2],['lat',2],['grip',2]])
+    }
+  };
+  var PHNAME = {
+    saida:['Saída do chão','concêntrica · início'], baixo:['Do chão ao joelho','concêntrica'],
+    joelho:['Passagem do joelho','concêntrica'], alto:['Do joelho ao bloqueio','concêntrica'],
+    topo:['Bloqueio','isométrica'], desce:['Descida controlada','excêntrica'],
+    fundo:['Ponto mais baixo','transição'], sobe:['Subida','concêntrica']
+  };
+  function phaseOf(id, h, dir){
+    var ex = EX[id], r = hRange(ex);
+    if (h > r[1]-3) return 'topo';
+    if (ex.floor){
+      if (dir < 0) return 'desce';
+      if (h < 27) return 'saida';
+      if (h < 46) return 'baixo';
+      if (h < 57) return 'joelho';
+      return 'alto';
+    }
+    if (h < r[0]+3) return 'fundo';
+    return dir < 0 ? 'desce' : 'sobe';
+  }
+
+  // ---------- estado e animação
+  var state = {ex:'sumo', s:0, dir:1, playing:true, joint:'hip', phase:null, t0:null, tPause:0};
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) state.playing = false;
+  var CYCLE = 5600;
+  function ease(x){ return x<.5 ? 2*x*x : 1-Math.pow(-2*x+2,2)/2; }
+  function cyc(ph, floor){
+    // devolve s (0 = embaixo, 1 = em cima) e direção
+    var a = floor ? [0.09, 0.42, 0.52, 0.84] : [0.10, 0.42, 0.50, 0.82];
+    var s, d;
+    if (ph < a[0]){ s = floor?0:1; d = floor?1:-1; }
+    else if (ph < a[1]){ var x = ease((ph-a[0])/(a[1]-a[0])); s = floor? x : 1-x; d = floor?1:-1; }
+    else if (ph < a[2]){ s = floor?1:0; d = 0; }
+    else if (ph < a[3]){ var y = ease((ph-a[2])/(a[3]-a[2])); s = floor? 1-y : y; d = floor?-1:1; }
+    else { s = floor?0:1; d = floor?1:-1; }
+    return {s:s, d:d};
+  }
+
+  // ---------- desenho do palco
+  var stage = document.getElementById('stage'), sctx = stage.getContext('2d');
+  var graph = document.getElementById('graph'), gctx = graph.getContext('2d');
+  var VIEW = {x0:-72, x1:68, y0:-4, y1:172};
+  function fit(cv){
+    var r = cv.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio||1, 2.5);
+    var w = Math.max(1, Math.round(r.width*dpr)), h = Math.max(1, Math.round(r.height*dpr));
+    if (cv.width !== w || cv.height !== h){ cv.width = w; cv.height = h; }
+    return {w:w, h:h, dpr:dpr, cssW:r.width};
+  }
+  function seg(ctx, T, a, b, col, w){ var p = T(a), q = T(b); ctx.strokeStyle = col; ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke(); }
+  function txt(ctx, s, x, y, col, size, align, weight){
+    ctx.font = (weight||600)+' '+size+'px '+C.mono; ctx.textAlign = align||'left'; ctx.textBaseline = 'middle';
+    ctx.lineJoin = 'round'; ctx.lineWidth = Math.max(4, size*0.35); ctx.strokeStyle = C.surface; ctx.strokeText(s, x, y);
+    ctx.fillStyle = col; ctx.fillText(s, x, y);
+  }
+
+  function drawStage(){
+    var f = fit(stage), ctx = sctx, ex = EX[state.ex];
+    var sc = f.w/(VIEW.x1-VIEW.x0);
+    function T(p){ return {x:(p.x-VIEW.x0)*sc, y:(VIEW.y1-p.y)*sc}; }
+    var fs = Math.round((f.cssW < 420 ? 12.5 : 12)*f.dpr);
+    ctx.setTransform(1,0,0,1,0,0); ctx.fillStyle = C.surface; ctx.fillRect(0,0,f.w,f.h);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    var r = hRange(ex), h = r[0]+(r[1]-r[0])*state.s, P = pose(ex, h);
+
+    // chão
+    seg(ctx, T, {x:VIEW.x0,y:0}, {x:VIEW.x1,y:0}, C.line, 2*f.dpr);
+
+    // linha de ação (meio do pé)
+    ctx.save(); ctx.setLineDash([6*f.dpr, 6*f.dpr]);
+    seg(ctx, T, {x:P.cop,y:-2}, {x:P.cop,y:VIEW.y1}, 'rgba(245,239,232,.35)', 1.5*f.dpr);
+    ctx.restore();
+    var top = T({x:P.cop, y:VIEW.y1-4});
+    txt(ctx, 'linha da carga', top.x+6*f.dpr, top.y, C.muted, fs*0.92, 'left', 500);
+
+    // corpo
+    var cm = sc;
+    var BODYC = C.body;
+    // pé
+    seg(ctx, T, {x:-7,y:2.5}, {x:19*Math.cos(rad(ex.toe))+1,y:2.5}, BODYC, 5*cm);
+    seg(ctx, T, ANK, {x:-5,y:3}, BODYC, 5*cm);
+    // perna
+    seg(ctx, T, ANK, P.K, BODYC, 7*cm);
+    seg(ctx, T, P.K, P.H, BODYC, 9*cm);
+    // tronco
+    seg(ctx, T, P.H, P.Sh, BODYC, 11*cm);
+    var neck = {x:P.Sh.x+P.tr.x*7, y:P.Sh.y+P.tr.y*7};
+    seg(ctx, T, P.Sh, neck, BODYC, 5*cm);
+    var head = {x:P.Sh.x+P.tr.x*16+P.tr.y*1.5, y:P.Sh.y+P.tr.y*16-P.tr.x*1.5};
+    var hp = T(head); ctx.fillStyle = BODYC; ctx.beginPath(); ctx.arc(hp.x, hp.y, 10*cm, 0, Math.PI*2); ctx.fill();
+    // braço
+    seg(ctx, T, P.Sh, P.bar, '#7a7069', 5*cm);
+
+    // anilha + barra
+    var bp = T(P.bar);
+    ctx.fillStyle = 'rgba(19,17,15,.55)'; ctx.strokeStyle = C.fg; ctx.lineWidth = 2.5*f.dpr;
+    ctx.beginPath(); ctx.arc(bp.x, bp.y, 22.5*cm, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+    ctx.globalAlpha = .4; ctx.beginPath(); ctx.arc(bp.x, bp.y, 15*cm, 0, Math.PI*2); ctx.stroke(); ctx.globalAlpha = 1;
+    ctx.fillStyle = C.fg; ctx.beginPath(); ctx.arc(bp.x, bp.y, 2.6*cm, 0, Math.PI*2); ctx.fill();
+
+    // braços de momento
+    function arm(J, col, label, yoff){
+      var a = T(J), b = T({x:P.cop, y:J.y});
+      ctx.strokeStyle = col; ctx.lineWidth = 3.5*f.dpr; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+      ctx.fillStyle = col; ctx.beginPath(); ctx.arc(b.x, b.y, 3.2*f.dpr, 0, Math.PI*2); ctx.fill();
+      if (label){ var mx = (a.x+b.x)/2; txt(ctx, label, mx, a.y+yoff*f.dpr, col, fs, 'center'); }
+    }
+    arm(P.H, C.hip, Math.abs(P.armHip).toFixed(0)+' cm', -14);
+    arm(P.L5, C.l5, null, 0);
+    arm(P.K, C.knee, Math.abs(P.armKnee).toFixed(0)+' cm', 16);
+
+    // articulações
+    [[P.H,C.hip],[P.L5,C.l5],[P.K,C.knee]].forEach(function(j){
+      var p = T(j[0]); ctx.fillStyle = C.surface; ctx.strokeStyle = j[1]; ctx.lineWidth = 3*f.dpr;
+      ctx.beginPath(); ctx.arc(p.x, p.y, 5.5*f.dpr, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+    });
+
+    // ângulo do tronco
+    var hpx = T(P.H);
+    txt(ctx, 'tronco '+Math.round(P.trunk)+'°', hpx.x-10*f.dpr, hpx.y+ (P.trunk > 60 ? 30 : -34)*f.dpr, C.fg, fs*0.95, 'right', 500);
+
+    // vista frontal (canto)
+    var bx = 10*f.dpr, by = 10*f.dpr, bw = 92*f.dpr, bh = 74*f.dpr;
+    ctx.fillStyle = C.bg; ctx.strokeStyle = C.line; ctx.lineWidth = 1*f.dpr;
+    ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(bx,by,bw,bh,8*f.dpr); else ctx.rect(bx,by,bw,bh); ctx.fill(); ctx.stroke();
+    txt(ctx, 'frente', bx+8*f.dpr, by+11*f.dpr, C.muted, fs*0.8, 'left', 500);
+    var cx = bx+bw/2, fy = by+bh-12*f.dpr, wide = state.ex === 'sumo';
+    var fw = (wide ? 30 : 11)*f.dpr, hw = (wide ? 8 : 20)*f.dpr, barY = by+30*f.dpr;
+    ctx.strokeStyle = C.muted; ctx.lineWidth = 2*f.dpr;
+    ctx.beginPath(); ctx.moveTo(bx+10*f.dpr, barY); ctx.lineTo(bx+bw-10*f.dpr, barY); ctx.stroke();
+    ctx.strokeStyle = BODYC; ctx.lineWidth = 4*f.dpr;
+    // pernas
+    ctx.beginPath(); ctx.moveTo(cx-6*f.dpr, barY-6*f.dpr); ctx.lineTo(cx-fw, fy); ctx.moveTo(cx+6*f.dpr, barY-6*f.dpr); ctx.lineTo(cx+fw, fy); ctx.stroke();
+    // pés
+    ctx.strokeStyle = C.fg; ctx.lineWidth = 3*f.dpr;
+    var tw = wide ? 0.75 : 0.15;
+    ctx.beginPath(); ctx.moveTo(cx-fw, fy); ctx.lineTo(cx-fw-7*f.dpr*tw, fy+3*f.dpr); ctx.moveTo(cx+fw, fy); ctx.lineTo(cx+fw+7*f.dpr*tw, fy+3*f.dpr); ctx.stroke();
+    // mãos
+    ctx.fillStyle = C.accent;
+    ctx.beginPath(); ctx.arc(cx-hw, barY, 3.5*f.dpr, 0, Math.PI*2); ctx.arc(cx+hw, barY, 3.5*f.dpr, 0, Math.PI*2); ctx.fill();
+
+    // legenda das cores
+    var ly = f.h - 14*f.dpr, lx = f.w - 10*f.dpr;
+    ctx.font = '500 '+(fs*0.85)+'px '+C.mono; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    [['joelho',C.knee],['lombar',C.l5],['quadril',C.hip]].forEach(function(it){
+      ctx.fillStyle = C.muted; ctx.fillText(it[0], lx, ly); var w = ctx.measureText(it[0]).width;
+      ctx.fillStyle = it[1]; ctx.beginPath(); ctx.arc(lx-w-8*f.dpr, ly, 4*f.dpr, 0, Math.PI*2); ctx.fill();
+      lx -= w + 26*f.dpr;
+    });
+    return P;
+  }
+
+  // ---------- gráfico
+  function drawGraph(){
+    var f = fit(graph), ctx = gctx, W = 600, Hh = 280, sc = f.w/W;
+    var narrow = f.cssW < 480, fs = narrow ? 17 : 12.5;
+    ctx.setTransform(1,0,0,1,0,0); ctx.fillStyle = C.surface; ctx.fillRect(0,0,f.w,f.h);
+    ctx.setTransform(sc,0,0,sc,0,0);
+    var j = state.joint, col = C[j];
+    var pad = {l: narrow ? 74 : 58, r: 18, t: narrow ? 30 : 26, b: narrow ? 46 : 40};
+    var ymin = 0, ymax = 0, series = {};
+    ORDER.forEach(function(id){
+      var ex = EX[id], r = hRange(ex), pts = [];
+      for (var h=r[0]; h<=r[1]+0.01; h+=0.5){ var v = pose(ex,h)[j]; pts.push({h:h, v:v}); ymin = Math.min(ymin, v); ymax = Math.max(ymax, v); }
+      series[id] = pts;
+    });
+    var step = 200; ymax = Math.ceil((ymax+20)/step)*step; ymin = Math.floor((ymin-10)/step)*step; if (ymin > 0) ymin = 0;
+    var hx0 = 20, hx1 = 86;
+    function X(h){ return pad.l + (h-hx0)/(hx1-hx0)*(W-pad.l-pad.r); }
+    function Y(v){ return pad.t + (ymax-v)/(ymax-ymin)*(Hh-pad.t-pad.b); }
+    ctx.font = '500 '+fs+'px '+C.mono; ctx.textBaseline = 'middle'; ctx.textAlign = 'right';
+    for (var v=ymin; v<=ymax+1; v+=step){
+      ctx.strokeStyle = v === 0 ? C.muted : C.line; ctx.lineWidth = v === 0 ? 1.4 : 1;
+      ctx.beginPath(); ctx.moveTo(pad.l, Y(v)); ctx.lineTo(W-pad.r, Y(v)); ctx.stroke();
+      ctx.fillStyle = C.muted; ctx.fillText(v, pad.l-8, Y(v));
+    }
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    [20,40,60,80].forEach(function(h){ ctx.fillStyle = C.muted; ctx.fillText(h+' cm', X(h), Hh-pad.b+8); });
+    ctx.fillStyle = C.body; ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillText('N·m', 4, 2);
+    ctx.textAlign = 'right'; ctx.fillText('altura da barra', W-pad.r, Hh-pad.b+10+fs);
+    if (j === 'knee'){
+      ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillStyle = C.body;
+      ctx.textAlign = 'right';
+      ctx.fillText('extensores ↑', W-pad.r-4, Y(0)-fs*0.8);
+      ctx.fillText('flexores ↓', W-pad.r-4, Y(0)+fs*0.8);
+    }
+    ORDER.forEach(function(id){
+      var pts = series[id], on = id === state.ex;
+      ctx.save();
+      if (!on){ ctx.setLineDash([5,5]); ctx.globalAlpha = .55; }
+      ctx.strokeStyle = on ? col : C.muted; ctx.lineWidth = on ? 4 : 2; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      ctx.beginPath(); pts.forEach(function(p,i){ var x = X(p.h), y = Y(p.v); if (i) ctx.lineTo(x,y); else ctx.moveTo(x,y); }); ctx.stroke();
+      ctx.restore();
+    });
+    // rótulo de cada curva junto ao seu ponto inicial (barra mais baixa)
+    var placed = [];
+    ORDER.forEach(function(id){
+      var p0 = series[id][0], on = id === state.ex;
+      var x = X(p0.h)+6, y = Y(p0.v) - fs*0.9;
+      placed.forEach(function(q){ if (Math.abs(q.x-x) < 90 && Math.abs(q.y-y) < fs+2) y = q.y - fs - 4; });
+      if (y < pad.t + fs*0.5) y = Y(p0.v) + fs*0.9;
+      placed.push({x:x, y:y});
+      ctx.font = (on ? 700 : 500)+' '+fs+'px '+C.mono; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+      ctx.lineJoin = 'round'; ctx.lineWidth = 5; ctx.strokeStyle = C.surface; ctx.strokeText(EX[id].nome, x, y);
+      ctx.fillStyle = on ? col : C.muted; ctx.fillText(EX[id].nome, x, y);
+    });
+    // cursor da posição atual
+    var ex = EX[state.ex], r = hRange(ex), h = r[0]+(r[1]-r[0])*state.s, P = pose(ex,h);
+    ctx.strokeStyle = 'rgba(245,239,232,.3)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(X(h), pad.t); ctx.lineTo(X(h), Hh-pad.b); ctx.stroke();
+    ctx.fillStyle = C.surface; ctx.strokeStyle = col; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(X(h), Y(P[j]), 6, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+  }
+
+  // ---------- interface
+  var $ = function(id){ return document.getElementById(id); };
+  var picker = $('picker');
+  ORDER.forEach(function(id){
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'pick'; b.id = 'pk-'+id;
+    b.setAttribute('aria-pressed', id === state.ex ? 'true' : 'false');
+    b.innerHTML = '<b>'+EX[id].nome+'</b><small>'+EX[id].sub+'</small>';
+    b.addEventListener('click', function(){ setEx(id); });
+    picker.appendChild(b);
+  });
+  function setEx(id){
+    state.ex = id; state.phase = null; state.t0 = null;
+    var ex = EX[id];
+    state.s = ex.floor ? 0 : 1; state.dir = ex.floor ? 1 : -1;
+    ORDER.forEach(function(k){ $('pk-'+k).setAttribute('aria-pressed', k === id ? 'true' : 'false'); });
+    $('exNote').textContent = ex.nota;
+    $('endLo').textContent = ex.floor ? 'chão' : 'canela';
+    update();
+  }
+  document.querySelectorAll('.tabs button').forEach(function(b){
+    b.addEventListener('click', function(){
+      state.joint = b.getAttribute('data-j');
+      document.querySelectorAll('.tabs button').forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      drawGraph(); graphNote();
+    });
+  });
+
+  function graphNote(){
+    var t = {
+      hip:'O quadril é a articulação mais exigida nas quatro variações. No sumô e no convencional, o pico aparece logo na saída do chão; no RDL e no stiff, no ponto mais baixo.',
+      l5:'A lombar segue o quadril. O tronco mais vertical do sumô reduz um pouco o torque; o tronco quase horizontal do stiff produz o maior pico.',
+      knee:'Acima do zero, o joelho exige os extensores (quadríceps); abaixo, os flexores (isquiotibiais e gastrocnêmio). O sumô exige mais quadríceps na saída; no convencional, o joelho passa a exigir flexores depois da passagem pelo joelho; no stiff, os flexores trabalham o tempo todo.'
+    };
+    $('graphNote').textContent = t[state.joint];
+  }
+
+  function renderMuscles(phase){
+    var list = PH[state.ex][phase] || [];
+    var sorted = list.slice().sort(function(a,b){ return b.n-a.n; });
+    $('muscles').innerHTML = sorted.map(function(m){
+      var d = ''; for (var i=1;i<=3;i++) d += '<span'+(i <= m.n ? ' class="on"' : '')+'></span>';
+      return '<li class="mus"><div class="dots" aria-label="nível '+m.n+' de 3">'+d+'</div><div><b>'+M[m.k][0]+(m.ct ? '<span class="ct">'+m.ct+'</span>' : '')+'</b><small>'+M[m.k][1]+'</small></div></li>';
+    }).join('');
+  }
+
+  function update(){
+    var P = drawStage();
+    drawGraph();
+    var ex = EX[state.ex], r = hRange(ex), h = r[0]+(r[1]-r[0])*state.s;
+    $('pos').value = Math.round(state.s*1000);
+    $('posOut').textContent = Math.round(h)+' cm';
+    function nm(v){ return (Math.round(Math.abs(v)/10)*10)+'<small>N·m</small>'; }
+    $('vHip').innerHTML = nm(P.hip); $('vL5').innerHTML = nm(P.l5); $('vKnee').innerHTML = nm(P.knee);
+    $('mHip').style.width = Math.max(0, P.hip/MAX.hip*100)+'%';
+    $('mL5').style.width = Math.max(0, P.l5/MAX.l5*100)+'%';
+    var kf = Math.max(-1, Math.min(1, P.knee/MAX.knee))*50, mk = $('mKnee');
+    mk.style.left = (kf >= 0 ? 50 : 50+kf)+'%'; mk.style.width = Math.abs(kf)+'%';
+    $('wKnee').textContent = Math.abs(P.knee) < 20 ? 'Quase neutro: a linha da carga passa perto do joelho'
+      : (P.knee > 0 ? 'Extensores do joelho: quadríceps (vastos)' : 'Flexores do joelho: isquiotibiais e gastrocnêmio');
+    var ph = phaseOf(state.ex, h, state.dir);
+    if (ph !== state.phase){
+      state.phase = ph;
+      $('phaseName').textContent = PHNAME[ph][0]; $('phaseType').textContent = PHNAME[ph][1];
+      renderMuscles(ph);
+    }
+  }
+
+  function tick(ts){
+    if (!state.playing) return;
+    var ex = EX[state.ex];
+    if (state.t0 === null) state.t0 = ts;
+    var ph = ((ts-state.t0) % CYCLE)/CYCLE, c = cyc(ph, ex.floor);
+    state.s = c.s; state.dir = c.d || state.dir;
+    update();
+    requestAnimationFrame(tick);
+  }
+  function setPlaying(p){
+    var was = state.playing; state.playing = p; state.t0 = null;
+    $('play').textContent = p ? 'Pausar' : 'Animar';
+    if (p && !was) requestAnimationFrame(tick);
+  }
+  $('play').addEventListener('click', function(){ setPlaying(!state.playing); });
+  $('pos').addEventListener('input', function(e){
+    if (state.playing) setPlaying(false);
+    var ns = +e.target.value/1000;
+    state.dir = ns > state.s ? 1 : (ns < state.s ? -1 : state.dir);
+    state.s = ns;
+    update();
+  });
+
+  // tabela
+  var EMF = {
+    sumo:'Quadríceps e adutores; glúteo máximo',
+    conv:'Glúteo, isquiotibiais e eretores; quadríceps na saída',
+    rdl:'Isquiotibiais e glúteo máximo; eretores em isometria',
+    stiff:'Isquiotibiais mais alongados; eretores e gastrocnêmio'
+  };
+  $('tbody').innerHTML = ORDER.map(function(id){
+    var ex = EX[id], r = hRange(ex), mh = 0, ml = 0, kx = 0, kf = 0;
+    for (var h=r[0]; h<=r[1]; h+=0.5){ var p = pose(ex,h); mh = Math.max(mh,p.hip); ml = Math.max(ml,p.l5); kx = Math.max(kx,p.knee); kf = Math.min(kf,p.knee); }
+    var crit = pose(ex, r[0]);
+    function n(v){ return Math.round(v/10)*10; }
+    var kTxt = (kx > 20 ? n(kx)+' ext.' : '') + (kx > 20 && kf < -20 ? ' / ' : '') + (kf < -20 ? n(-kf)+' flex.' : '');
+    return '<tr><td><b>'+ex.nome+'</b></td><td class="num">'+Math.round(crit.trunk)+'°</td><td class="num">'+n(mh)+'</td><td class="num">'+n(ml)+'</td><td class="num">'+kTxt+'</td><td>'+EMF[id]+'</td></tr>';
+  }).join('');
+
+  if (window.ResizeObserver){ var ro = new ResizeObserver(function(){ update(); }); ro.observe(stage); ro.observe(graph); }
+  else window.addEventListener('resize', update);
+
+  $('play').textContent = state.playing ? 'Pausar' : 'Animar';
+  setEx('sumo'); graphNote();
+  if (state.playing) requestAnimationFrame(tick);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(update);
+})();
+</script>
+</body>
+</html>
