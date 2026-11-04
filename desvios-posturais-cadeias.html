@@ -6,13 +6,13 @@
 <script>(function(){var e=true;try{e=window.self!==window.top}catch(x){}if(e)document.documentElement.classList.add("embed")})();</script>
 <title>Desvios Posturais e Cadeias</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Tipos posturais (Kendall) com linha de prumo, reações em cadeia ascendentes e descendentes e outros desvios posturais.">
+<meta name="description" content="Tipos posturais e desvios: músculos encurtados e alongados com o porquê, e a reação em cadeia que cada desvio gera.">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
 <style>
-/* Layout: (1) tipos posturais em vista lateral com linha de prumo + painel de segmentos e músculos; (2) explorador de cadeia em vista frontal, ascendente ou descendente; (3) catálogo de outros desvios; (4) evidências. Visual escuro deliberado (identidade MG COACH). */
+/* Layout: (1) tipos posturais: figura lateral fixa + músculos com o porquê + mapa da cadeia; (2) explorador frontal ascendente/descendente; (3) catálogo de desvios com o mesmo detalhe (músculos + porquê + cadeia); (4) evidências. Visual escuro deliberado (identidade MG COACH). */
 :root{
   --bg:#0a0a0a;
   --surface:#13110f;
@@ -25,10 +25,14 @@
   --accent:#ff6b1a;
   --up:#ff6b1a;
   --down:#5cc6ff;
+  --short:#ff6b1a;
+  --long:#5cc6ff;
+  --weak:#ffc24a;
   --ok:#7ee08a;
   --display:"Big Shoulders Display", Impact, "Arial Narrow", sans-serif;
   --text:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --segw:7.6em;
   color-scheme:dark;
 }
 *,*::before,*::after{box-sizing:border-box}
@@ -50,6 +54,15 @@ h1 em{font-style:normal;color:var(--accent)}
 .lede strong{color:var(--fg);font-weight:600}
 h2.sec{margin:8px 0 0;font-family:var(--display);font-weight:900;font-size:clamp(30px,5vw,44px);line-height:.95;text-transform:uppercase}
 h2.sec span{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--accent);display:block;letter-spacing:.08em;margin-bottom:6px}
+.note{margin:0;color:var(--muted);font-size:14px;max-width:66ch}
+
+/* princípio */
+.rule{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.rule div{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.rule h3{margin:0;font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.rule .s h3{color:var(--short)} .rule .l h3{color:var(--long)}
+.rule p{margin:0;font-size:14.5px;color:var(--fg)}
+.rule p span{color:var(--muted)}
 
 .picker{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
 .picker::-webkit-scrollbar{display:none}
@@ -59,8 +72,9 @@ h2.sec span{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--a
 .pk[aria-pressed="true"]{border-color:var(--accent);background:var(--surface-2)}
 .pk[aria-pressed="true"] b{color:var(--accent)}
 
-.studio{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:14px;align-items:start}
+.studio{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:14px;align-items:start}
 .stage{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.studio > .stage{position:sticky;top:12px}
 .stage-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
 .stage-head b{font-family:var(--display);font-weight:700;font-size:22px;text-transform:uppercase}
 .stage-head small{display:block;font-family:var(--mono);font-size:11px;color:var(--muted)}
@@ -71,20 +85,50 @@ svg.fig{display:block;width:100%;height:auto;max-width:100%}
 .side{display:flex;flex-direction:column;gap:14px;min-width:0}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
 .panel h3{margin:0;font-family:var(--display);font-weight:700;font-size:24px;text-transform:uppercase;letter-spacing:.02em}
-.note{margin:0;color:var(--muted);font-size:14px;max-width:66ch}
-.segs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
-.sg{display:flex;justify-content:space-between;gap:8px;align-items:baseline;padding:8px 10px;border-radius:10px;background:var(--bg);border:1px solid var(--line);min-width:0}
-.sg span{font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
-.sg b{font-weight:600;font-size:13.5px;text-align:right}
-.sg.alt{border-color:rgba(255,107,26,.55)}
-.sg.alt b{color:var(--accent)}
-.mus{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.mus div{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--bg);min-width:0}
-.mus h4{margin:0 0 6px;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
-.mus .s h4{color:var(--up)} .mus .l h4{color:var(--down)}
-.mus ul{margin:0;padding-left:16px;font-size:13.5px;color:var(--fg);display:flex;flex-direction:column;gap:2px}
+.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.step-tag{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--accent)}
 
-/* cadeia */
+/* músculos */
+.mgroups{display:flex;flex-direction:column;gap:14px}
+.mg h4{margin:0 0 8px;font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.mg h4 i{width:14px;height:3px;border-radius:2px;display:inline-block}
+.mg.s h4{color:var(--short)} .mg.s h4 i{background:var(--short)}
+.mg.l h4{color:var(--long)} .mg.l h4 i{background:var(--long)}
+.mg.w h4{color:var(--weak)} .mg.w h4 i{background:var(--weak)}
+.mlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.mi{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg);display:flex;flex-direction:column;gap:3px}
+.mi b{font-weight:700;font-size:14.5px;line-height:1.3}
+.mi p{margin:0;font-size:13.5px;color:var(--muted);line-height:1.45}
+.mi p em{font-style:normal;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;margin-right:6px}
+.mg.s .mi p em{color:var(--short)} .mg.l .mi p em{color:var(--long)} .mg.w .mi p em{color:var(--weak)}
+.mnote{margin:0;font-size:13px;color:var(--muted);border:1px dashed var(--line);border-radius:10px;padding:8px 10px}
+
+/* mapa da cadeia */
+.cleg{display:flex;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.cleg span{display:inline-flex;align-items:center;gap:6px}
+.cleg i{width:18px;height:18px;border-radius:50%;display:inline-grid;place-items:center;font-style:normal;font-size:11px;border:2px solid currentColor}
+.ladder{list-style:none;margin:0;padding:0;position:relative;display:flex;flex-direction:column}
+.ladder::before{content:"";position:absolute;left:calc(var(--segw) + 10px + 13px);top:16px;bottom:16px;width:2px;background:var(--line)}
+.lr{display:grid;grid-template-columns:var(--segw) 28px minmax(0,1fr);gap:10px;align-items:start;padding:6px 0}
+.lseg{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);text-align:right;padding-top:6px;line-height:1.25}
+.node{position:relative;z-index:1;width:28px;height:28px;border-radius:50%;background:var(--bg);border:2px solid var(--line);display:grid;place-items:center;font-family:var(--mono);font-size:13px;font-weight:600;color:var(--dim);transition:border-color .3s, background-color .3s, color .3s;transition-delay:var(--d,0ms)}
+.lbody{min-width:0;padding-top:3px}
+.lbody b{display:block;font-weight:600;font-size:14.5px;line-height:1.3;transition:color .3s;transition-delay:var(--d,0ms)}
+.lbody small{display:block;color:var(--muted);font-size:13px;line-height:1.45;margin-top:2px}
+.lr.neutral .lbody b{color:var(--dim);font-weight:500}
+.lr.neutral .lseg{color:var(--dim)}
+.lr.up.lit .node{border-color:var(--up);color:var(--up)}
+.lr.down.lit .node{border-color:var(--down);color:var(--down)}
+.lr.up.lit .lbody b{color:var(--up)}
+.lr.down.lit .lbody b{color:var(--down)}
+.lr.origin .node{background:var(--fg);border-color:var(--fg);color:var(--bg)}
+.lr.origin .lseg{color:var(--fg)}
+.lr.origin .lbody b{color:var(--fg)}
+.chip{display:inline-block;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:var(--fg);color:var(--bg);border-radius:999px;padding:2px 8px;margin-left:6px;vertical-align:2px}
+.cnote{margin:0;font-size:13.5px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.cnote span{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-right:6px}
+
+/* cadeia frontal */
 .chain-wrap{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:14px;align-items:start}
 .seg2{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--bg)}
 .seg2 button{font:600 13px/1 var(--text);color:var(--muted);background:transparent;border:0;border-radius:999px;padding:8px 13px;cursor:pointer}
@@ -99,10 +143,9 @@ svg.fig{display:block;width:100%;height:auto;max-width:100%}
 input[type=range]{width:100%;margin:0;accent-color:var(--accent)}
 .steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
 .st{display:grid;grid-template-columns:2.2em minmax(0,1fr);gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);transition:border-color .2s, opacity .2s;opacity:.45}
-.st.on{opacity:1}
+.st.on{opacity:1;border-color:var(--mc)}
 .st i{font-style:normal;font-family:var(--display);font-weight:900;font-size:26px;line-height:1;color:var(--dim)}
 .st.on i{color:var(--mc)}
-.st.on{border-color:var(--mc)}
 .st b{display:block;font-weight:700;font-size:15px}
 .st small{display:block;color:var(--muted);font-size:13px;line-height:1.4}
 .meter{height:5px;border-radius:3px;background:var(--surface-2);overflow:hidden;margin-top:6px}
@@ -110,12 +153,21 @@ input[type=range]{width:100%;margin:0;accent-color:var(--accent)}
 
 /* catálogo */
 .cat{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.dv{border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--surface);display:flex;flex-direction:column;gap:8px;min-width:0}
+button.dv{appearance:none;-webkit-appearance:none;text-align:left;font:inherit;color:inherit;cursor:pointer;border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--surface);display:flex;flex-direction:column;gap:8px;min-width:0}
+button.dv:hover{border-color:var(--muted)}
+button.dv[aria-pressed="true"]{border-color:var(--accent);background:var(--surface-2)}
 .dv svg{width:100%;height:auto;max-width:100%;background:var(--bg);border-radius:10px;border:1px solid var(--line)}
 .dv h4{margin:0;font-family:var(--display);font-weight:700;font-size:22px;text-transform:uppercase;line-height:1}
+.dv[aria-pressed="true"] h4{color:var(--accent)}
 .dv p{margin:0;color:var(--muted);font-size:13.5px}
-.dv .ch{font-size:13px;color:var(--fg)}
-.dv .ch b{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);margin-right:6px}
+.dv .cta{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--accent);margin-top:auto}
+.detail{display:flex;flex-direction:column;gap:14px;scroll-margin-top:12px}
+.dhead{background:var(--surface);border:1px solid var(--accent);border-radius:18px;padding:16px;display:grid;grid-template-columns:120px minmax(0,1fr);gap:16px;align-items:center}
+.dhead svg{width:100%;height:auto;background:var(--bg);border-radius:10px;border:1px solid var(--line)}
+.dhead .k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.dhead h3{margin:2px 0 6px;font-family:var(--display);font-weight:900;font-size:clamp(28px,4.5vw,40px);line-height:.95;text-transform:uppercase}
+.dhead p{margin:0;color:var(--muted);font-size:14.5px;max-width:70ch}
+.dgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}
 
 .evid ul{margin:0;padding-left:18px;color:var(--muted);font-size:14px;display:flex;flex-direction:column;gap:6px}
 .evid ul b{color:var(--fg);font-weight:600}
@@ -124,15 +176,18 @@ footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-f
 footer b{color:var(--accent);font-weight:600}
 
 @media (max-width:860px){
-  .studio,.chain-wrap{grid-template-columns:minmax(0,1fr)}
+  .studio,.chain-wrap,.dgrid{grid-template-columns:minmax(0,1fr)}
+  .studio > .stage{position:static}
   .cat{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
-@media (max-width:520px){
+@media (max-width:560px){
+  :root{--segw:5.6em}
   .cat{grid-template-columns:minmax(0,1fr)}
-  .segs{grid-template-columns:minmax(0,1fr)}
-  .mus{grid-template-columns:minmax(0,1fr)}
+  .rule{grid-template-columns:minmax(0,1fr)}
+  .dhead{grid-template-columns:minmax(0,1fr)}
+  .dhead svg{max-width:220px}
 }
-@media (prefers-reduced-motion:reduce){.st{transition:none}}
+@media (prefers-reduced-motion:reduce){.st,.node,.lbody b{transition:none}}
 </style>
 </head>
 <body>
@@ -142,8 +197,13 @@ footer b{color:var(--accent);font-weight:600}
   <header>
     <div class="eyebrow"><b>MG COACH</b> · Postura e biomecânica</div>
     <h1>Desvios posturais e <em>reações em cadeia</em></h1>
-    <p class="lede">O corpo funciona como uma corrente de segmentos empilhados. Quando um elo sai da linha, os outros costumam se ajustar para manter o equilíbrio e o olhar na horizontal. Esse ajuste pode <strong>descer da coluna até o pé</strong> ou <strong>subir do pé até a coluna</strong>.</p>
+    <p class="lede">O corpo funciona como uma corrente de segmentos empilhados. Quando um elo sai da linha, os outros costumam se ajustar para manter o equilíbrio e o olhar na horizontal. Em cada desvio abaixo você vê <strong>quais músculos encurtam ou alongam e por quê</strong>, e depois <strong>a reação em cadeia</strong> que ele gera para cima e para baixo.</p>
   </header>
+
+  <div class="rule" aria-label="Por que um músculo encurta ou alonga">
+    <div class="s"><h3>Por que encurta</h3><p>A postura <b>aproxima</b> a origem e a inserção do músculo. <span>Com o tempo ele se adapta a essa posição mais curta. Na coluna, é o lado de dentro (côncavo) da curva.</span></p></div>
+    <div class="l"><h3>Por que alonga</h3><p>A postura <b>afasta</b> a origem e a inserção. <span>O músculo fica esticado e, muitas vezes, mais fraco nessa posição. Na coluna, é o lado de fora (convexo) da curva.</span></p></div>
+  </div>
 
   <noscript><p class="note">Esta página precisa de JavaScript ativado para funcionar.</p></noscript>
 
@@ -159,18 +219,15 @@ footer b{color:var(--accent);font-weight:600}
       <svg class="fig" id="side" viewBox="0 0 300 560" role="img" aria-label="Silhueta em vista lateral, voltada para a direita, com linha de prumo"></svg>
     </section>
     <div class="side">
-      <section class="panel" aria-label="Segmentos">
-        <h3>Segmento por segmento</h3>
-        <p class="note" id="pDesc"></p>
-        <div class="segs" id="segs"></div>
-      </section>
       <section class="panel" aria-label="Músculos">
-        <h3>Tendência muscular</h3>
-        <p class="note">Padrões frequentes descritos por Kendall. Servem de pista para avaliar, não de diagnóstico.</p>
-        <div class="mus">
-          <div class="s"><h4>Tende a encurtar</h4><ul id="mShort"></ul></div>
-          <div class="l"><h4>Tende a alongar</h4><ul id="mLong"></ul></div>
-        </div>
+        <div class="panel-head"><h3>Músculos e o porquê</h3><span class="step-tag">PASSO 1</span></div>
+        <p class="note" id="pDesc"></p>
+        <div id="pMus"></div>
+      </section>
+      <section class="panel" aria-label="Reação em cadeia">
+        <div class="panel-head"><h3>Reação em cadeia</h3><span class="step-tag">PASSO 2</span></div>
+        <div class="cleg"><span><i style="color:var(--fg);background:var(--fg)"></i>origem do desvio</span><span><i style="color:var(--up)">↑</i>ascendente: sobe</span><span><i style="color:var(--down)">↓</i>descendente: desce</span></div>
+        <div id="pChain"></div>
       </section>
     </div>
   </div>
@@ -202,15 +259,32 @@ footer b{color:var(--accent);font-weight:600}
   </div>
 
   <h2 class="sec"><span>03 · catálogo</span>Outros desvios posturais</h2>
+  <p class="note">Toque em um desvio para ver os músculos, o porquê de cada um e a reação em cadeia que ele gera.</p>
   <div class="cat" id="cat"></div>
+
+  <section class="detail" id="detail" aria-live="polite">
+    <div class="dhead" id="dHead"></div>
+    <div class="dgrid">
+      <section class="panel" aria-label="Músculos do desvio">
+        <div class="panel-head"><h3>Músculos e o porquê</h3><span class="step-tag">PASSO 1</span></div>
+        <div id="dMus"></div>
+      </section>
+      <section class="panel" aria-label="Cadeia do desvio">
+        <div class="panel-head"><h3>Reação em cadeia</h3><span class="step-tag">PASSO 2</span></div>
+        <div class="cleg"><span><i style="color:var(--fg);background:var(--fg)"></i>origem</span><span><i style="color:var(--up)">↑</i>sobe</span><span><i style="color:var(--down)">↓</i>desce</span></div>
+        <div id="dChain"></div>
+      </section>
+    </div>
+  </section>
 
   <section class="panel evid" aria-label="Evidências">
     <h3>O que a ciência sustenta</h3>
     <ul>
       <li><b>Postura tem faixa, não ponto ideal.</b> A cifose torácica normal fica entre 20° e 40°. Não há consenso sobre onde começa a hipercifose; 40° é o corte mais usado, e com o envelhecimento muitos estudos usam 50°.</li>
       <li><b>Postural e estrutural são diferentes.</b> A cifose postural é flexível e corrige quando a pessoa se alinha. A estrutural, como na doença de Scheuermann ou nas fraturas vertebrais por osteoporose, é rígida e precisa de avaliação médica.</li>
+      <li><b>Músculo encurtado ou alongado é tendência.</b> Os padrões vêm da observação clínica de Kendall e colegas. Confirme com testes de comprimento e força antes de concluir que um músculo está curto ou fraco.</li>
       <li><b>Exercício ajuda na cifose postural.</b> Revisões de ensaios clínicos mostram redução da cifose com programas de exercício, com mais efeito quando incluem consciência postural e trabalho global, e não só exercícios isolados.</li>
-      <li><b>Cadeia é tendência, não regra.</b> As reações em cadeia descrevem padrões frequentes. Cada pessoa compensa de um jeito, e a relação entre postura estática e dor é fraca. Avalie o movimento, a força e a história de cada aluno antes de concluir.</li>
+      <li><b>Cadeia é tendência, não regra.</b> As reações em cadeia descrevem padrões frequentes. Cada pessoa compensa de um jeito, e a relação entre postura estática e dor é fraca. Avalie o movimento, a força e a história de cada aluno.</li>
       <li><b>Encaminhe quando necessário.</b> Curvas que não corrigem ao se alinhar, assimetrias que pioram, dor noturna, dormência ou fraqueza são motivo para avaliação de médico ou fisioterapeuta.</li>
     </ul>
     <ol class="refs">
@@ -237,41 +311,156 @@ footer b{color:var(--accent);font-weight:600}
   function el(tag, attrs, parent){ var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
   var $ = function(id){ return document.getElementById(id); };
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+  // ================= renderizadores compartilhados =================
+  var SEGS = ['Cabeça e cervical','Ombros','Torácica','Lombar','Pelve','Quadril','Joelho','Tornozelo e pé'];
+
+  function renderMuscles(host, d){
+    var html = '<div class="mgroups">';
+    function group(cls, title, list, tag){
+      if (!list || !list.length) return '';
+      return '<div class="mg '+cls+'"><h4><i></i>'+title+'</h4><ul class="mlist">' + list.map(function(m){
+        return '<li class="mi"><b>'+esc(m[0])+'</b><p><em>'+tag+'</em>'+esc(m[1])+'</p></li>';
+      }).join('') + '</ul></div>';
+    }
+    html += group('s', 'Tende a encurtar', d.short, 'por quê');
+    html += group('l', 'Tende a alongar', d.long, 'por quê');
+    html += group('w', 'Pouca ativação', d.weak, 'por quê');
+    if (d.mnote) html += '<p class="mnote">'+esc(d.mnote)+'</p>';
+    html += '</div>';
+    host.innerHTML = html;
+  }
+
+  function renderChain(host, d){
+    var oi = d.origin ? SEGS.indexOf(d.origin) : -1;
+    var rows = SEGS.map(function(s, i){
+      var v = d.segs[s] || ['sem alteração típica',''];
+      var state = v[0], why = v[1], cls, sym, dist = oi < 0 ? 0 : Math.abs(i-oi);
+      if (i === oi){ cls = 'origin'; sym = '●'; }
+      else if (oi >= 0 && why){ cls = i < oi ? 'up' : 'down'; sym = i < oi ? '↑' : '↓'; }
+      else { cls = 'neutral'; sym = ''; }
+      return '<li class="lr '+cls+'" style="--d:'+(dist*110)+'ms"><span class="lseg">'+esc(s)+'</span><span class="node">'+sym+'</span><div class="lbody"><b>'+esc(state)+(i === oi ? '<span class="chip">origem</span>' : '')+'</b>'+(why ? '<small>'+esc(why)+'</small>' : '')+'</div></li>';
+    }).join('');
+    host.innerHTML = '<ol class="ladder">'+rows+'</ol>' + (d.cnote ? '<p class="cnote"><span>atenção</span>'+esc(d.cnote)+'</p>' : '');
+    var lis = host.querySelectorAll('.lr.up, .lr.down');
+    if (reduce){ lis.forEach(function(li){ li.classList.add('lit'); }); return; }
+    void host.offsetWidth;
+    requestAnimationFrame(function(){ lis.forEach(function(li){ li.classList.add('lit'); }); });
+  }
 
   // ================= 01 · tipos posturais =================
-  // pontos: tornozelo, joelho, quadril (trocânter), pelve (centro + inclinação), coluna S1→C4, orelha, cabeça, acrômio
-  var PL = 156; // linha de prumo
+  var PL = 156;
   var P = {
     ideal: {nome:'Referência', sub:'alinhamento ideal', ank:[150,520], knee:[152,400], hip:[156,290], tilt:10,
       sp:[[136,262],[148,216],[140,176],[128,132],[136,88],[148,62]], ear:[156,38], head:[163,30], acr:[156,92],
       desc:'A linha de prumo passa pela orelha, pelo acrômio, pelo trocânter maior, um pouco à frente do eixo do joelho e um pouco à frente do maléolo lateral. As curvas da coluna estão presentes, sem exagero.',
-      seg:{'Cabeça':'neutra','Cervical':'lordose típica','Torácica':'cifose típica','Lombar':'lordose típica','Pelve':'leve anteversão','Quadril':'neutro','Joelho':'neutro','Tornozelo':'neutro'},
-      short:['—'], long:['—']},
+      short:[], long:[], mnote:'No alinhamento de referência, os músculos de lados opostos de cada articulação ficam em comprimento equilibrado. Escolha um tipo postural para ver o que muda.',
+      origin:null, segs:{'Cabeça e cervical':['neutra',''],'Ombros':['neutros',''],'Torácica':['cifose típica',''],'Lombar':['lordose típica',''],'Pelve':['leve anteversão',''],'Quadril':['neutro',''],'Joelho':['neutro',''],'Tornozelo e pé':['neutro','']},
+      cnote:'Sem desvio de origem: cada segmento está empilhado sobre o de baixo e nenhum precisa compensar.'},
+
     ciflor: {nome:'Cifose-lordose', sub:'curvas acentuadas', ank:[150,520], knee:[146,402], hip:[152,290], tilt:22,
       sp:[[132,258],[160,216],[146,176],[116,134],[130,90],[150,64]], ear:[170,42], head:[177,34], acr:[164,96],
-      desc:'As duas curvas aumentam juntas. A pelve vai para a anteversão, a lordose lombar acentua, a cifose torácica cresce e a cabeça vai à frente. O quadril fica em flexão e o joelho tende à hiperextensão.',
-      seg:{'Cabeça':'anteriorizada','Cervical':'extensão alta','Torácica':'cifose aumentada','Lombar':'lordose aumentada','Pelve':'anteversão','Quadril':'flexão','Joelho':'hiperextensão','Tornozelo':'flexão plantar'},
-      short:['Extensores do pescoço','Flexores do quadril','Eretores lombares'], long:['Flexores profundos do pescoço','Eretores torácicos','Oblíquo externo','Isquiotibiais (leve)']},
+      desc:'As duas curvas aumentam juntas. A pelve vai para a anteversão, a lordose lombar acentua, a cifose torácica cresce e a cabeça vai à frente.',
+      short:[
+        ['Flexores do quadril (iliopsoas e reto femoral)','A pelve gira para a frente sobre o fêmur. Isso aproxima a lombar e a frente da pelve, onde eles se originam, do fêmur, onde se inserem.'],
+        ['Eretores lombares','Ficam do lado côncavo da lordose aumentada: as vértebras lombares e o sacro se aproximam atrás.'],
+        ['Extensores altos do pescoço (suboccipitais)','A cervical alta estende para manter o olhar na horizontal, aproximando a base do crânio das primeiras vértebras.']],
+      long:[
+        ['Oblíquo externo','A anteversão leva o púbis e a crista ilíaca para baixo e para a frente, afastando-os das costelas.'],
+        ['Eretores torácicos','Ficam do lado convexo da cifose aumentada: as vértebras torácicas se afastam umas das outras atrás.'],
+        ['Flexores profundos do pescoço','A extensão da cervical alta afasta suas inserções, na frente das vértebras e na base do crânio.'],
+        ['Isquiotibiais (leve)','A anteversão eleva o túber isquiático e o afasta da tíbia.']],
+      origin:'Pelve', segs:{
+        'Cabeça e cervical':['anteriorizada, extensão alta','Com a cifose maior, a cabeça vai à frente; a cervical alta estende para manter o olhar na horizontal.'],
+        'Ombros':['à frente','Acompanham a cifose: as escápulas deslizam para fora e para a frente sobre o tórax.'],
+        'Torácica':['cifose aumentada','Curva mais para trazer o tronco de volta sobre a pelve e equilibrar a lordose maior.'],
+        'Lombar':['lordose aumentada','A anteversão inclina a base do sacro, e a lombar curva mais para o tronco continuar ereto.'],
+        'Pelve':['anteversão','Ponto de partida: a pelve gira para a frente.'],
+        'Quadril':['flexão','Com a pelve girada para a frente sobre o fêmur, o quadril fica em flexão.'],
+        'Joelho':['hiperextensão','O joelho trava para trás e leva o peso para trás, compensando o tronco à frente.'],
+        'Tornozelo e pé':['flexão plantar','Acompanha o joelho em hiperextensão: a tíbia inclina para trás.']}},
+
     sway: {nome:'Sway-back', sub:'pelve projetada à frente', ank:[150,520], knee:[145,402], hip:[172,292], tilt:4,
       sp:[[152,264],[164,222],[150,180],[124,136],[128,92],[148,66]], ear:[170,42], head:[177,34], acr:[148,98],
-      desc:'A pelve desliza para a frente da linha de prumo com pouca anteversão, e o tronco superior inclina para trás. A cifose se estende até a lombar alta, a lombar baixa fica em extensão curta, o quadril fica estendido e o joelho hiperestendido.',
-      seg:{'Cabeça':'anteriorizada','Cervical':'extensão alta','Torácica':'cifose longa','Lombar':'lordose curta, baixa','Pelve':'à frente, pouca anteversão','Quadril':'extensão','Joelho':'hiperextensão','Tornozelo':'neutro'},
-      short:['Isquiotibiais','Fibras altas do oblíquo interno','Eretores lombares baixos'], long:['Iliopsoas','Oblíquo externo','Eretores torácicos','Flexores do pescoço']},
+      desc:'A pelve desliza para a frente da linha de prumo com pouca anteversão, e o tronco superior inclina para trás para equilibrar.',
+      short:[
+        ['Isquiotibiais','O quadril fica estendido e a pelve tem pouca anteversão. O túber isquiático desce e se aproxima da tíbia.'],
+        ['Fibras altas do oblíquo interno','Com o tórax inclinado para trás e a cifose longa, as costelas baixas se aproximam da crista ilíaca.']],
+      long:[
+        ['Iliopsoas','A pelve projetada à frente e o quadril estendido afastam o fêmur da lombar e do ílio.'],
+        ['Oblíquo externo','A pelve à frente e o tórax para trás afastam a crista ilíaca das costelas, na lateral do tronco.'],
+        ['Eretores torácicos','Ficam do lado convexo da cifose longa.'],
+        ['Flexores profundos do pescoço','A cabeça à frente, com extensão da cervical alta, afasta suas inserções.']],
+      mnote:'Os eretores lombares costumam ser fortes, mas não encurtados.',
+      origin:'Pelve', segs:{
+        'Cabeça e cervical':['anteriorizada','Com o tórax para trás, a cabeça vai à frente para manter o equilíbrio e o olhar.'],
+        'Ombros':['atrás da linha','Acompanham o tórax, que inclina para trás.'],
+        'Torácica':['cifose longa','O tronco superior inclina para trás para equilibrar a pelve à frente, e a curva se estende até a lombar alta.'],
+        'Lombar':['lordose curta, baixa','Só a parte baixa fica em extensão; o resto é puxado pela cifose longa.'],
+        'Pelve':['à frente, pouca anteversão','Ponto de partida: a pelve desliza para a frente da linha de prumo.'],
+        'Quadril':['extensão','Com a pelve à frente e pouca anteversão, o quadril fica estendido.'],
+        'Joelho':['hiperextensão','O joelho trava para trás e a pessoa se apoia nos ligamentos.'],
+        'Tornozelo e pé':['neutro ou flexão plantar','Com o joelho travado, a tíbia pode inclinar para trás.']}},
+
     flat: {nome:'Costas planas', sub:'curvas retificadas', ank:[150,520], knee:[153,400], hip:[154,290], tilt:2,
       sp:[[140,262],[142,216],[138,176],[132,132],[134,88],[150,62]], ear:[162,40], head:[169,32], acr:[158,94],
-      desc:'A lordose lombar e a cifose torácica baixa ficam retificadas. A pelve tem pouca anteversão ou fica neutra, o quadril fica neutro ou em extensão e a cabeça pode ir um pouco à frente.',
-      seg:{'Cabeça':'leve anteriorização','Cervical':'neutra','Torácica':'retificada embaixo','Lombar':'retificada','Pelve':'pouca anteversão','Quadril':'neutro ou extensão','Joelho':'neutro','Tornozelo':'neutro'},
-      short:['Isquiotibiais','Abdominais (frequentemente fortes)'], long:['Flexores do quadril monoarticulares','Eretores lombares']},
+      desc:'A lordose lombar e a cifose torácica baixa ficam retificadas. A pelve tem pouca anteversão e a coluna perde parte da capacidade de amortecer.',
+      short:[
+        ['Isquiotibiais','Com pouca anteversão, o túber isquiático fica mais baixo e perto da tíbia.'],
+        ['Reto abdominal','A pelve com pouca anteversão e a lombar reta aproximam o púbis do esterno.']],
+      long:[
+        ['Flexores do quadril monoarticulares (iliopsoas)','A pelve com pouca anteversão e o quadril mais estendido afastam o fêmur da lombar.'],
+        ['Eretores lombares','A lombar perde a curva para trás, e o lado de trás da coluna fica mais comprido.']],
+      origin:'Pelve', segs:{
+        'Cabeça e cervical':['leve anteriorização','Com a coluna mais reta, a cabeça pode ir um pouco à frente.'],
+        'Ombros':['neutros',''],
+        'Torácica':['retificada embaixo','A parte baixa da curva também fica reta; a parte alta pode curvar um pouco mais.'],
+        'Lombar':['retificada','Com o sacro menos inclinado, a lombar perde a curva.'],
+        'Pelve':['pouca anteversão','Ponto de partida: a pelve fica mais vertical.'],
+        'Quadril':['neutro ou extensão','Pouca anteversão deixa o quadril mais estendido.'],
+        'Joelho':['neutro ou leve flexão','Costuma não mudar; em algumas pessoas fica levemente flexionado.'],
+        'Tornozelo e pé':['neutro','']}},
+
     cifose: {nome:'Hipercifose', sub:'cabeça e ombros à frente', ank:[150,520], knee:[152,400], hip:[156,290], tilt:10,
       sp:[[136,262],[148,216],[138,178],[112,138],[124,96],[150,68]], ear:[180,46], head:[187,38], acr:[168,100],
-      desc:'A curva torácica aumenta, os ombros vão à frente e a cabeça se projeta. Para manter o olhar na horizontal, a cervical alta estende. Da pelve para baixo, o alinhamento pode continuar neutro.',
-      seg:{'Cabeça':'anteriorizada','Cervical':'baixa flexão, alta extensão','Torácica':'cifose aumentada','Lombar':'neutra','Pelve':'neutra','Quadril':'neutro','Joelho':'neutro','Tornozelo':'neutro'},
-      short:['Peitoral maior e menor','Extensores altos do pescoço','Grande dorsal'], long:['Trapézio médio e inferior','Romboides','Eretores torácicos','Flexores profundos do pescoço']},
+      desc:'A curva torácica aumenta, os ombros vão à frente e a cabeça se projeta. Da pelve para baixo, o alinhamento pode continuar neutro.',
+      short:[
+        ['Peitoral menor','Liga o processo coracoide da escápula às costelas. Com os ombros à frente, essas pontas se aproximam.'],
+        ['Peitoral maior','Os ombros à frente e o úmero em rotação interna aproximam a inserção no úmero do esterno e da clavícula.'],
+        ['Abdominais superiores','A flexão torácica aproxima o esterno e as costelas do púbis.'],
+        ['Extensores altos do pescoço (suboccipitais)','A cervical alta estende para manter o olhar na horizontal.']],
+      long:[
+        ['Trapézio médio e inferior e romboides','Ligam a coluna à escápula. Com as escápulas afastadas da coluna, ficam esticados.'],
+        ['Eretores torácicos','Ficam do lado convexo da curva aumentada.'],
+        ['Flexores profundos do pescoço','A extensão da cervical alta afasta suas inserções.']],
+      origin:'Torácica', segs:{
+        'Cabeça e cervical':['anteriorizada, extensão alta','A curva maior leva a cabeça à frente; a cervical alta estende para manter o olhar.'],
+        'Ombros':['protrusos','As escápulas deslizam sobre o tórax mais curvo e se afastam da coluna.'],
+        'Torácica':['cifose aumentada','Ponto de partida: a curva torácica aumenta.'],
+        'Lombar':['neutra ou mais lordose','Pode continuar neutra ou curvar mais para trazer o tronco de volta sobre a pelve.'],
+        'Pelve':['neutra',''],'Quadril':['neutro',''],'Joelho':['neutro',''],'Tornozelo e pé':['neutro','']},
+      cnote:'Ombros à frente reduzem o espaço sob o acrômio ao elevar o braço. Veja também a cabeça anteriorizada e os ombros protrusos no catálogo.'},
+
     lordose: {nome:'Hiperlordose', sub:'lombar acentuada', ank:[150,520], knee:[147,402], hip:[153,290], tilt:24,
       sp:[[132,258],[164,216],[148,176],[128,132],[136,88],[148,62]], ear:[158,38], head:[165,30], acr:[158,92],
-      desc:'A pelve antevertida aumenta a lordose lombar. O quadril fica em flexão, o joelho pode hiperestender e o tornozelo vai para a flexão plantar. A parte de cima do tronco pode continuar alinhada.',
-      seg:{'Cabeça':'neutra','Cervical':'neutra','Torácica':'típica','Lombar':'lordose aumentada','Pelve':'anteversão','Quadril':'flexão','Joelho':'hiperextensão leve','Tornozelo':'flexão plantar'},
-      short:['Flexores do quadril','Eretores lombares'], long:['Abdominais','Isquiotibiais']}
+      desc:'A pelve antevertida aumenta a lordose lombar. A parte de cima do tronco pode continuar alinhada.',
+      short:[
+        ['Flexores do quadril','A anteversão coloca o quadril em flexão e aproxima a pelve e a lombar do fêmur.'],
+        ['Eretores lombares e quadrado lombar','Ficam do lado côncavo da lordose aumentada.']],
+      long:[
+        ['Abdominais','O púbis desce e se afasta do esterno e das costelas.'],
+        ['Isquiotibiais','A anteversão eleva o túber isquiático e o afasta da tíbia.'],
+        ['Glúteo máximo','O quadril em flexão afasta a origem, atrás da pelve e no sacro, da inserção no fêmur.']],
+      origin:'Pelve', segs:{
+        'Cabeça e cervical':['neutra ou à frente','Pode continuar alinhada; em parte das pessoas vai à frente para compensar.'],
+        'Ombros':['neutros',''],
+        'Torácica':['típica ou maior','Pode curvar mais para equilibrar a lombar mais curva.'],
+        'Lombar':['lordose aumentada','A anteversão inclina mais a base do sacro e a lombar acompanha.'],
+        'Pelve':['anteversão','Ponto de partida: a pelve gira para a frente.'],
+        'Quadril':['flexão','Com a pelve girada sobre o fêmur, o quadril flexiona; pode vir com rotação interna da coxa.'],
+        'Joelho':['hiperextensão leve','Leva o peso para trás; em algumas pessoas aparece junto com o valgo.'],
+        'Tornozelo e pé':['flexão plantar','Acompanha o joelho; com a rotação interna do membro, o pé pode pronar.']}}
   };
   var ORDER = ['ideal','ciflor','sway','flat','cifose','lordose'];
 
@@ -304,28 +493,20 @@ footer b{color:var(--accent);font-weight:600}
   function figure(g, S, col, strong){
     while (g.firstChild) g.removeChild(g.firstChild);
     var w = strong ? 1 : 0.8;
-    // pé
     el('path', {d:'M'+(S.ank[0]-12)+',535 L'+(S.ank[0]+46)+',536', stroke:col, 'stroke-width':9*w, 'stroke-linecap':'round'}, g);
     el('path', {d:'M'+S.ank[0]+','+S.ank[1]+' L'+(S.ank[0]-6)+',532', stroke:col, 'stroke-width':9*w, 'stroke-linecap':'round'}, g);
-    // perna e coxa
     el('path', {d:'M'+S.ank[0]+','+S.ank[1]+' L'+S.knee[0]+','+S.knee[1]+' L'+S.hip[0]+','+S.hip[1], fill:'none', stroke:col, 'stroke-width':15*w, 'stroke-linecap':'round', 'stroke-linejoin':'round'}, g);
-    // pelve
     var t = S.tilt*Math.PI/180, c = [S.hip[0]-4, S.hip[1]-14];
     var asis = [c[0]+30*Math.cos(t), c[1]+30*Math.sin(t)], psis = [c[0]-24*Math.cos(t), c[1]-24*Math.sin(t)];
     el('path', {d:'M'+psis[0]+','+psis[1]+' L'+asis[0]+','+asis[1], stroke:col, 'stroke-width':14*w, 'stroke-linecap':'round'}, g);
-    // coluna
     var spine = S.sp.slice(); spine.push([S.ear[0]-6, S.ear[1]+12]);
     el('path', {d:crPath(spine), fill:'none', stroke:col, 'stroke-width':9*w, 'stroke-linecap':'round'}, g);
-    // caixa torácica
     var t12 = S.sp[2], t1 = S.sp[4], ang = Math.atan2(t1[1]-t12[1], t1[0]-t12[0]), mid = [(t12[0]+t1[0])/2, (t12[1]+t1[1])/2];
     var nx = Math.sin(ang), ny = -Math.cos(ang); if (nx < 0){ nx = -nx; ny = -ny; }
     var cc = [mid[0]+nx*24, mid[1]+ny*24 + 6];
     el('ellipse', {cx:cc[0], cy:cc[1], rx:48, ry:28, transform:'rotate('+(ang*180/Math.PI)+' '+cc[0]+' '+cc[1]+')', fill:'none', stroke:col, 'stroke-width':3*w, opacity:.8}, g);
-    // braço
     el('path', {d:'M'+S.acr[0]+','+S.acr[1]+' L'+(S.acr[0]+2)+','+(S.acr[1]+82)+' L'+(S.acr[0]+10)+','+(S.acr[1]+150), fill:'none', stroke:col, 'stroke-width':9*w, 'stroke-linecap':'round', 'stroke-linejoin':'round', opacity:.85}, g);
-    // cabeça
     el('circle', {cx:S.head[0], cy:S.head[1], r:21, fill:strong ? col : 'none', stroke:col, 'stroke-width':strong ? 0 : 3}, g);
-    return {asis:asis, psis:psis};
   }
   figure(gRef, P.ideal, C.fg, false);
 
@@ -335,13 +516,9 @@ footer b{color:var(--accent);font-weight:600}
     while (gDev.firstChild) gDev.removeChild(gDev.firstChild);
     var marks = [['orelha',S.ear,0],['acrômio',S.acr,0],['trocânter',S.hip,0],['joelho',S.knee,4],['maléolo',S.ank,6]];
     marks.forEach(function(m){
-      var x = m[1][0], y = m[1][1], dev = x - PL - m[2]*-1*0;
-      var ref = PL - m[2]; // referência: a linha passa um pouco à frente do joelho e do maléolo
-      var off = x - ref, bad = Math.abs(off) > 5;
+      var x = m[1][0], y = m[1][1], ref = PL - m[2], off = x - ref, bad = Math.abs(off) > 5;
       el('circle', {cx:x, cy:y, r:5, fill:bad ? C.accent : C.ok, stroke:C.surface, 'stroke-width':2}, gDev);
-      if (bad){
-        el('line', {x1:ref, y1:y, x2:x, y2:y, stroke:C.accent, 'stroke-width':2.5}, gDev);
-      }
+      if (bad) el('line', {x1:ref, y1:y, x2:x, y2:y, stroke:C.accent, 'stroke-width':2.5}, gDev);
       var lx = 96;
       el('line', {x1:lx+4, y1:y, x2:Math.min(x, ref)-7, y2:y, stroke:bad ? C.accent : C.dim, 'stroke-width':1, opacity:.6}, gDev);
       var tx = el('text', {x:lx, y:y+4, 'text-anchor':'end', fill:bad ? C.accent : C.muted, 'font-family':C.mono, 'font-size':11.5, 'font-weight':600}, gDev);
@@ -355,13 +532,8 @@ footer b{color:var(--accent);font-weight:600}
     $('pName').textContent = key === 'ideal' ? 'Alinhamento de referência' : to.nome;
     $('pSub').textContent = to.sub;
     $('pDesc').textContent = to.desc;
-    var segs = $('segs'); segs.innerHTML = '';
-    Object.keys(to.seg).forEach(function(s){
-      var v = to.seg[s], ref = P.ideal.seg[s], d = document.createElement('div');
-      d.className = 'sg' + (v !== ref ? ' alt' : ''); d.innerHTML = '<span>'+s+'</span><b>'+v+'</b>'; segs.appendChild(d);
-    });
-    $('mShort').innerHTML = to.short.map(function(x){ return '<li>'+x+'</li>'; }).join('');
-    $('mLong').innerHTML = to.long.map(function(x){ return '<li>'+x+'</li>'; }).join('');
+    renderMuscles($('pMus'), to);
+    renderChain($('pChain'), to);
     if (reduce){ cur.S = to; drawSide(to); return; }
     function step(ts){ if (cur.key !== key) return; if (t0 === null) t0 = ts; var x = Math.min(1,(ts-t0)/550), e = 1-Math.pow(1-x,3);
       var S = mix(from, to, e); cur.S = S; drawSide(S); if (x < 1) requestAnimationFrame(step); else cur.S = to; }
@@ -403,44 +575,26 @@ footer b{color:var(--accent);font-weight:600}
   el('line', {x1:0, y1:452, x2:300, y2:452, stroke:C.line, 'stroke-width':2}, front);
   var gF = el('g', {}, front);
 
-  function amounts(){
-    var s = STEPS[cstate.mode], a = {};
-    s.forEach(function(st){ a[st.n] = sm(prog(st.w, cstate.k)); });
-    return a;
-  }
+  function amounts(){ var s = STEPS[cstate.mode], a = {}; s.forEach(function(st){ a[st.n] = sm(prog(st.w, cstate.k)); }); return a; }
   function drawFront(){
     while (gF.firstChild) gF.removeChild(gF.firstChild);
     var a = amounts(), col = cstate.mode === 'asc' ? C.up : C.down;
     var foot = a['Pé']||0, tib = a['Tíbia']||a['Joelho']||0, knee = a['Joelho']||0, fem = a['Fêmur']||0, pel = a['Pelve']||0;
-    // referência: linha quadril → pé
-    var hipR = {x:190, y:120}, hipL = {x:110, y:120};
-    var pelDrop = 16*pel;
-    hipL = {x:110, y:120+pelDrop}; // lado sem apoio cai
-    var hipRy = 120 - pelDrop*0.15;
-    hipR.y = hipRy;
-    var ankR = {x:186 - 4*foot, y:424};
-    var kneeR = {x:189 - 26*Math.max(knee, fem*0.9), y:276};
-    // pelve
-    el('line', {x1:hipL.x-26, y1:hipL.y-12, x2:hipR.x+26, y2:hipR.y-12+ (hipR.y-hipL.y)*0.3, stroke:C.bone, 'stroke-width':16, 'stroke-linecap':'round', opacity:.9}, gF);
-    el('line', {x1:60, y1:120-12, x2:240, y2:120-12, stroke:C.fg, 'stroke-width':1, 'stroke-dasharray':'4 5', opacity:.4}, gF);
-    // perna sem apoio (esquerda), elevada
+    var pelDrop = 16*pel, hipL = {x:110, y:120+pelDrop}, hipR = {x:190, y:120 - pelDrop*0.15};
+    var ankR = {x:186 - 4*foot, y:424}, kneeR = {x:189 - 26*Math.max(knee, fem*0.9), y:276};
+    el('line', {x1:hipL.x-26, y1:hipL.y-12, x2:hipR.x+26, y2:hipR.y-12+(hipR.y-hipL.y)*0.3, stroke:C.bone, 'stroke-width':16, 'stroke-linecap':'round', opacity:.9}, gF);
+    el('line', {x1:60, y1:108, x2:240, y2:108, stroke:C.fg, 'stroke-width':1, 'stroke-dasharray':'4 5', opacity:.4}, gF);
     el('path', {d:'M'+hipL.x+','+hipL.y+' L'+(hipL.x+2)+','+(hipL.y+140)+' L'+(hipL.x+16)+','+(hipL.y+230), fill:'none', stroke:C.dim, 'stroke-width':16, 'stroke-linecap':'round', 'stroke-linejoin':'round', opacity:.7}, gF);
-    // linha de referência quadril → tornozelo
     el('line', {x1:hipR.x, y1:hipR.y, x2:ankR.x, y2:ankR.y, stroke:C.fg, 'stroke-width':1.2, 'stroke-dasharray':'5 5', opacity:.55}, gF);
-    // fêmur e tíbia
     el('line', {x1:hipR.x, y1:hipR.y, x2:kneeR.x, y2:kneeR.y, stroke:C.bone, 'stroke-width':20, 'stroke-linecap':'round'}, gF);
     el('line', {x1:kneeR.x, y1:kneeR.y, x2:ankR.x, y2:ankR.y, stroke:C.bone, 'stroke-width':16, 'stroke-linecap':'round'}, gF);
     el('circle', {cx:hipR.x, cy:hipR.y, r:12, fill:C.bone}, gF);
-    // patela (gira para dentro com a rotação interna)
     var pr = Math.max(fem, tib*0.6);
     el('ellipse', {cx:kneeR.x - 6*pr, cy:kneeR.y, rx:9 - 3*pr, ry:11, fill:C.surface, stroke:C.fg, 'stroke-width':2.5}, gF);
-    // pé (calcâneo everte, arco medial desce)
-    var ex = ankR.x, ey = ankR.y;
-    var arch = 12 - 10*foot;
-    el('path', {d:'M'+(ex-30)+',448 Q'+(ex-14)+','+(448-arch)+' '+(ex+2)+','+(446)+' L'+(ex+30)+',448 L'+(ex+22)+','+(436)+' L'+(ex-18)+','+(434 + 6*foot)+' Z', fill:C.bone, opacity:.9}, gF);
+    var ex = ankR.x, ey = ankR.y, arch = 12 - 10*foot;
+    el('path', {d:'M'+(ex-30)+',448 Q'+(ex-14)+','+(448-arch)+' '+(ex+2)+',446 L'+(ex+30)+',448 L'+(ex+22)+',436 L'+(ex-18)+','+(434 + 6*foot)+' Z', fill:C.bone, opacity:.9}, gF);
     el('line', {x1:ex, y1:ey, x2:ex - 8*foot, y2:440, stroke:C.bone, 'stroke-width':12, 'stroke-linecap':'round'}, gF);
-    // setas de rotação
-    function rotArrow(cx, cy, amt, label){
+    function rotArrow(cx, cy, amt){
       if (amt < 0.05) return;
       var r = 22, a0 = -20, a1 = -20 - 120*amt;
       var p0 = {x:cx + r*Math.cos(a0*Math.PI/180), y:cy + r*0.45*Math.sin(a0*Math.PI/180)}, p1 = {x:cx + r*Math.cos(a1*Math.PI/180), y:cy + r*0.45*Math.sin(a1*Math.PI/180)};
@@ -449,23 +603,15 @@ footer b{color:var(--accent);font-weight:600}
     }
     rotArrow((hipR.x+kneeR.x)/2, (hipR.y+kneeR.y)/2, fem);
     rotArrow((kneeR.x+ankR.x)/2, (kneeR.y+ankR.y)/2, tib);
-    // valgo: desvio do joelho em relação à linha
     var lineX = hipR.x + (ankR.x-hipR.x)*((kneeR.y-hipR.y)/(ankR.y-hipR.y));
-    if (lineX - kneeR.x > 3){
-      el('line', {x1:lineX, y1:kneeR.y, x2:kneeR.x+10, y2:kneeR.y, stroke:col, 'stroke-width':3}, gF);
-    }
-    // rótulos dos segmentos ativos
-    var lab = [['Pelve',{x:250,y:hipR.y-14}],['Fêmur',{x:250,y:200}],['Joelho',{x:250,y:kneeR.y}],['Tíbia',{x:250,y:350}],['Pé',{x:250,y:438}]];
-    lab.forEach(function(L){
+    if (lineX - kneeR.x > 3) el('line', {x1:lineX, y1:kneeR.y, x2:kneeR.x+10, y2:kneeR.y, stroke:col, 'stroke-width':3}, gF);
+    [['Pelve',hipR.y-14],['Fêmur',200],['Joelho',kneeR.y],['Tíbia',350],['Pé',438]].forEach(function(L){
       var v = a[L[0]]; if (v === undefined && L[0] === 'Tíbia') v = a['Joelho'];
-      var on = (v||0) > 0.05;
-      var t = el('text', {x:L[1].x, y:L[1].y+4, fill:on ? col : C.dim, 'font-family':C.mono, 'font-size':12, 'font-weight':600}, gF);
+      var t = el('text', {x:250, y:L[1]+4, fill:(v||0) > 0.05 ? col : C.dim, 'font-family':C.mono, 'font-size':12, 'font-weight':600}, gF);
       t.textContent = L[0];
     });
     var tg = el('text', {x:14, y:24, fill:C.muted, 'font-family':C.mono, 'font-size':11}, gF); tg.textContent = 'vista frontal · perna de apoio';
-    // painel
-    var list = STEPS[cstate.mode];
-    list.forEach(function(st, i){
+    STEPS[cstate.mode].forEach(function(st, i){
       var li = $('st-'+i), v = prog(st.w, cstate.k);
       li.classList.toggle('on', v > 0.02);
       li.querySelector('.meter span').style.width = (v*100)+'%';
@@ -474,8 +620,8 @@ footer b{color:var(--accent);font-weight:600}
     $('k').value = Math.round(cstate.k*100);
   }
   function buildSteps(){
-    var list = STEPS[cstate.mode], col = cstate.mode === 'asc' ? 'var(--up)' : 'var(--down)';
-    $('steps').innerHTML = list.map(function(st, i){
+    var col = cstate.mode === 'asc' ? 'var(--up)' : 'var(--down)';
+    $('steps').innerHTML = STEPS[cstate.mode].map(function(st, i){
       return '<li class="st" id="st-'+i+'" style="--mc:'+col+'"><i>'+(i+1)+'</i><div><b>'+st.n+' · '+st.t+'</b><small>'+st.d+'</small><div class="meter"><span></span></div></div></li>';
     }).join('');
     $('cName').textContent = cstate.mode === 'asc' ? 'Cadeia ascendente' : 'Cadeia descendente';
@@ -504,37 +650,162 @@ footer b{color:var(--accent);font-weight:600}
   var B = C.bone, A = C.accent, R = C.fg;
   function svgIcon(inner){ return '<svg viewBox="0 0 200 120" role="img" aria-hidden="true">'+inner+'</svg>'; }
   var CAT = [
-    {t:'Escoliose', p:'Curva lateral da coluna com rotação das vértebras. A estrutural não corrige ao se inclinar para a frente (teste de Adams mostra a giba); a funcional pode vir de diferença de comprimento das pernas ou de dor.',
-     c:'Ombros e pelve em alturas diferentes, escápula mais saliente de um lado.',
-     i:svgIcon('<path d="M100 10 C80 35 124 55 100 80 C84 96 108 108 100 114" fill="none" stroke="'+A+'" stroke-width="7" stroke-linecap="round"/><line x1="62" y1="22" x2="138" y2="30" stroke="'+B+'" stroke-width="5" stroke-linecap="round"/><line x1="66" y1="96" x2="134" y2="90" stroke="'+B+'" stroke-width="5" stroke-linecap="round"/><line x1="100" y1="6" x2="100" y2="116" stroke="'+R+'" stroke-dasharray="4 4" opacity=".4"/>')},
-    {t:'Cabeça anteriorizada', p:'O ouvido fica à frente do ombro. Para manter o olhar reto, a cervical alta estende e a baixa flexiona, o que aumenta a demanda dos extensores do pescoço.',
-     c:'Costuma vir com hipercifose e ombros protrusos.',
-     i:svgIcon('<line x1="96" y1="8" x2="96" y2="116" stroke="'+R+'" stroke-dasharray="4 4" opacity=".4"/><path d="M90 112 C88 84 92 66 104 52 C112 44 118 40 126 38" fill="none" stroke="'+B+'" stroke-width="7" stroke-linecap="round"/><circle cx="138" cy="30" r="16" fill="'+A+'"/><line x1="96" y1="30" x2="122" y2="30" stroke="'+A+'" stroke-width="3"/>')},
-    {t:'Ombros protrusos', p:'As escápulas se afastam da coluna e o ombro roda para a frente. O peitoral menor tende a encurtar e o trapézio médio e inferior a alongar.',
-     c:'Pode reduzir a elevação do braço e alterar o ritmo escapuloumeral.',
-     i:svgIcon('<rect x="84" y="20" width="32" height="90" rx="10" fill="'+B+'" opacity=".5"/><path d="M40 40 Q70 30 84 44" fill="none" stroke="'+A+'" stroke-width="7" stroke-linecap="round"/><path d="M160 40 Q130 30 116 44" fill="none" stroke="'+A+'" stroke-width="7" stroke-linecap="round"/><path d="M52 60 L36 56 M148 60 L164 56" stroke="'+R+'" stroke-width="2.5" stroke-linecap="round"/>')},
-    {t:'Escápula alada', p:'A borda medial da escápula se descola das costelas. Costuma refletir pouca ação do serrátil anterior ou do trapézio; em casos marcados, vale investigar lesão nervosa.',
-     c:'Aparece mais ao empurrar ou ao elevar o braço.',
-     i:svgIcon('<path d="M60 20 Q100 34 140 20 L140 110 L60 110 Z" fill="'+B+'" opacity=".25"/><path d="M78 34 L104 30 L98 88 Z" fill="none" stroke="'+B+'" stroke-width="4"/><path d="M108 32 L132 40 L118 86 Z" fill="'+A+'" opacity=".85"/><line x1="100" y1="16" x2="100" y2="114" stroke="'+R+'" stroke-dasharray="4 4" opacity=".4"/>')},
-    {t:'Joelho valgo', p:'Os joelhos se aproximam e os pés se afastam (formato em X). Pode ser estático, pela anatomia, ou dinâmico, aparecendo só no movimento.',
-     c:'Liga-se à pronação do pé e ao pouco controle do quadril (veja a cadeia acima).',
-     i:svgIcon('<path d="M78 8 L98 60 L74 112" fill="none" stroke="'+B+'" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><path d="M122 8 L102 60 L126 112" fill="none" stroke="'+B+'" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><circle cx="98" cy="60" r="6" fill="'+A+'"/><circle cx="102" cy="60" r="6" fill="'+A+'"/>')},
-    {t:'Joelho varo', p:'Os joelhos se afastam com os pés juntos (formato em O). Concentra mais carga no compartimento medial do joelho.',
-     c:'Pode vir com rotação externa do quadril e supinação do pé.',
-     i:svgIcon('<path d="M90 8 L66 60 L90 112" fill="none" stroke="'+B+'" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><path d="M110 8 L134 60 L110 112" fill="none" stroke="'+B+'" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><circle cx="66" cy="60" r="6" fill="'+A+'"/><circle cx="134" cy="60" r="6" fill="'+A+'"/>')},
-    {t:'Joelho recurvato', p:'O joelho estende além do neutro e fica atrás da linha de prumo. A pessoa "trava" o joelho e apoia nas estruturas passivas.',
-     c:'Frequente no sway-back e na hiperlordose, com tornozelo em flexão plantar.',
-     i:svgIcon('<line x1="104" y1="6" x2="104" y2="116" stroke="'+R+'" stroke-dasharray="4 4" opacity=".4"/><path d="M108 8 L92 62 L110 112" fill="none" stroke="'+B+'" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><circle cx="92" cy="62" r="6" fill="'+A+'"/><line x1="104" y1="62" x2="96" y2="62" stroke="'+A+'" stroke-width="3"/>')},
-    {t:'Pé plano', p:'O arco longitudinal medial fica baixo. Pode ser flexível, quando o arco reaparece na ponta dos pés, ou rígido.',
-     c:'Pronação, rotação interna da tíbia e tendência ao valgo.',
-     i:svgIcon('<path d="M30 92 Q90 88 120 90 L170 92 L166 78 L60 74 Z" fill="'+B+'" opacity=".85"/><path d="M60 92 Q95 86 130 92" fill="none" stroke="'+A+'" stroke-width="4"/><line x1="20" y1="96" x2="180" y2="96" stroke="'+R+'" opacity=".3"/>')},
-    {t:'Pé cavo', p:'O arco longitudinal fica alto e rígido. O pé absorve menos o impacto e a carga se concentra no calcanhar e na frente do pé.',
-     c:'Supinação e tendência ao varo.',
-     i:svgIcon('<path d="M30 92 Q90 54 128 90 L170 92 L166 72 L60 62 Z" fill="'+B+'" opacity=".85"/><path d="M50 92 Q90 56 128 92" fill="none" stroke="'+A+'" stroke-width="4"/><line x1="20" y1="96" x2="180" y2="96" stroke="'+R+'" opacity=".3"/>')}
+    {id:'escoliose', t:'Escoliose', p:'Curva lateral da coluna com rotação das vértebras.',
+     desc:'Curva lateral da coluna com rotação das vértebras. A estrutural não corrige ao inclinar o tronco para a frente (o teste de Adams mostra a giba); a funcional pode vir de diferença de comprimento das pernas ou de dor, e corrige quando a causa é compensada.',
+     i:svgIcon('<path d="M100 10 C80 35 124 55 100 80 C84 96 108 108 100 114" fill="none" stroke="'+A+'" stroke-width="7" stroke-linecap="round"/><line x1="62" y1="22" x2="138" y2="30" stroke="'+B+'" stroke-width="5" stroke-linecap="round"/><line x1="66" y1="96" x2="134" y2="90" stroke="'+B+'" stroke-width="5" stroke-linecap="round"/><line x1="100" y1="6" x2="100" y2="116" stroke="'+R+'" stroke-dasharray="4 4" opacity=".4"/>'),
+     short:[['Músculos do lado côncavo (eretores, quadrado lombar, intercostais)','A curva aproxima as vértebras e as costelas desse lado, encurtando o que fica por dentro dela.']],
+     long:[['Músculos do lado convexo','O lado de fora da curva fica mais comprido e os músculos são esticados.']],
+     mnote:'Na escoliose estrutural, a causa está no crescimento do osso, não no músculo. O desequilíbrio muscular é consequência.',
+     origin:'Torácica', segs:{
+       'Cabeça e cervical':['inclinada','Inclina para o lado oposto da curva para manter o olhar na horizontal.'],
+       'Ombros':['alturas diferentes','Um ombro sobe; a rotação das costelas deixa uma escápula mais saliente (giba).'],
+       'Torácica':['curva lateral com rotação','Ponto de partida da curva principal.'],
+       'Lombar':['curva compensatória','Forma uma curva no sentido oposto para recentralizar o tronco.'],
+       'Pelve':['inclinação lateral','Uma crista ilíaca fica mais alta que a outra.'],
+       'Quadril':['adução de um lado','Do lado da crista mais alta, o quadril fica relativamente aduzido.'],
+       'Joelho':['sem alteração típica',''],
+       'Tornozelo e pé':['apoio desigual','O peso se distribui de forma diferente entre os pés.']},
+     cnote:'Também pode começar de baixo: uma perna mais curta faz a pelve cair e a coluna curvar. Essa escoliose funcional corrige quando a diferença é compensada.'},
+
+    {id:'cabeca', t:'Cabeça anteriorizada', p:'O ouvido fica à frente do ombro.',
+     desc:'O ouvido fica à frente do ombro. Para manter o olhar reto, a cervical alta estende e a baixa flexiona, o que aumenta a demanda dos extensores do pescoço.',
+     i:svgIcon('<line x1="96" y1="8" x2="96" y2="116" stroke="'+R+'" stroke-dasharray="4 4" opacity=".4"/><path d="M90 112 C88 84 92 66 104 52 C112 44 118 40 126 38" fill="none" stroke="'+B+'" stroke-width="7" stroke-linecap="round"/><circle cx="138" cy="30" r="16" fill="'+A+'"/><line x1="96" y1="30" x2="122" y2="30" stroke="'+A+'" stroke-width="3"/>'),
+     short:[
+       ['Suboccipitais','A cervical alta estende para manter o olhar na horizontal, aproximando a base do crânio das vértebras C1 e C2.'],
+       ['Esternocleidomastoideo','Com a cabeça à frente, o processo mastoide fica mais perto do esterno e da clavícula.'],
+       ['Trapézio superior e levantador da escápula','Sustentam o peso da cabeça à frente e ficam curtos e tensos.']],
+     long:[
+       ['Flexores profundos do pescoço (longo da cabeça e do pescoço)','A extensão da cervical alta afasta suas inserções, na frente das vértebras e na base do crânio.'],
+       ['Extensores da cervical baixa e da torácica alta','A cervical baixa flexiona e alonga o lado de trás.']],
+     origin:'Cabeça e cervical', segs:{
+       'Cabeça e cervical':['à frente da linha','Ponto de partida: a cabeça se projeta à frente.'],
+       'Ombros':['protrusos','O peso da cabeça à frente puxa a cintura escapular para a frente.'],
+       'Torácica':['cifose alta aumentada','A torácica alta flexiona para acompanhar a cervical baixa.'],
+       'Lombar':['sem alteração típica',''],'Pelve':['sem alteração típica',''],'Quadril':['sem alteração típica',''],'Joelho':['sem alteração típica',''],'Tornozelo e pé':['sem alteração típica','']},
+     cnote:'O caminho inverso é comum: a hipercifose empurra a cabeça para a frente.'},
+
+    {id:'ombros', t:'Ombros protrusos', p:'As escápulas se afastam da coluna e o ombro roda para a frente.',
+     desc:'As escápulas se afastam da coluna e o ombro roda para a frente, com o úmero em rotação interna.',
+     i:svgIcon('<rect x="84" y="20" width="32" height="90" rx="10" fill="'+B+'" opacity=".5"/><path d="M40 40 Q70 30 84 44" fill="none" stroke="'+A+'" stroke-width="7" stroke-linecap="round"/><path d="M160 40 Q130 30 116 44" fill="none" stroke="'+A+'" stroke-width="7" stroke-linecap="round"/><path d="M52 60 L36 56 M148 60 L164 56" stroke="'+R+'" stroke-width="2.5" stroke-linecap="round"/>'),
+     short:[
+       ['Peitoral menor','Liga o processo coracoide às costelas 3 a 5. Com a escápula inclinada à frente, essas pontas se aproximam.'],
+       ['Peitoral maior','A rotação interna e a adução do úmero aproximam a inserção no úmero do esterno.'],
+       ['Serrátil anterior','A escápula protraída leva a borda medial para perto das costelas onde ele se origina.']],
+     long:[
+       ['Romboides','Ligam a coluna à borda medial da escápula; com a escápula afastada, ficam esticados.'],
+       ['Trapézio médio e inferior','Pelo mesmo motivo: a escápula longe da coluna estica suas fibras.']],
+     origin:'Ombros', segs:{
+       'Cabeça e cervical':['tende à frente','Com os ombros à frente, a cabeça costuma acompanhar.'],
+       'Ombros':['escápulas abduzidas, úmero em rotação interna','Ponto de partida.'],
+       'Torácica':['tende à cifose','As escápulas à frente favorecem a flexão torácica.'],
+       'Lombar':['sem alteração típica',''],'Pelve':['sem alteração típica',''],'Quadril':['sem alteração típica',''],'Joelho':['sem alteração típica',''],'Tornozelo e pé':['sem alteração típica','']},
+     cnote:'No braço: ao elevar, sobra menos espaço sob o acrômio e o ritmo entre escápula e úmero muda.'},
+
+    {id:'alada', t:'Escápula alada', p:'A borda medial da escápula se descola das costelas.',
+     desc:'A borda medial da escápula se descola das costelas, principalmente ao empurrar ou ao elevar o braço. Em casos marcados, vale investigar lesão nervosa.',
+     i:svgIcon('<path d="M60 20 Q100 34 140 20 L140 110 L60 110 Z" fill="'+B+'" opacity=".25"/><path d="M78 34 L104 30 L98 88 Z" fill="none" stroke="'+B+'" stroke-width="4"/><path d="M108 32 L132 40 L118 86 Z" fill="'+A+'" opacity=".85"/><line x1="100" y1="16" x2="100" y2="114" stroke="'+R+'" stroke-dasharray="4 4" opacity=".4"/>'),
+     short:[['Peitoral menor','Puxa o processo coracoide para baixo e para a frente, inclinando a escápula e descolando a borda inferior.']],
+     weak:[
+       ['Serrátil anterior','É o músculo que segura a escápula contra as costelas. Com pouca ação, a borda medial se solta.'],
+       ['Trapézio inferior','Ajuda a girar e assentar a escápula durante a elevação do braço.']],
+     mnote:'Aqui o problema principal é de ativação e força, mais do que de comprimento.',
+     origin:'Ombros', segs:{
+       'Cabeça e cervical':['trapézio superior compensa','O pescoço assume parte do controle da escápula e pode ficar tenso.'],
+       'Ombros':['borda medial descolada','Ponto de partida.'],
+       'Torácica':['frequentemente com cifose','O tórax mais curvo dificulta o contato da escápula com as costelas.'],
+       'Lombar':['sem alteração típica',''],'Pelve':['sem alteração típica',''],'Quadril':['sem alteração típica',''],'Joelho':['sem alteração típica',''],'Tornozelo e pé':['sem alteração típica','']},
+     cnote:'No braço: a escápula gira menos na elevação e o úmero perde espaço sob o acrômio.'},
+
+    {id:'valgo', t:'Joelho valgo', p:'Os joelhos se aproximam e os pés se afastam (formato em X).',
+     desc:'Os joelhos se aproximam e os pés se afastam, em formato de X. Pode ser estático, pela anatomia, ou dinâmico, aparecendo só no movimento.',
+     i:svgIcon('<path d="M78 8 L98 60 L74 112" fill="none" stroke="'+B+'" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><path d="M122 8 L102 60 L126 112" fill="none" stroke="'+B+'" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><circle cx="98" cy="60" r="6" fill="'+A+'"/><circle cx="102" cy="60" r="6" fill="'+A+'"/>'),
+     short:[
+       ['Adutores do quadril','O fêmur aduzido aproxima a inserção na coxa da origem no púbis.'],
+       ['Tensor da fáscia lata','Participa da rotação interna do quadril, que acompanha o valgo.']],
+     long:[
+       ['Glúteo médio','A adução do fêmur afasta o trocânter maior da asa do ílio, onde ele se origina.'],
+       ['Glúteo máximo e rotadores externos','A rotação interna do fêmur afasta suas inserções na parte de trás da coxa.']],
+     origin:'Joelho', segs:{
+       'Cabeça e cervical':['sem alteração típica',''],'Ombros':['sem alteração típica',''],'Torácica':['sem alteração típica',''],
+       'Lombar':['pode aumentar a lordose','Acompanha a anteversão, quando ela aparece.'],
+       'Pelve':['queda do lado oposto ou anteversão','O fêmur aduzido tira a pelve do nível.'],
+       'Quadril':['adução e rotação interna','A coxa cai para dentro junto com o joelho.'],
+       'Joelho':['para dentro da linha','Ponto de partida observado.'],
+       'Tornozelo e pé':['pronação','A tíbia gira para dentro e o arco medial cede.']},
+     cnote:'Pode começar no pé (cadeia ascendente) ou no quadril (descendente). Veja o explorador da cadeia acima.'},
+
+    {id:'varo', t:'Joelho varo', p:'Os joelhos se afastam com os pés juntos (formato em O).',
+     desc:'Os joelhos se afastam com os pés juntos, em formato de O. Concentra mais carga no compartimento medial do joelho.',
+     i:svgIcon('<path d="M90 8 L66 60 L90 112" fill="none" stroke="'+B+'" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><path d="M110 8 L134 60 L110 112" fill="none" stroke="'+B+'" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><circle cx="66" cy="60" r="6" fill="'+A+'"/><circle cx="134" cy="60" r="6" fill="'+A+'"/>'),
+     short:[['Estruturas mediais do joelho (pata de ganso: sartório, grácil e semitendíneo)','O lado de dentro do joelho fica do lado fechado da curva, e suas pontas se aproximam.']],
+     long:[['Trato iliotibial e tensor da fáscia lata','O lado de fora do joelho fica do lado aberto da curva e é esticado.']],
+     origin:'Joelho', segs:{
+       'Cabeça e cervical':['sem alteração típica',''],'Ombros':['sem alteração típica',''],'Torácica':['sem alteração típica',''],'Lombar':['sem alteração típica',''],'Pelve':['sem alteração típica',''],
+       'Quadril':['coxa mais aberta','Com os joelhos afastados, a coxa fica mais abduzida em relação à pelve.'],
+       'Joelho':['para fora da linha','Ponto de partida; mais carga no compartimento medial.'],
+       'Tornozelo e pé':['apoio na borda lateral ou pronação','A perna inclinada leva o apoio para a borda lateral; em muitas pessoas o pé prona para assentar no chão.']},
+     cnote:'No varo postural descrito por Kendall, o osso é reto: a curva aparente vem da rotação interna do fêmur, da hiperextensão do joelho e da pronação juntas.'},
+
+    {id:'recurvato', t:'Joelho recurvato', p:'O joelho estende além do neutro e fica atrás da linha de prumo.',
+     desc:'O joelho estende além do neutro e fica atrás da linha de prumo. A pessoa trava o joelho e se apoia nas estruturas passivas.',
+     i:svgIcon('<line x1="104" y1="6" x2="104" y2="116" stroke="'+R+'" stroke-dasharray="4 4" opacity=".4"/><path d="M108 8 L92 62 L110 112" fill="none" stroke="'+B+'" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><circle cx="92" cy="62" r="6" fill="'+A+'"/><line x1="104" y1="62" x2="96" y2="62" stroke="'+A+'" stroke-width="3"/>'),
+     short:[
+       ['Sóleo','O tornozelo em flexão plantar aproxima o calcâneo da tíbia.'],
+       ['Quadríceps','O joelho travado em extensão mantém o músculo na posição curta.']],
+     long:[
+       ['Isquiotibiais (atrás do joelho)','Passam atrás do joelho; com ele atrás da linha, a parte de trás é esticada.'],
+       ['Poplíteo','Cruza a parte de trás do joelho e fica esticado na hiperextensão.']],
+     origin:'Joelho', segs:{
+       'Cabeça e cervical':['sem alteração típica',''],'Ombros':['sem alteração típica',''],'Torácica':['sem alteração típica',''],
+       'Lombar':['pode aumentar a lordose','Com a pelve à frente ou antevertida, a lombar acompanha.'],
+       'Pelve':['anteversão ou deslocada à frente','Aparece junto da hiperlordose e do sway-back.'],
+       'Quadril':['flexão ou extensão','Depende do padrão: flexão na hiperlordose, extensão no sway-back.'],
+       'Joelho':['atrás da linha de prumo','Ponto de partida.'],
+       'Tornozelo e pé':['flexão plantar','A tíbia inclina para trás e o tornozelo acompanha.']}},
+
+    {id:'plano', t:'Pé plano', p:'O arco longitudinal medial fica baixo.',
+     desc:'O arco longitudinal medial fica baixo. Pode ser flexível, quando o arco reaparece na ponta dos pés, ou rígido.',
+     i:svgIcon('<path d="M30 92 Q90 88 120 90 L170 92 L166 78 L60 74 Z" fill="'+B+'" opacity=".85"/><path d="M60 92 Q95 86 130 92" fill="none" stroke="'+A+'" stroke-width="4"/><line x1="20" y1="96" x2="180" y2="96" stroke="'+R+'" opacity=".3"/>'),
+     short:[
+       ['Fibulares','O calcâneo evertido aproxima suas inserções na lateral do pé.'],
+       ['Tríceps sural (gastrocnêmio e sóleo)','Quando está curto, o pé prona para ganhar dorsiflexão. É causa frequente, e não só consequência.']],
+     long:[
+       ['Tibial posterior','Sustenta o arco por baixo; com o arco caído, fica alongado e sobrecarregado.'],
+       ['Músculos intrínsecos da sola','O arco baixo afasta o calcâneo das cabeças dos metatarsos.']],
+     origin:'Tornozelo e pé', segs:{
+       'Cabeça e cervical':['sem alteração típica',''],'Ombros':['sem alteração típica',''],'Torácica':['sem alteração típica',''],
+       'Lombar':['pode aumentar a lordose','Acompanha a anteversão da pelve.'],
+       'Pelve':['pode antevertir','A rotação interna dos fêmures favorece a anteversão.'],
+       'Quadril':['adução e rotação interna','A coxa acompanha a rotação da tíbia.'],
+       'Joelho':['valgo','A tíbia gira para dentro e o joelho cai para dentro.'],
+       'Tornozelo e pé':['pronação, arco baixo','Ponto de partida: o calcâneo everte e o arco cede.']}},
+
+    {id:'cavo', t:'Pé cavo', p:'O arco longitudinal fica alto e rígido.',
+     desc:'O arco longitudinal fica alto e rígido. O pé absorve menos impacto e a carga se concentra no calcanhar e na frente do pé.',
+     i:svgIcon('<path d="M30 92 Q90 54 128 90 L170 92 L166 72 L60 62 Z" fill="'+B+'" opacity=".85"/><path d="M50 92 Q90 56 128 92" fill="none" stroke="'+A+'" stroke-width="4"/><line x1="20" y1="96" x2="180" y2="96" stroke="'+R+'" opacity=".3"/>'),
+     short:[
+       ['Fáscia plantar e intrínsecos da sola','O arco alto aproxima o calcâneo das cabeças dos metatarsos.'],
+       ['Tibial posterior','Inverte o pé e ajuda a elevar o arco; fica na posição curta.']],
+     long:[['Fibulares','O pé invertido afasta suas inserções na lateral do pé.']],
+     origin:'Tornozelo e pé', segs:{
+       'Cabeça e cervical':['sem alteração típica',''],'Ombros':['sem alteração típica',''],'Torácica':['sem alteração típica',''],'Lombar':['sem alteração típica',''],'Pelve':['sem alteração típica',''],
+       'Quadril':['rotação externa','A coxa acompanha a rotação da tíbia.'],
+       'Joelho':['tendência ao varo','A tíbia gira para fora e o joelho tende a ir para fora.'],
+       'Tornozelo e pé':['supinação, arco alto','Ponto de partida: o calcâneo inverte.']},
+     cnote:'Com o pé rígido, menos impacto é absorvido na base e mais carga sobe pela perna.'}
   ];
-  $('cat').innerHTML = CAT.map(function(d){
-    return '<article class="dv">'+d.i+'<h4>'+d.t+'</h4><p>'+d.p+'</p><div class="ch"><b>em cadeia</b>'+d.c+'</div></article>';
+  $('cat').innerHTML = CAT.map(function(d, i){
+    return '<button type="button" class="dv" id="dv-'+d.id+'" aria-pressed="'+(i === 0 ? 'true' : 'false')+'" aria-controls="detail">'+d.i+'<h4>'+d.t+'</h4><p>'+d.p+'</p><span class="cta">Ver músculos e cadeia ↓</span></button>';
   }).join('');
+  function showDetail(d, scroll){
+    CAT.forEach(function(x){ $('dv-'+x.id).setAttribute('aria-pressed', x === d ? 'true' : 'false'); });
+    $('dHead').innerHTML = d.i + '<div><span class="k">desvio selecionado</span><h3>'+d.t+'</h3><p>'+esc(d.desc)+'</p></div>';
+    renderMuscles($('dMus'), d);
+    renderChain($('dChain'), d);
+    if (scroll) $('detail').scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'start'});
+  }
+  CAT.forEach(function(d){ $('dv-'+d.id).addEventListener('click', function(){ showDetail(d, true); }); });
+  showDetail(CAT[0], false);
 })();
 </script>
 </body>
