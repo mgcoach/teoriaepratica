@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script>(function(){var e=true;try{e=window.self!==window.top}catch(x){}if(e)document.documentElement.classList.add("embed")})();</script>
+<title>Extensão de Quadril</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Explorador de exercícios de extensão de quadril: posição da polia, pico de torque, alongamento do glúteo, elevação pélvica e agachamento.">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: régua do comprimento do glúteo; explorador (palco + leitura + curva) com polia ajustável; comparação de todas as curvas sobre o mesmo eixo de ângulo do quadril; tabela; músculos por faixa; estudos. Visual escuro deliberado (identidade MG COACH). */
+:root{
+  --bg:#0a0a0a;
+  --surface:#13110f;
+  --surface-2:#1b1815;
+  --line:#2c2622;
+  --fg:#f5efe8;
+  --muted:#9d9188;
+  --dim:#5f5650;
+  --bone:#d9cfc4;
+  --accent:#ff6b1a;
+  --cable:#5cc6ff;
+  --long:#ff6b1a;
+  --mid:#ffc24a;
+  --short:#5cc6ff;
+  --display:"Big Shoulders Display", Impact, "Arial Narrow", sans-serif;
+  --text:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--fg)}
+html{-webkit-text-size-adjust:100%;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font-family:var(--text);font-size:15px;line-height:1.5}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1100px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));display:flex;flex-direction:column;gap:22px}
+.back{font-family:var(--mono);font-size:12px;color:var(--muted);text-decoration:none;align-self:flex-start;border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+.back:hover{color:var(--fg);border-color:var(--muted)}
+.embed .back{display:none}
+header{display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.eyebrow b{color:var(--accent);font-weight:600}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(44px,9vw,86px);line-height:.9;text-transform:uppercase;margin:0;text-wrap:balance}
+h1 em{font-style:normal;color:var(--accent)}
+.lede{margin:0;max-width:66ch;color:var(--muted);font-size:16px}
+.lede strong{color:var(--fg);font-weight:600}
+h2.sec{margin:8px 0 0;font-family:var(--display);font-weight:900;font-size:clamp(30px,5vw,44px);line-height:.95;text-transform:uppercase}
+h2.sec span{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--accent);display:block;letter-spacing:.08em;margin-bottom:6px}
+.note{margin:0;color:var(--muted);font-size:14px;max-width:70ch}
+
+/* régua */
+.ruler{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.ruler-bar{position:relative;height:14px;border-radius:7px;background:linear-gradient(90deg,var(--long),var(--mid) 50%,var(--short))}
+.ruler-ticks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.ruler-ticks div{min-width:0}
+.ruler-ticks b{display:block;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase}
+.ruler-ticks div:nth-child(1) b{color:var(--long)} .ruler-ticks div:nth-child(2) b{color:var(--mid);text-align:center} .ruler-ticks div:nth-child(3) b{color:var(--short);text-align:right}
+.ruler-ticks small{display:block;color:var(--muted);font-size:13px}
+.ruler-ticks div:nth-child(2) small{text-align:center} .ruler-ticks div:nth-child(3) small{text-align:right}
+
+.picker{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.picker::-webkit-scrollbar{display:none}
+.pk{flex:0 0 auto;display:flex;flex-direction:column;gap:1px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;cursor:pointer;color:var(--fg);font:inherit}
+.pk b{font-weight:700;font-size:14.5px}
+.pk small{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.pk .tg{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--cable)}
+.pk .tg.f{color:var(--mid)}
+.pk[aria-pressed="true"]{border-color:var(--accent);background:var(--surface-2)}
+.pk[aria-pressed="true"] b{color:var(--accent)}
+
+.studio{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.stage-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.stage-head b{font-family:var(--display);font-weight:700;font-size:22px;text-transform:uppercase;line-height:1.05}
+.stage-head small{display:block;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.btn{font:600 13px/1 var(--text);color:var(--fg);background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:9px 14px;cursor:pointer;min-width:92px}
+.btn:hover{border-color:var(--muted)}
+.canvas-box{position:relative;width:100%;aspect-ratio:1/1;max-width:100%}
+.canvas-box canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.ctrl{padding:12px 14px 14px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:12px}
+.sl{display:flex;flex-direction:column;gap:6px}
+.sl label{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted)}
+.sl output{font-family:var(--mono);color:var(--fg);font-variant-numeric:tabular-nums}
+.sl .ends{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--dim)}
+input[type=range]{width:100%;margin:0;accent-color:var(--accent)}
+#pulley{accent-color:var(--cable)}
+
+.side{display:flex;flex-direction:column;gap:14px;min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.panel h3{margin:0;font-family:var(--display);font-weight:700;font-size:24px;text-transform:uppercase;letter-spacing:.02em}
+.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.kv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.kv div{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;min-width:0}
+.kv span{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.kv b{display:block;font-family:var(--display);font-weight:700;font-size:25px;line-height:1.05;font-variant-numeric:tabular-nums}
+.kv b small{font-size:14px;color:var(--muted)}
+.kv i{display:block;font-style:normal;font-size:12px;color:var(--muted)}
+.gl{display:flex;flex-direction:column;gap:6px}
+.gl-top{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.gl-bar{position:relative;height:12px;border-radius:6px;background:linear-gradient(90deg,var(--short),var(--mid) 50%,var(--long));opacity:.9}
+.gl-bar i{position:absolute;top:-4px;width:4px;height:20px;border-radius:2px;background:var(--fg);transform:translateX(-2px);box-shadow:0 0 0 2px var(--surface)}
+.gl-bar u{position:absolute;top:-6px;width:12px;height:12px;border-radius:50%;background:transparent;border:3px solid var(--fg);transform:translateX(-6px);text-decoration:none;top:0}
+.verdict{display:flex;gap:10px;align-items:flex-start;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.verdict .pill{flex:0 0 auto;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:4px 10px;color:var(--bg)}
+.verdict p{margin:0;font-size:14px}
+.graph-box{position:relative;width:100%;aspect-ratio:600/280;max-width:100%}
+.graph-box canvas{position:absolute;inset:0;width:100%;height:100%}
+
+.mus{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.mu{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 10px;align-items:start;padding:9px 10px;border-radius:10px;background:var(--bg);border:1px solid var(--line)}
+.dots{display:flex;gap:3px;padding-top:6px}
+.dots span{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.dots span.on{background:var(--accent)}
+.mu b{font-weight:600;font-size:14.5px;line-height:1.3}
+.mu small{display:block;color:var(--muted);font-size:12.8px;line-height:1.4}
+.zone{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:16px;height:3px;border-radius:2px;display:inline-block}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+tr:last-child td{border-bottom:0}
+td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tagL{font-family:var(--mono);font-size:11px;font-weight:600;border-radius:999px;padding:2px 8px;white-space:nowrap;color:var(--bg)}
+
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.card{border:1px solid var(--line);border-radius:14px;padding:16px;background:var(--surface);display:flex;flex-direction:column;gap:6px;min-width:0}
+.card h4{margin:0;font-size:16.5px;font-weight:700;line-height:1.25}
+.card p{margin:0;color:var(--muted);font-size:14px}
+.card .tag{align-self:flex-start;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;border-radius:999px;padding:3px 9px;border:1px solid currentColor;color:var(--accent)}
+.evid ul{margin:0;padding-left:18px;color:var(--muted);font-size:14px;display:flex;flex-direction:column;gap:6px}
+.evid ul b{color:var(--fg);font-weight:600}
+.refs{margin:0;padding-left:18px;color:var(--muted);font-size:13px;display:flex;flex-direction:column;gap:4px}
+footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+footer b{color:var(--accent);font-weight:600}
+
+@media (max-width:900px){
+  .studio{grid-template-columns:minmax(0,1fr)}
+  .cards{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:520px){
+  .kv b{font-size:21px}
+  .ruler-ticks small{font-size:12px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./" target="_top">← Teoria e Prática</a>
+
+  <header>
+    <div class="eyebrow"><b>MG COACH</b> · Biomecânica do treino</div>
+    <h1>Extensão de quadril: <em>onde fica o pico?</em></h1>
+    <p class="lede">Todo exercício de glúteo estende o quadril, mas cada um cobra em um ponto diferente da amplitude. Na polia, quem decide é a <strong>posição da polia</strong>. No peso livre, é a <strong>posição do corpo</strong> em relação à gravidade. Veja onde cada exercício tem o pico de torque e quanto o glúteo está alongado nesse momento.</p>
+  </header>
+
+  <section class="ruler" aria-label="Comprimento do glúteo máximo">
+    <div class="ruler-bar"></div>
+    <div class="ruler-ticks">
+      <div><b>Glúteo alongado</b><small>quadril muito flexionado (acima de 60°)</small></div>
+      <div><b>Comprimento médio</b><small>entre 20° e 60° de flexão</small></div>
+      <div><b>Glúteo encurtado</b><small>perto da extensão completa</small></div>
+    </div>
+  </section>
+
+  <noscript><p class="note">Esta página precisa de JavaScript ativado para funcionar.</p></noscript>
+
+  <h2 class="sec"><span>explorador</span>Escolha o exercício</h2>
+  <div class="picker" role="group" aria-label="Exercício" id="picker"></div>
+
+  <div class="studio">
+    <section class="stage" aria-label="Exercício em vista lateral">
+      <div class="stage-head">
+        <div aria-live="polite"><b id="exName">—</b><small id="exSub">—</small></div>
+        <button type="button" class="btn" id="play">Pausar</button>
+      </div>
+      <div class="canvas-box"><canvas id="stage" role="img" aria-label="Exercício em vista lateral com a linha da força e o braço de momento no quadril"></canvas></div>
+      <div class="ctrl">
+        <div class="sl">
+          <label for="pos">Posição no movimento <output id="posOut">0°</output></label>
+          <input type="range" id="pos" min="0" max="1000" step="1" value="0">
+          <div class="ends"><span>quadril flexionado</span><span>quadril estendido</span></div>
+        </div>
+        <div class="sl" id="pulleyWrap">
+          <label for="pulley"><span id="pulleyLbl">Altura da polia</span> <output id="pulleyOut">baixa</output></label>
+          <input type="range" id="pulley" min="0" max="100" step="1" value="0">
+          <div class="ends"><span id="pLo">baixa</span><span id="pHi">alta</span></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="side">
+      <section class="panel" aria-label="Leitura">
+        <div class="panel-head"><h3>Torque no quadril</h3></div>
+        <div class="kv">
+          <div><span>quadril agora</span><b id="kAng">0°</b><i id="kAngT">flexão</i></div>
+          <div><span>torque agora</span><b id="kTq">0<small>%</small></b><i>do pico</i></div>
+          <div><span id="kExtraL">cabo × perna</span><b id="kExtra">90°</b><i id="kExtraT">90° = pico</i></div>
+        </div>
+        <div class="gl">
+          <div class="gl-top"><span>glúteo encurtado</span><span>comprimento do glúteo</span><span>alongado</span></div>
+          <div class="gl-bar" aria-hidden="true"><u id="glPeak" title="pico"></u><i id="glNow"></i></div>
+          <div class="gl-top"><span>● agora</span><span>○ onde está o pico</span><span></span></div>
+        </div>
+        <div class="verdict"><span class="pill" id="vPill">—</span><p id="vText"></p></div>
+        <div class="graph-box"><canvas id="graph" role="img" aria-label="Curva de torque do exercício por ângulo do quadril"></canvas></div>
+        <p class="note" id="exNote"></p>
+      </section>
+      <section class="panel" aria-label="Músculos">
+        <div class="panel-head"><h3>Músculos agora</h3><span class="zone" id="zone">—</span></div>
+        <ul class="mus" id="mus" aria-live="polite"></ul>
+      </section>
+    </div>
+  </div>
+
+  <h2 class="sec"><span>comparação</span>Todos no mesmo eixo</h2>
+  <section class="panel" aria-label="Comparação das curvas">
+    <div class="legend" id="cLegend"></div>
+    <div class="graph-box" style="aspect-ratio:600/300"><canvas id="cmp" role="img" aria-label="Curvas de torque de todos os exercícios pelo ângulo do quadril"></canvas></div>
+    <p class="note">Cada curva está normalizada pelo próprio pico (100%), para comparar o formato. À esquerda o quadril está flexionado e o glúteo alongado; à direita, estendido e encurtado. As curvas da polia usam a altura escolhida no explorador.</p>
+  </section>
+
+  <section class="panel" aria-label="Tabela comparativa">
+    <h3>Resumo dos exercícios</h3>
+    <div class="tbl-wrap"><table><thead><tr><th>Exercício</th><th>Amplitude do quadril</th><th>Pico de torque</th><th>Glúteo no pico</th><th>Joelho</th><th>Ênfase</th></tr></thead><tbody id="tbody"></tbody></table></div>
+  </section>
+
+  <h2 class="sec"><span>na prática</span>Polia, elevação pélvica e agachamento</h2>
+  <div class="cards">
+    <article class="card"><span class="tag">regra da polia</span><h4>O pico acontece quando o cabo faz 90° com a perna</h4><p>Nesse ponto o braço de momento é igual ao comprimento até a tornozeleira. Antes ou depois, o ângulo fecha e o torque cai. Escolha a altura da polia para esse ângulo cair na parte da amplitude que você quer cobrar.</p></article>
+    <article class="card"><span class="tag">polia alta</span><h4>Cobra mais no início, com o glúteo alongado</h4><p>No coice inclinado, a polia acima do quadril puxa a perna para a frente e para cima. O cabo fica a 90° da perna quando o quadril ainda está flexionado: o pico vem com o glúteo alongado, e o final fica leve.</p></article>
+    <article class="card"><span class="tag">polia baixa</span><h4>Mantém a tensão até o fim</h4><p>Com a polia no chão, o cabo puxa a perna para a frente e para baixo. Ele só fica a 90° da perna quando ela já foi para trás: o pico vai para o meio e a tensão segue alta perto da extensão, com o glúteo encurtado.</p></article>
+    <article class="card"><span class="tag">elevação pélvica</span><h4>Tensão que não some no topo</h4><p>A carga empurra o quadril para baixo e os pés seguram. No modelo estático, o torque fica quase constante; em laboratório, o pico apareceu no início da subida e caiu cerca de dois terços no bloqueio. Mesmo assim, ao contrário do agachamento, ainda sobra carga no topo, e o joelho flexionado reduz a ajuda dos isquiotibiais.</p></article>
+    <article class="card"><span class="tag">agachamento e RDL</span><h4>Pico no fundo</h4><p>A barra fica sobre o meio do pé, e o quadril se afasta dessa linha quando desce. O torque é máximo com o quadril flexionado, onde o glúteo está alongado e o adutor magno ajuda muito. No topo, o torque quase some.</p></article>
+    <article class="card"><span class="tag">combinação</span><h4>Use os dois extremos</h4><p>Um exercício com pico no alongado (agachamento profundo, RDL, coice com polia alta) somado a um que mantém tensão perto da extensão (elevação pélvica, coice com polia baixa) cobre a curva inteira do glúteo.</p></article>
+  </div>
+
+  <section class="panel evid" aria-label="Estudos">
+    <h3>O que dizem os estudos</h3>
+    <ul>
+      <li><b>Ativação é maior na elevação pélvica.</b> Em mulheres treinadas, a elevação pélvica teve ativação média do glúteo máximo superior de cerca de 70% contra 29% no agachamento, além de mais ativação do bíceps femoral. O vasto lateral foi parecido.</li>
+      <li><b>Hipertrofia do glúteo foi parecida.</b> Em 9 semanas com iniciantes, agachamento e elevação pélvica geraram crescimento semelhante do glúteo máximo. O agachamento cresceu mais quadríceps e adutores. A maior ativação aguda não garantiu mais hipertrofia.</li>
+      <li><b>Profundidade importa no agachamento.</b> O agachamento completo aumentou o volume do glúteo máximo em 6,7%, contra 2,2% no meio agachamento, e também cresceu mais os adutores.</li>
+      <li><b>Na elevação pélvica, o pico não é no topo.</b> Com análise 3D, o momento extensor do quadril foi máximo no início da subida, com o quadril perto de 83° de flexão, e caiu cerca de dois terços até o bloqueio.</li>
+      <li><b>Quem estende o quadril muda com o ângulo.</b> O braço de momento do glúteo máximo é maior perto da posição neutra. Com o quadril bem flexionado, o adutor magno e os isquiotibiais ganham importância como extensores.</li>
+    </ul>
+    <ol class="refs">
+      <li>Contreras B et al. A comparison of gluteus maximus, biceps femoris, and vastus lateralis EMG amplitude in the parallel, full, and front squat variations and the barbell hip thrust. J Appl Biomech, 2015.</li>
+      <li>Plotkin DL et al. Hip thrust and back squat training elicit similar gluteus muscle hypertrophy and transfer similarly to the deadlift. Front Physiol, 2023.</li>
+      <li>Kubo K et al. Effects of squat training with different depths on lower limb muscle volumes. Eur J Appl Physiol, 2019.</li>
+      <li>Brazil A et al. A comprehensive biomechanical analysis of the barbell hip thrust. PLoS ONE, 2021.</li>
+      <li>Németh G, Ohlsén H. In vivo moment arm lengths for hip extensor muscles at different angles of hip flexion. J Biomech, 1985.</li>
+    </ol>
+    <p class="note">Modelo didático em vista lateral. Nas variações com polia, a força do cabo tem intensidade constante e direção para a polia. Nos exercícios livres, o torque é calculado pela posição do quadril em relação à linha da carga. As curvas mostram o formato, não valores exatos.</p>
+  </section>
+
+  <footer>
+    <span><b>MG COACH</b> · Matheus Garrido · @matheusgarrido</span>
+    <span>Teoria e Prática</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var css = getComputedStyle(document.documentElement);
+  function tok(n){ return css.getPropertyValue(n).trim(); }
+  var C = {bg:tok('--bg'), surface:tok('--surface'), surface2:tok('--surface-2'), line:tok('--line'), fg:tok('--fg'), muted:tok('--muted'), dim:tok('--dim'),
+           bone:tok('--bone'), accent:tok('--accent'), cable:tok('--cable'), long:tok('--long'), mid:tok('--mid'), short:tok('--short'), mono:tok('--mono')};
+  var $ = function(id){ return document.getElementById(id); };
+  var D = Math.PI/180, LT = 44, LS = 44, LTR = 52;
+  function V(x,y){ return {x:x, y:y}; }
+  function add(a,b){ return V(a.x+b.x, a.y+b.y); }
+  function sub(a,b){ return V(a.x-b.x, a.y-b.y); }
+  function mul(a,k){ return V(a.x*k, a.y*k); }
+  function len(a){ return Math.hypot(a.x, a.y); }
+  function unit(a){ var l = len(a)||1; return V(a.x/l, a.y/l); }
+  function cross(a,b){ return a.x*b.y - a.y*b.x; }
+  function rotCW(v, a){ var c = Math.cos(a*D), s = Math.sin(a*D); return V(v.x*c + v.y*s, -v.x*s + v.y*c); }
+  function circ(A, ra, B, rb, pickFront){
+    var d = sub(B, A), D2 = len(d); if (D2 < 1e-6) return A;
+    var a = (ra*ra - rb*rb + D2*D2)/(2*D2), h = Math.sqrt(Math.max(0, ra*ra - a*a));
+    var p = add(A, mul(d, a/D2)), n = V(-d.y/D2, d.x/D2);
+    var s1 = add(p, mul(n, h)), s2 = sub(p, mul(n, h));
+    return pickFront ? (s1.x > s2.x ? s1 : s2) : (s1.y > s2.y ? s1 : s2);
+  }
+  function footPerp(P, dir, O){ var t = (O.x-P.x)*dir.x + (O.y-P.y)*dir.y; return add(P, mul(dir, t)); }
+
+  // ======== exercícios ========
+  // hip: ângulo do quadril (flexão +, extensão −). Cada um devolve pose + torque resistente (unidades arbitrárias)
+  function legCable(cfg){
+    return function(hip, u){
+      var H = V(0,0), phi = hip - cfg.beta;
+      var t = V(Math.sin(phi*D), -Math.cos(phi*D));
+      var K = mul(t, LT), s = rotCW(t, cfg.knee), A = add(K, mul(s, LS));
+      var P = cfg.pulley(u), F = unit(sub(P, A));
+      var tau = cross(A, F);
+      var Q = footPerp(A, F, H);
+      var segDir = unit(sub(A, H)), ang = Math.acos(Math.max(-1, Math.min(1, segDir.x*F.x + segDir.y*F.y)))/D;
+      return {H:H, K:K, A:A, P:P, F:F, Q:Q, tau:tau, cableAng:ang, arm:len(sub(Q,H))};
+    };
+  }
+  var EX = {
+    emPe: {nome:'Extensão de quadril em pé', sub:'polia à frente · tronco ereto · joelho estendido', tag:'polia', range:[35,-15], knee:'estendido',
+      cable:true, plbl:'Altura da polia', pends:['no chão','na altura do quadril'],
+      model: legCable({beta:0, knee:0, pulley:function(u){ return V(75, -88 + u*88); }}),
+      view:{x0:-70, x1:110, y0:-100, y1:80}, beta:0, floor:-92,
+      note:'Com o tronco ereto, a amplitude é curta: o quadril estende só cerca de 15° além do neutro. Com a polia no chão, o cabo fica a 90° da perna perto da posição neutra e a tensão segue até o fim. Subindo a polia, o pico passa para o começo.'},
+    inclinado: {nome:'Coice na polia inclinado', sub:'tronco a 45° · apoiado · joelho estendido', tag:'polia', range:[80,-10], knee:'estendido',
+      cable:true, plbl:'Altura da polia', pends:['no chão','acima do quadril'],
+      model: legCable({beta:45, knee:0, pulley:function(u){ return V(70, -88 + u*125); }}),
+      view:{x0:-100, x1:110, y0:-100, y1:110}, beta:45, floor:-92,
+      note:'Inclinar o tronco aumenta a amplitude: o quadril sai de bem flexionado. Com a polia no chão, o pico fica no meio e a tensão segue alta perto da extensão. Subindo a polia, o pico vai para o início, com o glúteo alongado, e o final fica leve.'},
+    quatro: {nome:'Coice em quatro apoios na polia', sub:'joelho a 90° · tornozeleira', tag:'polia', range:[100,-5], knee:'flexionado 90°',
+      cable:true, plbl:'Altura da polia', pends:['no chão','acima do quadril'],
+      model: legCable({beta:90, knee:90, pulley:function(u){ return V(75, -58 + u*58); }}),
+      view:{x0:-95, x1:115, y0:-70, y1:140}, beta:90, floor:-62,
+      note:'Com o joelho a 90°, os isquiotibiais ficam encurtados no joelho e ajudam menos: o glúteo assume. O pico vem no início, com o quadril flexionado. No topo a tensão some, porque o pé sobe acima do quadril e o cabo passa perto da articulação. Quanto mais alta a polia, mais cedo isso acontece: use a mais baixa.'},
+    pull: {nome:'Pull-through na polia', sub:'polia atrás · corda entre as pernas', tag:'polia', range:[85,0], knee:'levemente flexionado',
+      cable:true, plbl:'Distância da polia', pends:['perto','longe'],
+      model: function(hip, u){
+        var H = V(0,0), T = V(Math.sin(hip*D), Math.cos(hip*D)), S = mul(T, LTR);
+        var P = V(-35 - u*110, -88);
+        var d = unit(sub(P, S)), hand = add(S, mul(d, 60));
+        if (hand.x < 12){ var dx = 12 - S.x; hand = V(12, S.y - Math.sqrt(Math.max(0, 3600 - dx*dx))); }
+        var F = unit(sub(P, hand)), tau = -cross(hand, F), Q = footPerp(hand, F, H);
+        return {H:H, S:S, T:T, hand:hand, P:P, F:F, Q:Q, tau:tau, arm:len(sub(Q,H))};
+      },
+      view:{x0:-130, x1:90, y0:-100, y1:120}, floor:-90,
+      note:'A corda passa entre as pernas e puxa as mãos para trás e para baixo. O pico vem no início, como no RDL, mas ainda sobra tensão no topo, porque a linha do cabo passa abaixo do quadril. Com a polia mais perto, sobra um pouco mais.'},
+    thrust: {nome:'Elevação pélvica', sub:'barra no quadril · costas no banco', tag:'livre', range:null, knee:'flexionado ~90° no topo', cable:false,
+      model: function(phi){
+        var A = V(0,8), S = V(-96, 44), Hp = V(S.x + 50*Math.cos(phi*D), S.y - 50*Math.sin(phi*D));
+        var K = circ(A, 44, Hp, LT, false);
+        var hip = 180 - Math.acos(Math.max(-1, Math.min(1, (unit(sub(S,Hp)).x*unit(sub(K,Hp)).x + unit(sub(S,Hp)).y*unit(sub(K,Hp)).y))))/D;
+        var Wb = 80, Wt = 40, Wth = 16, Wsh = 7, tc = add(Hp, mul(sub(S,Hp), .5)), thc = add(Hp, mul(sub(K,Hp), .45)), shc = add(A, mul(sub(K,A), .55));
+        var RF = (Wb*(Hp.x-S.x) + Wt*(tc.x-S.x) + Wth*(thc.x-S.x) + Wsh*(shc.x-S.x)) / (A.x - S.x);
+        var tau = RF*(A.x - Hp.x) - Wth*(thc.x - Hp.x) - Wsh*(shc.x - Hp.x);
+        return {H:Hp, S:S, K:K, A:A, tau:tau, hip:hip, arm:A.x - Hp.x};
+      },
+      view:{x0:-160, x1:40, y0:-30, y1:170}, floor:0,
+      note:'A carga empurra o quadril para baixo e os pés seguram. No modelo estático, o torque fica quase constante da base ao topo. Medidas em laboratório mostraram o pico no início da subida, perto de 83° de flexão, e queda de cerca de dois terços no bloqueio, porque a barra acelera no começo e desacelera no fim.'},
+    squat: {nome:'Agachamento livre', sub:'barra nas costas · profundidade completa', tag:'livre', range:null, knee:'flexiona junto', cable:false,
+      model: function(k){
+        var A = V(0,8), a = 0.33*k, K = add(A, V(LS*Math.sin(a*D), LS*Math.cos(a*D)));
+        var g = (a - k)*D, Hp = add(K, V(45*Math.sin(g), 45*Math.cos(g)));
+        var sl = Math.max(-1, Math.min(1, (7 - Hp.x)/LTR)), lam = Math.asin(sl);
+        var S = add(Hp, V(LTR*Math.sin(lam), LTR*Math.cos(lam)));
+        var tr = unit(sub(S,Hp)), th = unit(sub(K,Hp));
+        var hip = 180 - Math.acos(Math.max(-1, Math.min(1, tr.x*th.x + tr.y*th.y)))/D;
+        var tau = 100*(7 - Hp.x) + 46*(Hp.x + (S.x-Hp.x)*.6 - Hp.x);
+        return {H:Hp, S:S, K:K, A:A, tau:tau, hip:hip, arm:7 - Hp.x, bar:V(7, S.y)};
+      },
+      view:{x0:-80, x1:100, y0:-5, y1:175}, floor:0,
+      note:'A barra fica sobre o meio do pé. Quando você desce, o quadril vai para trás e se afasta dessa linha: o torque cresce. O pico é no fundo, com o glúteo bem alongado; no topo, o quadril fica quase sob a barra e o torque quase some.'},
+    rdl: {nome:'Stiff / RDL', sub:'dobradiça do quadril · joelho fixo', tag:'livre', range:null, knee:'levemente flexionado', cable:false,
+      model: function(lam){
+        var A = V(0,8), Hx = 7 - LTR*Math.sin(lam*D)*0.92;
+        var Hy = 8 + Math.sqrt(Math.max(0, Math.pow((LS+LT)*0.985, 2) - Hx*Hx));
+        var Hp = V(Hx, Hy), K = circ(A, LS, Hp, LT, true);
+        var S = add(Hp, V(LTR*Math.sin(lam*D), LTR*Math.cos(lam*D)));
+        var tr = unit(sub(S,Hp)), th = unit(sub(K,Hp));
+        var hip = 180 - Math.acos(Math.max(-1, Math.min(1, tr.x*th.x + tr.y*th.y)))/D;
+        var tau = 100*(S.x - Hp.x) + 46*((S.x-Hp.x)*.6);
+        return {H:Hp, S:S, K:K, A:A, tau:tau, hip:hip, arm:S.x - Hp.x, bar:V(S.x, S.y - 60)};
+      },
+      view:{x0:-80, x1:100, y0:-5, y1:175}, floor:0,
+      note:'O tronco inclina e o quadril vai para trás, com a barra perto das pernas. O braço de momento cresce até o ponto mais baixo, onde o glúteo e os isquiotibiais estão mais alongados. No topo, o torque cai a quase zero.'}
+  };
+  // parâmetro de cada exercício livre (início → fim)
+  var PARAM = {thrust:[48,0], squat:[118,0], rdl:[82,0]};
+  var ORDER = ['emPe','inclinado','quatro','pull','thrust','squat','rdl'];
+
+  var state = {ex:'inclinado', s:0, playing:true, t0:null, pulley:{emPe:0, inclinado:0, quatro:0, pull:0}};
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) state.playing = false;
+
+  function evalAt(id, s){
+    var ex = EX[id];
+    if (ex.cable){
+      var hip = ex.range[0] + (ex.range[1]-ex.range[0])*s, r = ex.model(hip, state.pulley[id]/100);
+      r.hip = hip; return r;
+    }
+    var p = PARAM[id], v = p[0] + (p[1]-p[0])*s; return ex.model(v);
+  }
+  var cache = {};
+  function curve(id){
+    var key = id + ':' + (EX[id].cable ? state.pulley[id] : '');
+    if (cache[key]) return cache[key];
+    var pts = [], mx = 0;
+    for (var i=0;i<=120;i++){ var r = evalAt(id, i/120); pts.push({s:i/120, hip:r.hip, tau:r.tau}); mx = Math.max(mx, r.tau); }
+    pts.forEach(function(p){ p.n = mx > 0 ? Math.max(0, p.tau)/mx : 0; });
+    var ip = 0; pts.forEach(function(p,i){ if (p.n > pts[ip].n) ip = i; });
+    var out = {pts:pts, max:mx, peak:pts[ip], hip0:pts[0].hip, hip1:pts[pts.length-1].hip};
+    cache[key] = out; return out;
+  }
+  function glFrac(hip){ return Math.max(0, Math.min(1, (hip + 20)/140)); }
+  function zoneOf(hip){ return hip >= 60 ? 'long' : (hip >= 20 ? 'mid' : 'short'); }
+  var ZNAME = {long:'glúteo alongado', mid:'comprimento médio', short:'glúteo encurtado'};
+  function fmtHip(h){ var r = Math.round(h); return r >= 0 ? r+'° de flexão' : Math.abs(r)+'° de extensão'; }
+
+  // ======== desenho ========
+  function fit(cv){
+    var r = cv.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio||1, 2.5);
+    var w = Math.max(1, Math.round(r.width*dpr)), h = Math.max(1, Math.round(r.height*dpr));
+    if (cv.width !== w || cv.height !== h){ cv.width = w; cv.height = h; }
+    return {w:w, h:h, dpr:dpr, cssW:r.width};
+  }
+  function drawStage(){
+    var cv = $('stage'), f = fit(cv), ctx = cv.getContext('2d'), id = state.ex, ex = EX[id], vw = ex.view;
+    var sc = f.w/(vw.x1-vw.x0);
+    function T(p){ return {x:(p.x-vw.x0)*sc, y:(vw.y1-p.y)*sc}; }
+    var px = sc; // px por cm
+    ctx.setTransform(1,0,0,1,0,0); ctx.fillStyle = C.surface; ctx.fillRect(0,0,f.w,f.h);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    function seg(a,b,w,col){ var p = T(a), q = T(b); ctx.strokeStyle = col; ctx.lineWidth = w*px; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke(); }
+    function dot(a,r,col){ var p = T(a); ctx.fillStyle = col; ctx.beginPath(); ctx.arc(p.x,p.y,r*px,0,Math.PI*2); ctx.fill(); }
+    var fs = Math.round((f.cssW < 380 ? 13.5 : 12.5)*f.dpr);
+    function label(t, x, y, col, al){ ctx.font = '600 '+fs+'px '+C.mono; ctx.textAlign = al||'left'; ctx.textBaseline = 'middle'; ctx.lineWidth = 5*f.dpr; ctx.strokeStyle = C.surface; ctx.strokeText(t,x,y); ctx.fillStyle = col; ctx.fillText(t,x,y); }
+    var r = evalAt(id, state.s), BODY = '#5f5650', WORK = C.accent;
+    // chão
+    var fl = T(V(vw.x0, ex.floor)), fr = T(V(vw.x1, ex.floor));
+    ctx.strokeStyle = C.line; ctx.lineWidth = 2*f.dpr; ctx.beginPath(); ctx.moveTo(fl.x,fl.y); ctx.lineTo(fr.x,fr.y); ctx.stroke();
+
+    if (ex.cable && id !== 'pull'){
+      var H = r.H, beta = ex.beta, Td = V(Math.sin(beta*D), Math.cos(beta*D)), S = mul(Td, LTR);
+      // torre
+      var tw = T(V(r.P.x + 6, ex.floor)), tt = T(V(r.P.x + 6, 125));
+      ctx.fillStyle = '#26211d'; ctx.fillRect(tw.x - 3*px, tt.y, 9*px, tw.y - tt.y);
+      // apoio / pernas fixas
+      if (id === 'quatro'){
+        seg(H, V(0, ex.floor), 11, BODY); seg(V(0, ex.floor), V(-40, ex.floor), 9, BODY);
+        seg(S, V(S.x, ex.floor), 8, BODY);
+      } else {
+        seg(H, V(0, ex.floor + 4), 12, BODY); seg(V(0, ex.floor+3), V(16, ex.floor+3), 6, BODY);
+        var hand = id === 'inclinado' ? V(r.P.x - 8, S.y - 22) : V(r.P.x - 4, S.y - 18);
+        seg(S, hand, 7, BODY);
+        if (id === 'inclinado'){ var pad1 = T(V(r.P.x - 22, S.y - 24)), pad2 = T(V(r.P.x + 2, S.y - 24)); ctx.strokeStyle = '#3a332e'; ctx.lineWidth = 7*px; ctx.beginPath(); ctx.moveTo(pad1.x,pad1.y); ctx.lineTo(pad2.x,pad2.y); ctx.stroke(); }
+      }
+      // tronco e cabeça
+      seg(H, S, 15, BODY); dot(add(S, mul(Td, 14)), 10, BODY);
+      // linha de ação + cabo
+      ctx.save(); ctx.setLineDash([6*f.dpr, 6*f.dpr]); var l1 = T(add(r.A, mul(r.F, -300))), l2 = T(add(r.A, mul(r.F, 400)));
+      ctx.strokeStyle = 'rgba(245,239,232,.25)'; ctx.lineWidth = 1.3*f.dpr; ctx.beginPath(); ctx.moveTo(l1.x,l1.y); ctx.lineTo(l2.x,l2.y); ctx.stroke(); ctx.restore();
+      seg(r.A, r.P, 1.2, C.cable);
+      var pp = T(r.P); ctx.strokeStyle = C.muted; ctx.lineWidth = 2.5*f.dpr; ctx.beginPath(); ctx.arc(pp.x,pp.y,6*px,0,Math.PI*2); ctx.stroke();
+      // perna que trabalha
+      seg(H, r.K, 12, WORK); seg(r.K, r.A, 10, WORK); dot(r.A, 4.5, C.fg);
+      // braço de momento
+      seg(H, r.Q, 1.4, C.fg); dot(r.Q, 2, C.fg);
+      dot(H, 5, C.fg);
+      label('braço de momento '+Math.round(r.arm)+' cm', 12*f.dpr, f.h - 16*f.dpr, C.fg);
+      label('polia', pp.x, pp.y + 16*f.dpr, C.cable, 'center');
+    } else if (id === 'pull'){
+      var H2 = r.H, K2 = V(8, -45), A2 = V(0, ex.floor + 4);
+      var tw2 = T(V(r.P.x - 6, ex.floor)), tt2 = T(V(r.P.x - 6, 125));
+      ctx.fillStyle = '#26211d'; ctx.fillRect(tw2.x - 6*px, tt2.y, 9*px, tw2.y - tt2.y);
+      seg(A2, K2, 11, BODY); seg(K2, H2, 13, BODY); seg(A2, V(16, ex.floor+3), 6, BODY);
+      ctx.save(); ctx.setLineDash([6*f.dpr, 6*f.dpr]); var m1 = T(add(r.hand, mul(r.F, -200))), m2 = T(add(r.hand, mul(r.F, 300)));
+      ctx.strokeStyle = 'rgba(245,239,232,.25)'; ctx.lineWidth = 1.3*f.dpr; ctx.beginPath(); ctx.moveTo(m1.x,m1.y); ctx.lineTo(m2.x,m2.y); ctx.stroke(); ctx.restore();
+      seg(r.hand, r.P, 1.2, C.cable);
+      var pp2 = T(r.P); ctx.strokeStyle = C.muted; ctx.lineWidth = 2.5*f.dpr; ctx.beginPath(); ctx.arc(pp2.x,pp2.y,6*px,0,Math.PI*2); ctx.stroke();
+      seg(H2, r.S, 15, WORK); dot(add(r.S, mul(r.T, 14)), 10, WORK);
+      seg(r.S, r.hand, 7, '#8a7d73'); dot(r.hand, 4, C.fg);
+      seg(H2, r.Q, 1.4, C.fg); dot(r.Q, 2, C.fg); dot(H2, 5, C.fg);
+      label('braço de momento '+Math.round(r.arm)+' cm', 12*f.dpr, f.h - 16*f.dpr, C.fg);
+      label('polia', pp2.x, pp2.y - 16*f.dpr, C.cable, 'center');
+    } else if (id === 'thrust'){
+      var b1 = T(V(-130, 0)), b2 = T(V(-92, 42)); ctx.fillStyle = '#26211d'; ctx.fillRect(b1.x, b2.y, b2.x - b1.x, b1.y - b2.y);
+      var tr = unit(sub(r.S, r.H));
+      seg(r.A, r.K, 10, BODY); seg(r.A, V(14, 3), 6, BODY);
+      seg(r.H, r.K, 12, WORK); seg(r.H, r.S, 15, WORK); dot(add(r.S, mul(tr, 14)), 10, WORK);
+      // barra
+      var bp = T(add(r.H, V(0, 10))); ctx.fillStyle = '#2a2420'; ctx.strokeStyle = C.fg; ctx.lineWidth = 2*f.dpr; ctx.beginPath(); ctx.arc(bp.x, bp.y, 13*px, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      // reação do chão e braço quadril → pés
+      var g1 = T(V(r.A.x, 0)), g2 = T(V(r.A.x, 30));
+      ctx.strokeStyle = C.cable; ctx.lineWidth = 3*f.dpr; ctx.beginPath(); ctx.moveTo(g1.x, g1.y); ctx.lineTo(g2.x, g2.y); ctx.stroke();
+      ctx.fillStyle = C.cable; ctx.beginPath(); ctx.moveTo(g2.x, g2.y - 6*f.dpr); ctx.lineTo(g2.x - 6*f.dpr, g2.y + 4*f.dpr); ctx.lineTo(g2.x + 6*f.dpr, g2.y + 4*f.dpr); ctx.closePath(); ctx.fill();
+      seg(r.H, V(r.A.x, r.H.y), 1.4, C.fg); dot(V(r.A.x, r.H.y), 2, C.fg); dot(r.H, 5, C.fg);
+      label('peso da barra', bp.x, bp.y - 24*f.dpr, C.fg, 'center');
+      label('pés no chão', g2.x + 8*f.dpr, g2.y - 4*f.dpr, C.cable, 'left');
+      label('braço quadril → pés '+Math.round(r.arm)+' cm', 12*f.dpr, f.h - 16*f.dpr, C.fg);
+    } else {
+      var tr2 = unit(sub(r.S, r.H));
+      seg(r.A, V(18, 3), 6, BODY); seg(r.A, r.K, 11, BODY);
+      seg(r.K, r.H, 13, id === 'squat' ? BODY : BODY);
+      seg(r.H, r.S, 15, WORK); dot(add(r.S, mul(tr2, 14)), 10, WORK);
+      var bar = r.bar;
+      if (id === 'rdl') seg(r.S, bar, 6, '#8a7d73');
+      var bp2 = T(bar); ctx.fillStyle = '#2a2420'; ctx.strokeStyle = C.fg; ctx.lineWidth = 2*f.dpr; ctx.beginPath(); ctx.arc(bp2.x, bp2.y, (id === 'rdl' ? 20 : 15)*px, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      ctx.save(); ctx.setLineDash([6*f.dpr, 6*f.dpr]); var v1 = T(V(bar.x, 0)), v2 = T(V(bar.x, vw.y1)); ctx.strokeStyle = 'rgba(245,239,232,.3)'; ctx.lineWidth = 1.3*f.dpr; ctx.beginPath(); ctx.moveTo(v1.x,v1.y); ctx.lineTo(v2.x,v2.y); ctx.stroke(); ctx.restore();
+      seg(r.H, V(bar.x, r.H.y), 1.4, C.fg); dot(V(bar.x, r.H.y), 2, C.fg); dot(r.H, 5, C.fg);
+      label('linha da barra', v2.x + 6*f.dpr, v2.y + 14*f.dpr, C.muted, 'left');
+      label('braço de momento '+Math.round(Math.max(0,r.arm))+' cm', 12*f.dpr, f.h - 16*f.dpr, C.fg);
+    }
+    label(ex.cable ? 'cabo: força na direção da polia' : 'peso: força vertical', 12*f.dpr, 16*f.dpr, C.muted);
+    return r;
+  }
+
+  function drawCurve(cv, sets, cur, opts){
+    var f = fit(cv), ctx = cv.getContext('2d'), W = 600, Hh = opts.h, sc = f.w/W, narrow = f.cssW < 480, fs = narrow ? 17 : 12;
+    ctx.setTransform(1,0,0,1,0,0); ctx.fillStyle = C.surface; ctx.fillRect(0,0,f.w,f.h); ctx.setTransform(sc,0,0,sc,0,0);
+    var pad = {l: narrow ? 58 : 46, r:14, t:26, b: narrow ? 46 : 38};
+    var h0 = 120, h1 = -20;
+    function X(h){ return pad.l + (h0-h)/(h0-h1)*(W-pad.l-pad.r); }
+    function Y(v){ return pad.t + (1.05-v)/1.05*(Hh-pad.t-pad.b); }
+    // faixas de comprimento
+    [[120,60,'rgba(255,107,26,.07)','alongado'],[60,20,'rgba(255,194,74,.06)','médio'],[20,-20,'rgba(92,198,255,.07)','encurtado']].forEach(function(z){
+      ctx.fillStyle = z[2]; ctx.fillRect(X(z[0]), pad.t, X(z[1])-X(z[0]), Hh-pad.t-pad.b);
+      ctx.fillStyle = C.dim; ctx.font = '500 '+(fs*0.9)+'px '+C.mono; ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillText(z[3], (X(z[0])+X(z[1]))/2, 6);
+    });
+    ctx.font = '500 '+fs+'px '+C.mono; ctx.textBaseline = 'middle'; ctx.textAlign = 'right';
+    [0,.5,1].forEach(function(v){ ctx.strokeStyle = v === 0 ? C.muted : C.line; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(pad.l, Y(v)); ctx.lineTo(W-pad.r, Y(v)); ctx.stroke(); ctx.fillStyle = C.muted; ctx.fillText(Math.round(v*100)+'%', pad.l-8, Y(v)); });
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    [120,90,60,30,0,-20].forEach(function(h){ ctx.fillStyle = C.muted; ctx.fillText(h+'°', X(h), Hh-pad.b+8); });
+    ctx.fillStyle = C.dim; ctx.textAlign = 'left'; ctx.fillText('← flexão', pad.l, Hh-pad.b+10+fs); ctx.textAlign = 'right'; ctx.fillText('extensão →', W-pad.r, Hh-pad.b+10+fs);
+    sets.forEach(function(st){
+      ctx.save(); if (st.dash) ctx.setLineDash(st.dash); ctx.globalAlpha = st.alpha || 1;
+      ctx.strokeStyle = st.col; ctx.lineWidth = st.w; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      ctx.beginPath(); st.c.pts.forEach(function(p,i){ var x = X(p.hip), y = Y(p.n); if (i) ctx.lineTo(x,y); else ctx.moveTo(x,y); }); ctx.stroke(); ctx.restore();
+      if (st.fill){ ctx.beginPath(); st.c.pts.forEach(function(p,i){ var x = X(p.hip), y = Y(p.n); if (i) ctx.lineTo(x,y); else ctx.moveTo(x,y); }); ctx.lineTo(X(st.c.hip1), Y(0)); ctx.lineTo(X(st.c.hip0), Y(0)); ctx.closePath(); ctx.fillStyle = 'rgba(255,107,26,.12)'; ctx.fill(); }
+      if (st.peak){ ctx.fillStyle = st.col; ctx.beginPath(); ctx.arc(X(st.c.peak.hip), Y(1), st.w > 3 ? 6 : 4, 0, Math.PI*2); ctx.fill(); }
+      if (st.label){ ctx.font = '700 '+(fs*0.92)+'px '+C.mono; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'; ctx.lineWidth = 4; ctx.strokeStyle = C.surface; ctx.strokeText(st.label, X(st.c.peak.hip), Y(1) - 8); ctx.fillStyle = st.col; ctx.fillText(st.label, X(st.c.peak.hip), Y(1) - 8); }
+    });
+    if (cur){
+      ctx.strokeStyle = 'rgba(245,239,232,.35)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(X(cur.hip), pad.t); ctx.lineTo(X(cur.hip), Hh-pad.b); ctx.stroke();
+      ctx.fillStyle = C.surface; ctx.strokeStyle = C.accent; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(X(cur.hip), Y(cur.n), 6, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+    }
+  }
+
+  // ======== músculos por faixa ========
+  function muscles(id, hip){
+    var z = zoneOf(hip), kneeFlex = id === 'quatro' || id === 'thrust', L = [];
+    if (z === 'long'){
+      L.push([2,'Glúteo máximo','Bem alongado. Com o quadril muito flexionado, seu braço de momento para estender é menor.']);
+      L.push([3,'Adutor magno','Com o quadril flexionado, a porção posterior vira um extensor forte.']);
+      L.push(kneeFlex ? [2,'Isquiotibiais','Com o joelho flexionado ficam mais curtos e ajudam menos.'] : [3,'Isquiotibiais','Alongados no quadril e com bom braço de momento: ajudam muito.']);
+    } else if (z === 'mid'){
+      L.push([3,'Glúteo máximo','Comprimento médio; o braço de momento cresce conforme o quadril estende.']);
+      L.push(kneeFlex ? [2,'Isquiotibiais','Joelho flexionado limita a ajuda.'] : [3,'Isquiotibiais','Seguem como extensores importantes.']);
+      L.push([2,'Adutor magno','Ainda ajuda, mas perde vantagem conforme o quadril estende.']);
+    } else {
+      L.push([3,'Glúteo máximo','Perto da posição neutra tem o maior braço de momento e a maior ativação.']);
+      L.push(kneeFlex ? [1,'Isquiotibiais','Curtos no joelho e no quadril ao mesmo tempo: insuficiência ativa, ajudam pouco.'] : [2,'Isquiotibiais','Ajudam, com braço de momento menor.']);
+      L.push([1,'Adutor magno','Perde a função de extensor perto da extensão.']);
+    }
+    if (id === 'squat') L.push([3,'Quadríceps','Estende o joelho junto com o quadril.']);
+    if (id === 'thrust') L.push([2,'Quadríceps','Segura o joelho perto de 90° e ajuda a empurrar.']);
+    if (id === 'squat' || id === 'rdl' || id === 'pull') L.push([2,'Eretores da espinha','Isometria para manter a coluna neutra com o tronco inclinado.']);
+    if (id === 'emPe' || id === 'inclinado' || id === 'quatro') L.push([1,'Glúteo médio da perna de apoio','Mantém a pelve nivelada enquanto a outra perna trabalha.']);
+    return L;
+  }
+
+  // ======== interface ========
+  var picker = $('picker');
+  ORDER.forEach(function(id){
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'pk'; b.id = 'pk-'+id;
+    b.innerHTML = '<span class="tg'+(EX[id].cable ? '' : ' f')+'">'+(EX[id].cable ? 'polia' : 'peso livre')+'</span><b>'+EX[id].nome+'</b><small>'+EX[id].sub+'</small>';
+    b.addEventListener('click', function(){ setEx(id); });
+    picker.appendChild(b);
+  });
+  var COLS = {emPe:'#8fd4ff', inclinado:'#5cc6ff', quatro:'#2f8fc4', pull:'#a59bff', thrust:'#ffc24a', squat:'#ff6b1a', rdl:'#ff9a5c'};
+  $('cLegend').innerHTML = ORDER.map(function(id){ return '<span><i style="background:'+COLS[id]+'"></i>'+EX[id].nome+'</span>'; }).join('');
+
+  function setEx(id){
+    state.ex = id; var ex = EX[id];
+    ORDER.forEach(function(k){ $('pk-'+k).setAttribute('aria-pressed', k === id ? 'true' : 'false'); });
+    $('exName').textContent = ex.nome; $('exSub').textContent = ex.sub; $('exNote').textContent = ex.note;
+    $('pulleyWrap').hidden = !ex.cable;
+    if (ex.cable){ $('pulleyLbl').textContent = ex.plbl; $('pLo').textContent = ex.pends[0]; $('pHi').textContent = ex.pends[1]; $('pulley').value = state.pulley[id]; }
+    $('kExtraL').textContent = ex.cable ? (id === 'pull' ? 'braço de momento' : 'cabo × perna') : 'braço de momento';
+    update();
+  }
+  var lastZone = null;
+  function update(){
+    var id = state.ex, ex = EX[id], r = drawStage(), c = curve(id);
+    var i = Math.round(state.s*120), p = c.pts[i];
+    drawCurve($('graph'), [{c:c, col:C.accent, w:4, fill:true, peak:true}], {hip:p.hip, n:p.n}, {h:280});
+    $('kAng').textContent = Math.abs(Math.round(r.hip))+'°';
+    $('kAngT').textContent = r.hip >= 0 ? 'de flexão' : 'de extensão';
+    $('kTq').innerHTML = Math.round(p.n*100)+'<small>%</small>';
+    if (ex.cable && id !== 'pull'){ $('kExtra').textContent = Math.round(r.cableAng)+'°'; $('kExtraT').textContent = '90° = pico'; }
+    else { $('kExtra').innerHTML = Math.round(Math.max(0,r.arm))+'<small>cm</small>'; $('kExtraT').textContent = id === 'thrust' ? 'quadril → pés' : 'quadril → linha da força'; }
+    $('glNow').style.left = (glFrac(r.hip)*100)+'%';
+    $('glPeak').style.left = (glFrac(c.peak.hip)*100)+'%';
+    var z = zoneOf(c.peak.hip), zc = {long:C.long, mid:C.mid, short:C.short}[z];
+    $('vPill').textContent = ZNAME[z]; $('vPill').style.background = zc;
+    $('vText').textContent = 'Pico a '+fmtHip(c.peak.hip)+'. Amplitude: de '+fmtHip(c.hip0)+' a '+fmtHip(c.hip1)+'.' + (ex.cable ? ' Mova a polia para levar o pico para outro ponto.' : '');
+    if (ex.cable) $('pulleyOut').textContent = state.pulley[id] < 25 ? ex.pends[0] : (state.pulley[id] > 75 ? ex.pends[1] : 'meio');
+    $('posOut').textContent = fmtHip(r.hip);
+    $('pos').value = Math.round(state.s*1000);
+    var zn = zoneOf(r.hip) + id;
+    if (zn !== lastZone){
+      lastZone = zn;
+      $('zone').textContent = 'faixa: '+ZNAME[zoneOf(r.hip)];
+      $('mus').innerHTML = muscles(id, r.hip).sort(function(a,b){ return b[0]-a[0]; }).map(function(m){
+        var d = ''; for (var k=1;k<=3;k++) d += '<span'+(k <= m[0] ? ' class="on"' : '')+'></span>';
+        return '<li class="mu"><div class="dots" aria-label="nível '+m[0]+' de 3">'+d+'</div><div><b>'+m[1]+'</b><small>'+m[2]+'</small></div></li>';
+      }).join('');
+    }
+  }
+  var cmpDirty = true;
+  function drawCompare(){
+    var sets = ORDER.map(function(id){ var on = id === state.ex; return {c:curve(id), col:COLS[id], w:on ? 4 : 2.2, alpha:on ? 1 : .8, peak:true}; });
+    sets.sort(function(a,b){ return a.w - b.w; });
+    drawCurve($('cmp'), sets, null, {h:300});
+  }
+  function buildTable(){
+    var EMF = {emPe:'Glúteo no fim, amplitude curta', inclinado:'Ajustável pela polia; glúteo e isquiotibiais', quatro:'Glúteo com isquiotibiais encurtados', pull:'Dobradiça com tensão no topo', thrust:'Tensão do início ao topo; glúteo com pouca ajuda dos isquiotibiais', squat:'Glúteo alongado, quadríceps e adutores', rdl:'Glúteo e isquiotibiais alongados'};
+    $('tbody').innerHTML = ORDER.map(function(id){
+      var c = curve(id), z = zoneOf(c.peak.hip), zc = {long:C.long, mid:C.mid, short:C.short}[z];
+      return '<tr><td><b>'+EX[id].nome+'</b>'+(EX[id].cable ? '<br><small style="color:var(--muted)">polia: '+(state.pulley[id] < 25 ? EX[id].pends[0] : (state.pulley[id] > 75 ? EX[id].pends[1] : 'meio'))+'</small>' : '')+'</td><td class="num">'+Math.round(c.hip0)+'° → '+Math.round(c.hip1)+'°</td><td class="num">'+Math.round(c.peak.hip)+'°</td><td><span class="tagL" style="background:'+zc+'">'+ZNAME[z]+'</span></td><td>'+EX[id].knee+'</td><td>'+EMF[id]+'</td></tr>';
+    }).join('');
+  }
+  function refreshAll(){ update(); drawCompare(); buildTable(); }
+
+  function sm(x){ return x*x*(3-2*x); }
+  function tick(ts){
+    if (!state.playing) return;
+    if (state.t0 === null) state.t0 = ts;
+    var T = ((ts-state.t0) % 4600)/4600, s;
+    if (T < .08) s = 0; else if (T < .48) s = sm((T-.08)/.40); else if (T < .58) s = 1; else if (T < .95) s = 1 - sm((T-.58)/.37); else s = 0;
+    state.s = s; update(); requestAnimationFrame(tick);
+  }
+  function setPlaying(v){ var was = state.playing; state.playing = v; state.t0 = null; $('play').textContent = v ? 'Pausar' : 'Animar'; if (v && !was) requestAnimationFrame(tick); }
+  $('play').addEventListener('click', function(){ setPlaying(!state.playing); });
+  $('pos').addEventListener('input', function(e){ setPlaying(false); state.s = +e.target.value/1000; update(); });
+  $('pulley').addEventListener('input', function(e){ state.pulley[state.ex] = +e.target.value; lastZone = null; refreshAll(); });
+  var _setEx = setEx; setEx = function(id){ _setEx(id); drawCompare(); };
+  if (window.ResizeObserver){ var ro = new ResizeObserver(function(){ update(); drawCompare(); }); ro.observe($('stage')); ro.observe($('cmp')); }
+  else window.addEventListener('resize', function(){ update(); drawCompare(); });
+  $('play').textContent = state.playing ? 'Pausar' : 'Animar';
+  setEx('inclinado'); buildTable();
+  if (state.playing) requestAnimationFrame(tick);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ update(); drawCompare(); });
+})();
+</script>
+</body>
+</html>
