@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script>(function(){var e=true;try{e=window.self!==window.top}catch(x){}if(e)document.documentElement.classList.add("embed")})();</script>
+<title>Supino Barra × Halter</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Animação interativa do supino reto com barra e com halteres: braço de momento e torque no ombro e no cotovelo, carga e músculos.">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: dois palcos lado a lado (barra | halteres), vistos pelos pés do aluno, animados juntos; controles de carga e posição; leitura de torque; curva ao longo da subida; músculos e estudos. Visual escuro deliberado (identidade MG COACH). */
+:root{
+  --bg:#0a0a0a;
+  --surface:#13110f;
+  --surface-2:#1b1815;
+  --line:#2c2622;
+  --fg:#f5efe8;
+  --muted:#9d9188;
+  --dim:#5f5650;
+  --bone:#d9cfc4;
+  --accent:#ff6b1a;
+  --sh:#ff6b1a;
+  --el:#5cc6ff;
+  --display:"Big Shoulders Display", Impact, "Arial Narrow", sans-serif;
+  --text:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--fg)}
+html{-webkit-text-size-adjust:100%;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font-family:var(--text);font-size:15px;line-height:1.5}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));display:flex;flex-direction:column;gap:22px}
+.back{font-family:var(--mono);font-size:12px;color:var(--muted);text-decoration:none;align-self:flex-start;border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+.back:hover{color:var(--fg);border-color:var(--muted)}
+.embed .back{display:none}
+header{display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.eyebrow b{color:var(--accent);font-weight:600}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(40px,8vw,78px);line-height:.92;text-transform:uppercase;margin:0;text-wrap:balance}
+h1 em{font-style:normal;color:var(--accent)}
+.lede{margin:0;max-width:64ch;color:var(--muted);font-size:16px}
+.lede strong{color:var(--fg);font-weight:600}
+
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.stage-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.stage-head b{font-family:var(--display);font-weight:700;font-size:26px;text-transform:uppercase;line-height:1}
+.stage-head span{font-family:var(--mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.canvas-box{position:relative;width:100%;aspect-ratio:400/300;max-width:100%}
+.canvas-box canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.reads{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--line)}
+.rd{padding:10px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.rd+.rd{border-left:1px solid var(--line)}
+.rd .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;display:flex;align-items:center;gap:6px}
+.rd .k i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.rd .v{font-family:var(--display);font-weight:700;font-size:30px;line-height:1;font-variant-numeric:tabular-nums}
+.rd .v small{font-size:14px;color:var(--muted);margin-left:2px}
+.rd .t{font-size:12px;color:var(--muted)}
+.bar{height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden;margin-top:4px}
+.bar span{display:block;height:100%;width:0}
+
+.controls{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px 16px;display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,1fr);gap:14px 20px;align-items:center}
+.btn{font:600 13px/1 var(--text);color:var(--fg);background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:9px 14px;cursor:pointer;min-width:92px}
+.btn:hover{border-color:var(--muted)}
+.sl{display:flex;flex-direction:column;gap:6px;min-width:0}
+.sl label{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted)}
+.sl output{font-family:var(--mono);color:var(--fg);font-variant-numeric:tabular-nums}
+.sl .ends{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--dim)}
+input[type=range]{width:100%;margin:0;accent-color:var(--accent)}
+.chk{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);grid-column:1/-1}
+.chk input{accent-color:var(--accent);width:16px;height:16px;margin:0}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.panel h3{margin:0;font-family:var(--display);font-weight:700;font-size:26px;text-transform:uppercase;letter-spacing:.02em}
+.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.note{margin:0;color:var(--muted);font-size:14px;max-width:68ch}
+.tabs{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--bg)}
+.tabs button{font:600 13px/1 var(--text);color:var(--muted);background:transparent;border:0;border-radius:999px;padding:8px 13px;cursor:pointer}
+.tabs button[aria-pressed="true"][data-j="sh"]{background:var(--sh);color:var(--bg)}
+.tabs button[aria-pressed="true"][data-j="el"]{background:var(--el);color:var(--bg)}
+.graph-box{position:relative;width:100%;aspect-ratio:600/260;max-width:100%}
+.graph-box canvas{position:absolute;inset:0;width:100%;height:100%}
+
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:14px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+tr:last-child td{border-bottom:0}
+td b{font-weight:700}
+.lv{font-family:var(--mono);font-size:12px;white-space:nowrap}
+.lv.up{color:var(--accent)} .lv.eq{color:var(--muted)} .lv.dn{color:var(--el)}
+
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.card{border:1px solid var(--line);border-radius:14px;padding:16px;background:var(--bg);display:flex;flex-direction:column;gap:6px;min-width:0}
+.card h4{margin:0;font-size:16.5px;font-weight:700;line-height:1.25}
+.card p{margin:0;color:var(--muted);font-size:14px}
+.card .tag{align-self:flex-start;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;border-radius:999px;padding:3px 9px;border:1px solid currentColor;color:var(--accent)}
+.refs{margin:0;padding-left:18px;color:var(--muted);font-size:13px;display:flex;flex-direction:column;gap:4px}
+footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+footer b{color:var(--accent);font-weight:600}
+
+@media (max-width:860px){
+  .controls{grid-template-columns:minmax(0,1fr)}
+  .cards{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:620px){
+  .duo{grid-template-columns:minmax(0,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./" target="_top">← Teoria e Prática</a>
+
+  <header>
+    <div class="eyebrow"><b>MG COACH</b> · Biomecânica do treino</div>
+    <h1>Supino reto: <em>barra × halteres</em></h1>
+    <p class="lede">Visto pelos pés do aluno deitado no banco. Na barra, as mãos ficam presas na mesma largura. Com halteres, elas descem mais e se aproximam no topo. Isso muda o <strong>braço de momento no ombro</strong>, que é o trabalho do peitoral e do deltoide anterior, e no <strong>cotovelo</strong>, que é o trabalho do tríceps.</p>
+  </header>
+
+  <noscript><p class="note">Esta animação precisa de JavaScript ativado para funcionar.</p></noscript>
+
+  <div class="duo">
+    <section class="stage" aria-label="Supino com barra">
+      <div class="stage-head"><b>Barra</b><span id="loadB">40 kg por lado</span></div>
+      <div class="canvas-box"><canvas id="cvB" role="img" aria-label="Supino com barra visto pelos pés"></canvas></div>
+      <div class="reads">
+        <div class="rd"><span class="k" style="color:var(--sh)"><i style="background:var(--sh)"></i>Ombro</span><span class="v" id="sB">0<small>N·m</small></span><span class="t">peitoral + deltoide ant.</span><div class="bar"><span id="sBb" style="background:var(--sh)"></span></div></div>
+        <div class="rd"><span class="k" style="color:var(--el)"><i style="background:var(--el)"></i>Cotovelo</span><span class="v" id="eB">0<small>N·m</small></span><span class="t" id="eBt">tríceps</span><div class="bar"><span id="eBb" style="background:var(--el)"></span></div></div>
+      </div>
+    </section>
+    <section class="stage" aria-label="Supino com halteres">
+      <div class="stage-head"><b>Halteres</b><span id="loadH">33 kg cada</span></div>
+      <div class="canvas-box"><canvas id="cvH" role="img" aria-label="Supino com halteres visto pelos pés"></canvas></div>
+      <div class="reads">
+        <div class="rd"><span class="k" style="color:var(--sh)"><i style="background:var(--sh)"></i>Ombro</span><span class="v" id="sH">0<small>N·m</small></span><span class="t">peitoral + deltoide ant.</span><div class="bar"><span id="sHb" style="background:var(--sh)"></span></div></div>
+        <div class="rd"><span class="k" style="color:var(--el)"><i style="background:var(--el)"></i>Cotovelo</span><span class="v" id="eH">0<small>N·m</small></span><span class="t" id="eHt">tríceps</span><div class="bar"><span id="eHb" style="background:var(--el)"></span></div></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="controls">
+    <button type="button" class="btn" id="play">Pausar</button>
+    <div class="sl">
+      <label for="pos">Posição na subida <output id="posOut">fundo</output></label>
+      <input type="range" id="pos" min="0" max="1000" step="1" value="0">
+      <div class="ends"><span>fundo</span><span>topo</span></div>
+    </div>
+    <div class="sl">
+      <label for="load">Carga na barra <output id="loadOut">80 kg</output></label>
+      <input type="range" id="load" min="20" max="200" step="5" value="80">
+      <div class="ends"><span>20 kg</span><span>200 kg</span></div>
+    </div>
+    <label class="chk"><input type="checkbox" id="rel" checked> Halteres com a mesma intensidade relativa (1RM cerca de 17% menor que na barra). Desmarque para usar a mesma carga total.</label>
+  </div>
+
+  <section class="panel" aria-label="Curvas de torque">
+    <div class="panel-head">
+      <h3>Torque ao longo da subida</h3>
+      <div class="tabs" role="group" aria-label="Articulação">
+        <button type="button" data-j="sh" aria-pressed="true">Ombro</button>
+        <button type="button" data-j="el" aria-pressed="false">Cotovelo</button>
+      </div>
+    </div>
+    <div class="graph-box"><canvas id="graph" role="img" aria-label="Torque por lado ao longo da subida, barra e halteres"></canvas></div>
+    <p class="note" id="gNote"></p>
+  </section>
+
+  <section class="panel" aria-label="Diferenças">
+    <h3>O que muda na prática</h3>
+    <div class="cards">
+      <article class="card"><span class="tag">topo</span><h4>Com halteres, o ombro descansa no topo</h4><p>As mãos se aproximam e ficam sobre os ombros. A linha da carga passa pela articulação e o torque no ombro chega perto de zero. Na barra, as mãos continuam afastadas e o peitoral segue trabalhando no topo.</p></article>
+      <article class="card"><span class="tag">fundo</span><h4>Com halteres, desce mais</h4><p>Sem a barra para bater no peito, o cotovelo passa da linha do tronco. O ombro chega a mais abdução horizontal e o peitoral trabalha mais alongado, onde o braço de momento é maior.</p></article>
+      <article class="card"><span class="tag">cotovelo</span><h4>Barra cobra mais tríceps</h4><p>Na barra, a mão fica por dentro do cotovelo durante boa parte da subida, e esse desalinhamento exige o tríceps. Com halteres, o antebraço fica quase vertical e a demanda no cotovelo cai.</p></article>
+      <article class="card"><span class="tag">estabilidade</span><h4>Halteres pedem mais controle</h4><p>Cada mão se equilibra sozinha. Por isso o bíceps e o manguito rotador trabalham mais como estabilizadores, e a carga máxima cai.</p></article>
+      <article class="card"><span class="tag">força</span><h4>Barra move mais carga</h4><p>As duas mãos dividem uma única barra, e dá para empurrar uma contra a outra. Isso permite cargas maiores e torna a barra a melhor escolha para progressão de força máxima.</p></article>
+      <article class="card"><span class="tag">escolha</span><h4>Use os dois</h4><p>Barra para carga e força; halteres para amplitude, trabalho alongado do peitoral e correção de assimetrias entre os lados.</p></article>
+    </div>
+  </section>
+
+  <section class="panel" aria-label="Músculos">
+    <h3>Músculos e o que dizem os estudos</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Músculo</th><th>Função no supino</th><th>Halteres × barra (EMG)</th></tr></thead>
+        <tbody>
+          <tr><td><b>Peitoral maior</b></td><td>Adução horizontal do ombro; a porção clavicular ajuda na flexão.</td><td><span class="lv eq">sem diferença</span></td></tr>
+          <tr><td><b>Deltoide anterior</b></td><td>Flexão e adução horizontal do ombro.</td><td><span class="lv eq">sem diferença</span></td></tr>
+          <tr><td><b>Tríceps braquial</b></td><td>Extensão do cotovelo.</td><td><span class="lv dn">menor com halteres</span></td></tr>
+          <tr><td><b>Bíceps braquial</b></td><td>Estabiliza o cotovelo e o ombro.</td><td><span class="lv up">maior com halteres</span></td></tr>
+          <tr><td><b>Manguito rotador e serrátil</b></td><td>Centralizam a cabeça do úmero e posicionam a escápula.</td><td><span class="lv up">mais exigidos pela instabilidade</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Em homens treinados, o 1RM com halteres foi cerca de 17% menor que na barra e 14% menor que no Smith. O peitoral e o deltoide anterior tiveram ativação parecida nos três, o tríceps ativou menos com halteres e o bíceps aumentou conforme a instabilidade crescia.</p>
+    <ol class="refs">
+      <li>Saeterbakken AH, van den Tillaar R, Fimland MS. A comparison of muscle activity and 1-RM strength of three chest-press exercises with different stability requirements. J Sports Sci, 2011.</li>
+    </ol>
+    <p class="note">Modelo didático no plano frontal (visto pelos pés), com a carga atuando na vertical em cada mão. Considera o comprimento de um adulto médio e não inclui a inclinação dos cotovelos em direção aos pés nem o arco lombar. Os valores servem para comparar as duas formas, não como medida exata.</p>
+  </section>
+
+  <footer>
+    <span><b>MG COACH</b> · Matheus Garrido · @matheusgarrido</span>
+    <span>Teoria e Prática</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var css = getComputedStyle(document.documentElement);
+  function tok(n){ return css.getPropertyValue(n).trim(); }
+  var C = {bg:tok('--bg'), surface:tok('--surface'), surface2:tok('--surface-2'), line:tok('--line'), fg:tok('--fg'), muted:tok('--muted'), dim:tok('--dim'),
+           bone:tok('--bone'), accent:tok('--accent'), sh:tok('--sh'), el:tok('--el'), mono:tok('--mono')};
+  var $ = function(id){ return document.getElementById(id); };
+
+  // cm no plano frontal, lado direito; ombro em x=20, y=0 (y para cima)
+  var SH = {x:20, y:0};
+  var KEYS = {
+    barra:  [{p:0, e:[40,-14], h:[34,12]}, {p:.5, e:[42,10], h:[34,36]}, {p:1, e:[27,28], h:[34,56]}],
+    halter: [{p:0, e:[44,-20], h:[44,6]},  {p:.5, e:[41,8],  h:[38,33]}, {p:1, e:[23,28], h:[20,56]}]
+  };
+  function sm(t){ return t*t*(3-2*t); }
+  function pose(kind, p){
+    var k = KEYS[kind], a = k[0], b = k[1];
+    if (p > k[1].p){ a = k[1]; b = k[2]; }
+    var t = sm(Math.max(0, Math.min(1, (p-a.p)/(b.p-a.p))));
+    var E = {x:a.e[0]+(b.e[0]-a.e[0])*t, y:a.e[1]+(b.e[1]-a.e[1])*t}, H = {x:a.h[0]+(b.h[0]-a.h[0])*t, y:a.h[1]+(b.h[1]-a.h[1])*t};
+    return {E:E, H:H, armS:H.x-SH.x, armE:E.x-H.x};
+  }
+  var state = {p:0, dir:1, playing:true, load:80, rel:true, joint:'sh', t0:null};
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) state.playing = false;
+  function perHand(kind){
+    var bar = state.load/2;
+    if (kind === 'barra') return bar;
+    return Math.round((state.rel ? state.load*0.83 : state.load)/2*2)/2;
+  }
+  function torque(kind, p){ var P = pose(kind,p), m = perHand(kind)*9.81/100; return {s:m*P.armS, e:m*P.armE, P:P}; }
+
+  function fit(cv){
+    var r = cv.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio||1, 2.5);
+    var w = Math.max(1, Math.round(r.width*dpr)), h = Math.max(1, Math.round(r.height*dpr));
+    if (cv.width !== w || cv.height !== h){ cv.width = w; cv.height = h; }
+    return {w:w, h:h, dpr:dpr, cssW:r.width};
+  }
+  function drawStage(cv, kind){
+    var f = fit(cv), ctx = cv.getContext('2d'), sc = f.w/400;
+    ctx.setTransform(1,0,0,1,0,0); ctx.fillStyle = C.surface; ctx.fillRect(0,0,f.w,f.h);
+    ctx.setTransform(sc,0,0,sc,0,0); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    var U = 3.1, ox = 200, oy = 205;                         // cm → px
+    function T(p, side){ return {x:ox + side*p.x*U, y:oy - p.y*U}; }
+    var fs = f.cssW < 360 ? 15 : 12.5;
+    var P = pose(kind, state.p);
+    // banco
+    ctx.fillStyle = '#2a2420'; ctx.fillRect(ox-44, oy+26, 88, 22); ctx.fillRect(ox-10, oy+48, 20, 52);
+    // tronco (secção)
+    ctx.fillStyle = C.surface2; ctx.strokeStyle = C.dim; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.ellipse(ox, oy+6, 78, 26, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = C.dim; ctx.beginPath(); ctx.arc(ox, oy-34, 0, 0, Math.PI*2); ctx.fill();
+    // linha do peito
+    ctx.strokeStyle = C.line; ctx.setLineDash([4,5]); ctx.beginPath(); ctx.moveTo(ox-130, oy-12*U+0); ctx.lineTo(ox+130, oy-12*U); ctx.stroke(); ctx.setLineDash([]);
+    [-1,1].forEach(function(s){
+      var S = T(SH,s), E = T(P.E,s), H = T(P.H,s);
+      // braço
+      ctx.strokeStyle = C.bone; ctx.lineWidth = 12; ctx.beginPath(); ctx.moveTo(S.x,S.y); ctx.lineTo(E.x,E.y); ctx.stroke();
+      ctx.lineWidth = 10; ctx.beginPath(); ctx.moveTo(E.x,E.y); ctx.lineTo(H.x,H.y); ctx.stroke();
+      ctx.fillStyle = C.bone; ctx.beginPath(); ctx.arc(S.x,S.y,9,0,Math.PI*2); ctx.fill();
+      // linha da carga
+      ctx.save(); ctx.setLineDash([5,5]); ctx.strokeStyle = 'rgba(245,239,232,.4)'; ctx.lineWidth = 1.3;
+      ctx.beginPath(); ctx.moveTo(H.x, H.y-30); ctx.lineTo(H.x, 300); ctx.stroke(); ctx.restore();
+      // braços de momento
+      if (s === 1){
+        ctx.strokeStyle = C.sh; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(S.x,S.y); ctx.lineTo(H.x,S.y); ctx.stroke();
+        ctx.fillStyle = C.sh; ctx.beginPath(); ctx.arc(H.x,S.y,3.5,0,Math.PI*2); ctx.fill();
+        ctx.strokeStyle = C.el; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(E.x,E.y); ctx.lineTo(H.x,E.y); ctx.stroke();
+        ctx.fillStyle = C.el; ctx.beginPath(); ctx.arc(H.x,E.y,3.5,0,Math.PI*2); ctx.fill();
+        ctx.font = '600 '+fs+'px '+C.mono; ctx.textBaseline = 'middle';
+        function tag(t, x, y, col, al){ ctx.textAlign = al; ctx.lineWidth = 5; ctx.strokeStyle = C.surface; ctx.strokeText(t,x,y); ctx.fillStyle = col; ctx.fillText(t,x,y); }
+        tag(Math.abs(P.armS).toFixed(0)+' cm', Math.max(S.x,H.x)+8, S.y+12, C.sh, 'left');
+        tag(Math.abs(P.armE).toFixed(0)+' cm', Math.max(E.x,H.x)+8, E.y+2, C.el, 'left');
+      }
+      // cotovelo
+      ctx.fillStyle = C.surface; ctx.strokeStyle = C.el; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(E.x,E.y,5,0,Math.PI*2); ctx.fill(); ctx.stroke();
+      // implemento
+      if (kind === 'halter'){
+        ctx.fillStyle = '#2a2420'; ctx.strokeStyle = C.fg; ctx.lineWidth = 2;
+        ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(H.x-15, H.y-9, 30, 18, 5); else ctx.rect(H.x-15,H.y-9,30,18); ctx.fill(); ctx.stroke();
+      }
+    });
+    if (kind === 'barra'){
+      var L = T(P.H,-1), R = T(P.H,1);
+      ctx.strokeStyle = C.fg; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(14, L.y); ctx.lineTo(386, R.y); ctx.stroke();
+      ctx.fillStyle = '#2a2420'; ctx.strokeStyle = C.fg; ctx.lineWidth = 2;
+      [[6,L.y],[394,R.y]].forEach(function(q){ ctx.beginPath(); ctx.ellipse(q[0], q[1], 8, 30, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke(); });
+    }
+    ctx.font = '500 '+(fs*0.9)+'px '+C.mono; ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillStyle = C.muted;
+    ctx.fillText('vista pelos pés', 10, 10);
+  }
+
+  function drawGraph(){
+    var cv = $('graph'), f = fit(cv), ctx = cv.getContext('2d'), W = 600, Hh = 260, sc = f.w/W;
+    var narrow = f.cssW < 480, fs = narrow ? 17 : 12.5;
+    ctx.setTransform(1,0,0,1,0,0); ctx.fillStyle = C.surface; ctx.fillRect(0,0,f.w,f.h);
+    ctx.setTransform(sc,0,0,sc,0,0);
+    var key = state.joint === 'sh' ? 's' : 'e', col = state.joint === 'sh' ? C.sh : C.el;
+    var pad = {l: narrow ? 64 : 52, r:18, t: 24, b: narrow ? 46 : 38};
+    var ser = {barra:[], halter:[]}, ymin = 0, ymax = 10;
+    ['barra','halter'].forEach(function(k){ for (var i=0;i<=100;i++){ var v = torque(k, i/100)[key]; ser[k].push(v); ymin = Math.min(ymin, v); ymax = Math.max(ymax, v); } });
+    var step = ymax > 120 ? 40 : 20; ymax = Math.ceil((ymax+4)/step)*step; ymin = Math.floor(ymin/step)*step;
+    function X(i){ return pad.l + i/100*(W-pad.l-pad.r); }
+    function Y(v){ return pad.t + (ymax-v)/(ymax-ymin)*(Hh-pad.t-pad.b); }
+    ctx.font = '500 '+fs+'px '+C.mono; ctx.textBaseline = 'middle'; ctx.textAlign = 'right';
+    for (var v=ymin; v<=ymax+0.1; v+=step){ ctx.strokeStyle = v === 0 ? C.muted : C.line; ctx.lineWidth = v === 0 ? 1.4 : 1; ctx.beginPath(); ctx.moveTo(pad.l, Y(v)); ctx.lineTo(W-pad.r, Y(v)); ctx.stroke(); ctx.fillStyle = C.muted; ctx.fillText(v, pad.l-8, Y(v)); }
+    ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillStyle = C.dim; ctx.fillText('N·m por lado', 4, 2);
+    ctx.textBaseline = 'top'; ctx.textAlign = 'left'; ctx.fillStyle = C.muted; ctx.fillText('fundo', pad.l, Hh-pad.b+8); ctx.textAlign = 'right'; ctx.fillText('topo', W-pad.r, Hh-pad.b+8);
+    [['barra',[]],['halter',[6,5]]].forEach(function(it){
+      var k = it[0]; ctx.save(); ctx.setLineDash(it[1]); ctx.strokeStyle = col; ctx.globalAlpha = k === 'barra' ? 1 : .9; ctx.lineWidth = k === 'barra' ? 3.5 : 3;
+      ctx.beginPath(); ser[k].forEach(function(v,i){ var x = X(i), y = Y(v); if (i) ctx.lineTo(x,y); else ctx.moveTo(x,y); }); ctx.stroke(); ctx.restore();
+      var last = ser[k][100], lx = X(100)-4, ly = Y(last) + (k === 'barra' ? -fs*0.9 : fs*0.9);
+      if (Math.abs(ser.barra[100]-ser.halter[100]) > 6) ly = Y(last) - fs*0.9;
+      ctx.font = '700 '+fs+'px '+C.mono; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+      ctx.lineWidth = 5; ctx.strokeStyle = C.surface; ctx.strokeText(k === 'barra' ? 'barra' : 'halteres', lx, ly); ctx.fillStyle = col; ctx.fillText(k === 'barra' ? 'barra' : 'halteres', lx, ly);
+    });
+    if (state.joint === 'el'){ ctx.font = '500 '+fs+'px '+C.mono; ctx.textAlign = 'left'; ctx.fillStyle = C.dim; ctx.textBaseline = 'middle'; ctx.fillText('↑ exige tríceps', pad.l+6, Y(0)-fs*0.8); ctx.fillText('↓ mão por fora do cotovelo', pad.l+6, Y(0)+fs*0.8); }
+    var i0 = Math.round(state.p*100);
+    ctx.strokeStyle = 'rgba(245,239,232,.3)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(X(i0), pad.t); ctx.lineTo(X(i0), Hh-pad.b); ctx.stroke();
+    ['barra','halter'].forEach(function(k){ ctx.fillStyle = C.surface; ctx.strokeStyle = col; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(X(i0), Y(ser[k][i0]), 5.5, 0, Math.PI*2); ctx.fill(); ctx.stroke(); });
+    $('gNote').textContent = state.joint === 'sh'
+      ? 'No fundo, os halteres exigem mais do ombro porque as mãos ficam mais afastadas. No topo, o torque dos halteres cai perto de zero, enquanto o da barra continua, porque as mãos seguem afastadas dos ombros.'
+      : 'Na barra, a mão fica por dentro do cotovelo no meio da subida, e o tríceps assume a carga. Com halteres, o antebraço fica quase vertical e o torque no cotovelo é pequeno. No topo da barra, a mão passa para fora do cotovelo e o tríceps deixa de ser exigido neste plano.';
+  }
+
+  var MAXS = 1, MAXE = 1;
+  function scaleMax(){
+    MAXS = 1; MAXE = 1;
+    ['barra','halter'].forEach(function(k){ for (var i=0;i<=100;i++){ var t = torque(k,i/100); MAXS = Math.max(MAXS, t.s); MAXE = Math.max(MAXE, Math.abs(t.e)); } });
+  }
+  function nm(v){ return Math.round(Math.abs(v))+'<small>N·m</small>'; }
+  function update(){
+    drawStage($('cvB'), 'barra'); drawStage($('cvH'), 'halter'); drawGraph();
+    var b = torque('barra', state.p), h = torque('halter', state.p);
+    $('sB').innerHTML = nm(b.s); $('sH').innerHTML = nm(h.s);
+    function nmE(v){ return (v < -1 ? '−' : '')+Math.round(Math.abs(v))+'<small>N·m</small>'; }
+    $('eB').innerHTML = nmE(b.e); $('eH').innerHTML = nmE(h.e);
+    $('sBb').style.width = Math.max(0,b.s/MAXS*100)+'%'; $('sHb').style.width = Math.max(0,h.s/MAXS*100)+'%';
+    $('eBb').style.width = Math.max(0,b.e/MAXE*100)+'%'; $('eHb').style.width = Math.max(0,h.e/MAXE*100)+'%';
+    $('eBt').textContent = b.e < -1 ? 'mão por fora: sem tríceps' : 'tríceps';
+    $('eHt').textContent = h.e < -1 ? 'mão por fora: sem tríceps' : 'tríceps';
+    $('loadB').textContent = (state.load/2)+' kg por lado';
+    $('loadH').textContent = perHand('halter')+' kg cada';
+    $('loadOut').textContent = state.load+' kg';
+    $('pos').value = Math.round(state.p*1000);
+    $('posOut').textContent = state.p < .05 ? 'fundo' : (state.p > .95 ? 'topo' : Math.round(state.p*100)+'% da subida');
+  }
+  function tick(ts){
+    if (!state.playing) return;
+    if (state.t0 === null) state.t0 = ts;
+    var T = ((ts-state.t0) % 4200)/4200, p;
+    if (T < .1) p = 0; else if (T < .5) p = sm((T-.1)/.4); else if (T < .6) p = 1; else if (T < .95) p = 1 - sm((T-.6)/.35); else p = 0;
+    state.p = p; update(); requestAnimationFrame(tick);
+  }
+  function setPlaying(v){ var was = state.playing; state.playing = v; state.t0 = null; $('play').textContent = v ? 'Pausar' : 'Animar'; if (v && !was) requestAnimationFrame(tick); }
+  $('play').addEventListener('click', function(){ setPlaying(!state.playing); });
+  $('pos').addEventListener('input', function(e){ setPlaying(false); state.p = +e.target.value/1000; update(); });
+  $('load').addEventListener('input', function(e){ state.load = +e.target.value; scaleMax(); update(); });
+  $('rel').addEventListener('change', function(e){ state.rel = e.target.checked; scaleMax(); update(); });
+  document.querySelectorAll('.tabs button').forEach(function(b){ b.addEventListener('click', function(){ state.joint = b.getAttribute('data-j'); document.querySelectorAll('.tabs button').forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); drawGraph(); }); });
+  if (window.ResizeObserver){ var ro = new ResizeObserver(function(){ update(); }); ro.observe($('cvB')); ro.observe($('graph')); }
+  else window.addEventListener('resize', update);
+  $('play').textContent = state.playing ? 'Pausar' : 'Animar';
+  scaleMax(); update();
+  if (state.playing) requestAnimationFrame(tick);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(update);
+})();
+</script>
+</body>
+</html>
