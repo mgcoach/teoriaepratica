@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script>(function(){var e=true;try{e=window.self!==window.top}catch(x){}if(e)document.documentElement.classList.add("embed")})();</script>
+<title>Abdução de Quadril</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Abdução de quadril na polia, com caneleira e na cadeira abdutora (45°, 90° e inclinado à frente): perfil de resistência e quais músculos se beneficiam de cada variação, e por quê.">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: (1) matriz "flexão do quadril × músculo" com o porquê; (2) explorador de variações: palco (frente, deitado ou vista de cima) + curva de resistência + quem se beneficia; (3) tabela comparativa; (4) dicas e estudos. Visual escuro deliberado (identidade MG COACH). */
+:root{
+  --bg:#0a0a0a;
+  --surface:#13110f;
+  --surface-2:#1b1815;
+  --line:#2c2622;
+  --fg:#f5efe8;
+  --muted:#9d9188;
+  --dim:#5f5650;
+  --bone:#d9cfc4;
+  --accent:#ff6b1a;
+  --cable:#5cc6ff;
+  --gmed:#ff6b1a;
+  --gmin:#ff9a5c;
+  --tfl:#5cc6ff;
+  --gmax:#ffc24a;
+  --pir:#a59bff;
+  --display:"Big Shoulders Display", Impact, "Arial Narrow", sans-serif;
+  --text:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--fg)}
+html{-webkit-text-size-adjust:100%;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font-family:var(--text);font-size:15px;line-height:1.5}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1100px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));display:flex;flex-direction:column;gap:22px}
+.back{font-family:var(--mono);font-size:12px;color:var(--muted);text-decoration:none;align-self:flex-start;border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+.back:hover{color:var(--fg);border-color:var(--muted)}
+.embed .back{display:none}
+header{display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.eyebrow b{color:var(--accent);font-weight:600}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(44px,9vw,86px);line-height:.9;text-transform:uppercase;margin:0;text-wrap:balance}
+h1 em{font-style:normal;color:var(--accent)}
+.lede{margin:0;max-width:66ch;color:var(--muted);font-size:16px}
+.lede strong{color:var(--fg);font-weight:600}
+h2.sec{margin:8px 0 0;font-family:var(--display);font-weight:900;font-size:clamp(30px,5vw,44px);line-height:.95;text-transform:uppercase}
+h2.sec span{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--accent);display:block;letter-spacing:.08em;margin-bottom:6px}
+.note{margin:0;color:var(--muted);font-size:14px;max-width:70ch}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.panel h3{margin:0;font-family:var(--display);font-weight:700;font-size:24px;text-transform:uppercase;letter-spacing:.02em}
+.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+
+/* matriz */
+.mx-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+.mx{min-width:760px}
+.mx th,.mx td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.mx th{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+.mx th.c,.mx td.c{text-align:center;width:88px}
+.mx th small{display:block;text-transform:none;letter-spacing:0;font-weight:500;color:var(--dim)}
+.mx tr:last-child td{border-bottom:0}
+.mx td b{display:flex;align-items:center;gap:8px;font-weight:700}
+.mx td b i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.mx td small{display:block;color:var(--muted);font-size:12.8px;line-height:1.4;margin-top:3px}
+.dots{display:inline-flex;gap:3px}
+.dots span{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.dots span.on{background:var(--c,var(--accent))}
+
+.picker{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.picker::-webkit-scrollbar{display:none}
+.pk{flex:0 0 auto;display:flex;flex-direction:column;gap:1px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;cursor:pointer;color:var(--fg);font:inherit}
+.pk b{font-weight:700;font-size:14.5px}
+.pk small{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.pk .tg{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--cable)}
+.pk[aria-pressed="true"]{border-color:var(--accent);background:var(--surface-2)}
+.pk[aria-pressed="true"] b{color:var(--accent)}
+
+.studio{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.stage-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.stage-head b{font-family:var(--display);font-weight:700;font-size:22px;text-transform:uppercase;line-height:1.05}
+.stage-head small{display:block;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.btn{font:600 13px/1 var(--text);color:var(--fg);background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:9px 14px;cursor:pointer;min-width:92px}
+.btn:hover{border-color:var(--muted)}
+.canvas-box{position:relative;width:100%;aspect-ratio:1/1;max-width:100%}
+.canvas-box canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.ctrl{padding:12px 14px 14px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:12px}
+.sl{display:flex;flex-direction:column;gap:6px}
+.sl label{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted)}
+.sl output{font-family:var(--mono);color:var(--fg);font-variant-numeric:tabular-nums}
+.sl .ends{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--dim)}
+input[type=range]{width:100%;margin:0;accent-color:var(--accent)}
+#pulley{accent-color:var(--cable)}
+.side{display:flex;flex-direction:column;gap:14px;min-width:0}
+.badges{display:flex;gap:8px;flex-wrap:wrap}
+.badge{font-family:var(--mono);font-size:11.5px;font-weight:600;border-radius:999px;padding:5px 11px;border:1px solid var(--line);color:var(--fg);background:var(--bg)}
+.badge.hl{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.graph-box{position:relative;width:100%;aspect-ratio:600/260;max-width:100%}
+.graph-box canvas{position:absolute;inset:0;width:100%;height:100%}
+.ben{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.bi{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 10px;align-items:start;padding:10px 12px;border-radius:12px;background:var(--bg);border:1px solid var(--line)}
+.bi .dots{padding-top:6px}
+.bi b{font-weight:700;font-size:14.5px;line-height:1.3}
+.bi p{margin:2px 0 0;color:var(--muted);font-size:13.3px;line-height:1.45}
+.bi p em{font-style:normal;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-right:6px}
+.tip{margin:0;font-size:13.5px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.tip span{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-right:6px}
+
+.cmp{min-width:820px}
+.cmp th,.cmp td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.cmp th{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+.cmp tr:last-child td{border-bottom:0}
+.cmp td small{color:var(--muted)}
+.chipc{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:600;border-radius:999px;padding:2px 8px;margin:0 4px 4px 0;color:var(--bg)}
+
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.card{border:1px solid var(--line);border-radius:14px;padding:16px;background:var(--surface);display:flex;flex-direction:column;gap:6px;min-width:0}
+.card h4{margin:0;font-size:16.5px;font-weight:700;line-height:1.25}
+.card p{margin:0;color:var(--muted);font-size:14px}
+.card .tag{align-self:flex-start;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;border-radius:999px;padding:3px 9px;border:1px solid currentColor;color:var(--accent)}
+.evid ul{margin:0;padding-left:18px;color:var(--muted);font-size:14px;display:flex;flex-direction:column;gap:6px}
+.evid ul b{color:var(--fg);font-weight:600}
+.refs{margin:0;padding-left:18px;color:var(--muted);font-size:13px;display:flex;flex-direction:column;gap:4px}
+footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+footer b{color:var(--accent);font-weight:600}
+
+@media (max-width:900px){
+  .studio{grid-template-columns:minmax(0,1fr)}
+  .cards{grid-template-columns:minmax(0,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./" target="_top">← Teoria e Prática</a>
+
+  <header>
+    <div class="eyebrow"><b>MG COACH</b> · Biomecânica do treino</div>
+    <h1>Abdução de quadril: <em>quem trabalha em cada variação</em></h1>
+    <p class="lede">Abrir a perna parece sempre o mesmo movimento, mas a <strong>flexão do quadril</strong> muda a posição dos músculos em relação à articulação. Por isso, em pé, deitado ou sentado, os abdutores não dividem o trabalho do mesmo jeito. O <strong>implemento</strong> (polia, caneleira ou máquina) muda onde a carga pesa.</p>
+  </header>
+
+  <h2 class="sec"><span>01 · o princípio</span>A flexão do quadril muda quem abduz</h2>
+  <div class="mx-wrap">
+    <table class="mx" aria-label="Participação dos músculos conforme a flexão do quadril">
+      <thead><tr><th>Músculo e por quê</th><th class="c">0°<small>em pé ou deitado</small></th><th class="c">45°<small>cadeira reclinada</small></th><th class="c">90°<small>cadeira ereta</small></th><th class="c">135°<small>inclinado à frente</small></th></tr></thead>
+      <tbody id="mxBody"></tbody>
+    </table>
+  </div>
+  <p class="note">Bolinhas indicam a tendência de participação de cada músculo (3 = principal). O glúteo médio e o TFL têm dados de eletromiografia por ângulo; o glúteo máximo superior e o piriforme seguem a análise anatômica dos braços de momento.</p>
+
+  <noscript><p class="note">Esta página precisa de JavaScript ativado para funcionar.</p></noscript>
+
+  <h2 class="sec"><span>02 · explorador</span>Escolha a variação</h2>
+  <div class="picker" role="group" aria-label="Variação" id="picker"></div>
+
+  <div class="studio">
+    <section class="stage" aria-label="Variação">
+      <div class="stage-head">
+        <div aria-live="polite"><b id="vName">—</b><small id="vSub">—</small></div>
+        <button type="button" class="btn" id="play">Pausar</button>
+      </div>
+      <div class="canvas-box"><canvas id="stage" role="img" aria-label="Desenho da variação com a linha da força e o braço de momento"></canvas></div>
+      <div class="ctrl">
+        <div class="sl">
+          <label for="pos">Abdução <output id="posOut">0°</output></label>
+          <input type="range" id="pos" min="0" max="1000" step="1" value="0">
+          <div class="ends"><span id="posLo">perna fechada</span><span>perna aberta</span></div>
+        </div>
+        <div class="sl" id="pulleyWrap" hidden>
+          <label for="pulley">Altura da polia <output id="pulleyOut">no chão</output></label>
+          <input type="range" id="pulley" min="0" max="100" step="1" value="0">
+          <div class="ends"><span>no chão</span><span>na altura do quadril</span></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="side">
+      <section class="panel" aria-label="Resistência">
+        <div class="panel-head"><h3>Onde a carga pesa</h3></div>
+        <div class="badges" id="badges"></div>
+        <div class="graph-box"><canvas id="graph" role="img" aria-label="Perfil de resistência ao longo da abdução"></canvas></div>
+        <p class="note" id="pNote"></p>
+      </section>
+      <section class="panel" aria-label="Quem se beneficia">
+        <div class="panel-head"><h3>Quem mais se beneficia</h3></div>
+        <ul class="ben" id="ben"></ul>
+        <p class="tip" id="tip"></p>
+      </section>
+    </div>
+  </div>
+
+  <section class="panel" aria-label="Comparativo">
+    <h3>Comparativo das variações</h3>
+    <div class="mx-wrap"><table class="cmp"><thead><tr><th>Variação</th><th>Flexão do quadril</th><th>Perfil de resistência</th><th>Quem mais se beneficia</th><th>Por quê</th></tr></thead><tbody id="cmpBody"></tbody></table></div>
+  </section>
+
+  <h2 class="sec"><span>03 · na prática</span>Como escolher</h2>
+  <div class="cards">
+    <article class="card"><span class="tag">glúteo médio</span><h4>Em pé, deitado ou cadeira a 45°–90°</h4><p>Com pouca ou média flexão do quadril, o glúteo médio fica bem posicionado para abrir a perna. Foi onde o estudo com a cadeira abdutora encontrou a maior ativação dele.</p></article>
+    <article class="card"><span class="tag">glúteo máximo superior</span><h4>Cadeira com tronco inclinado à frente</h4><p>Com o quadril bem flexionado, as fibras superiores do glúteo máximo ficam alongadas e mais alinhadas para abrir a coxa. O TFL, que também é flexor, fica curto e participa menos.</p></article>
+    <article class="card"><span class="tag">menos TFL</span><h4>Gire levemente para dentro e mantenha a perna atrás</h4><p>Na abdução deitada de lado, a rotação interna leve aumentou o glúteo médio em relação ao TFL. Deixar a perna um pouco atrás da linha do corpo também tira o TFL de cena, porque ele é flexor.</p></article>
+    <article class="card"><span class="tag">perfil</span><h4>Cada implemento pesa num ponto</h4><p>A caneleira deitado de lado pesa mais no começo; a caneleira em pé, só no fim; a polia no chão mantém a carga do início ao fim; a cadeira tenta manter a carga parecida em toda a amplitude.</p></article>
+    <article class="card"><span class="tag">pelve</span><h4>Não deixe o tronco compensar</h4><p>Inclinar o tronco para o lado ou girar a pelve encurta o movimento e tira carga dos abdutores. Na polia e com caneleira, mantenha a pelve parada.</p></article>
+    <article class="card"><span class="tag">combinação</span><h4>Varie a flexão no programa</h4><p>Uma abdução em pé ou deitado (glúteo médio) somada à cadeira inclinada à frente (glúteo máximo superior) cobre os abdutores em posições diferentes.</p></article>
+  </div>
+
+  <section class="panel evid" aria-label="Estudos">
+    <h3>O que dizem os estudos</h3>
+    <ul>
+      <li><b>Cadeira abdutora a 45°, 90° e 135° de flexão.</b> O TFL caiu progressivamente conforme a flexão aumentou. O glúteo médio ficou parecido entre 45° e 90° e caiu a 135°. A razão glúteo médio/TFL foi maior a 135° (cerca de 3,3, contra 0,8 a 45°). O glúteo máximo não foi medido. É um pré-print com 14 participantes.</li>
+      <li><b>Rotação na abdução deitada de lado.</b> A abdução com rotação interna leve teve a maior ativação do glúteo médio e a maior razão glúteo médio/TFL. Com rotação externa, o TFL ativou mais.</li>
+      <li><b>A flexão muda a função dos músculos do quadril.</b> Com o quadril flexionado, vários músculos ganham braço de momento para rotação interna, e alguns trocam de rotadores externos para internos, como o piriforme. Isso explica por que a mesma abdução muda de músculo com a posição.</li>
+    </ul>
+    <ol class="refs">
+      <li>Effects of hip flexion angle on gluteus medius and tensor fasciae latae activation during seated hip abduction. Research Square (pré-print), 2025.</li>
+      <li>Lee JH et al. Comparison of three different surface plane conditions on gluteus medius and tensor fascia lata activity during side-lying hip abduction. 2014.</li>
+      <li>Delp SL et al. Variation of rotation moment arms with hip flexion. J Biomech, 1999.</li>
+    </ol>
+    <p class="note">Modelo didático: a polia e a caneleira são calculadas pela geometria no plano frontal; a cadeira é mostrada com resistência quase constante, que varia conforme o fabricante.</p>
+  </section>
+
+  <footer>
+    <span><b>MG COACH</b> · Matheus Garrido · @matheusgarrido</span>
+    <span>Teoria e Prática</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var css = getComputedStyle(document.documentElement);
+  function tok(n){ return css.getPropertyValue(n).trim(); }
+  var C = {bg:tok('--bg'), surface:tok('--surface'), surface2:tok('--surface-2'), line:tok('--line'), fg:tok('--fg'), muted:tok('--muted'), dim:tok('--dim'),
+           bone:tok('--bone'), accent:tok('--accent'), cable:tok('--cable'), gmed:tok('--gmed'), gmin:tok('--gmin'), tfl:tok('--tfl'), gmax:tok('--gmax'), pir:tok('--pir'), mono:tok('--mono')};
+  var $ = function(id){ return document.getElementById(id); };
+  var D = Math.PI/180;
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function dots(n, col){ var h = '<span class="dots" style="--c:'+col+'" aria-label="nível '+n+' de 3">'; for (var i=1;i<=3;i++) h += '<span'+(i <= n ? ' class="on"' : '')+'></span>'; return h + '</span>'; }
+
+  // ======== músculos × flexão ========
+  var FLEX = [0,45,90,135];
+  var MUS = [
+    {k:'gmed', n:'Glúteo médio', col:C.gmed, lv:[3,3,3,2],
+     why:'Principal abdutor. Até 90° de flexão segue bem alinhado para abrir a coxa. Com muita flexão, as fibras anteriores passam a girar a coxa para dentro e a ativação cai.',
+     byF:['Em pé ou deitado, fica na melhor posição para abrir a perna.','Ativação alta, parecida com a de 90° no estudo.','Ainda é o principal; ativação parecida com a de 45°.','A ativação caiu, mas ficou proporcionalmente maior que a do TFL.']},
+    {k:'gmin', n:'Glúteo mínimo', col:C.gmin, lv:[2,2,2,1],
+     why:'Fica embaixo do glúteo médio e trabalha junto com ele. Com muita flexão, também vira mais rotador interno.',
+     byF:['Ajuda o glúteo médio e estabiliza a cabeça do fêmur.','Acompanha o glúteo médio.','Acompanha o glúteo médio.','Perde participação como abdutor.']},
+    {k:'tfl', n:'Tensor da fáscia lata (TFL)', col:C.tfl, lv:[3,3,2,1],
+     why:'Também flexiona e gira o quadril para dentro. Com pouca flexão está bem posicionado; com muita flexão fica curto e participa menos.',
+     byF:['Participa muito, principalmente se a perna for um pouco à frente ou girar para fora.','Maior ativação do TFL no estudo com a cadeira.','Menor que a 45°.','Menor ativação: o músculo fica encurtado com o quadril tão flexionado.']},
+    {k:'gmax', n:'Glúteo máximo (fibras superiores)', col:C.gmax, lv:[1,2,3,3],
+     why:'As fibras de cima também abduzem. Com o quadril flexionado ficam alongadas e mais alinhadas para abrir a coxa (abdução horizontal).',
+     byF:['Ajuda pouco com o quadril estendido.','Participação crescente.','Abre bem a coxa com o quadril a 90°.','Mais alongadas e bem alinhadas para abrir a coxa.']},
+    {k:'pir', n:'Piriforme e rotadores profundos', col:C.pir, lv:[1,1,2,2],
+     why:'Em pé são rotadores externos. Com o quadril flexionado perto de 90°, o piriforme ajuda a abrir a coxa.',
+     byF:['Principalmente rotadores externos.','Começam a ajudar na abdução.','O piriforme passa a abrir a coxa.','Seguem ajudando a abrir a coxa.']}
+  ];
+  $('mxBody').innerHTML = MUS.map(function(m){
+    return '<tr><td><b><i style="background:'+m.col+'"></i>'+m.n+'</b><small>'+m.why+'</small></td>' + m.lv.map(function(v){ return '<td class="c">'+dots(v, m.col)+'</td>'; }).join('') + '</tr>';
+  }).join('');
+
+  // ======== variações ========
+  function sm(x){ return x*x*(3-2*x); }
+  var L = 88;
+  var VAR = {
+    polia: {nome:'Abdução na polia em pé', sub:'polia baixa do lado oposto · tornozeleira', tag:'polia', flex:0, type:'stand', range:[-10,40], cable:true,
+      tau: function(t, u){ var A = {x:L*Math.sin(t*D), y:-L*Math.cos(t*D)}, P = {x:-95, y:-88 + u*88}; var dx = P.x-A.x, dy = P.y-A.y, n = Math.hypot(dx,dy), F = {x:dx/n, y:dy/n}; return {v:-(A.x*F.y - A.y*F.x), A:A, P:P, F:F}; },
+      note:'O cabo vem do lado oposto e cruza na frente da perna de apoio, quase perpendicular à perna. Com a polia no chão, o perfil fica quase constante: a carga pesa do início ao fim. Subindo a polia, o pico continua no começo e o final fica cada vez mais leve.',
+      tip:'Comece com a perna levemente cruzada à frente da outra para ganhar amplitude, e mantenha o tronco parado.'},
+    caneleiraDeitado: {nome:'Abdução deitado de lado com caneleira', sub:'peso no tornozelo · perna de cima', tag:'caneleira', flex:0, type:'lying', range:[0,45],
+      tau: function(t){ return {v:Math.cos(t*D)}; },
+      note:'Com a perna paralela ao chão, o peso está o mais longe possível do quadril: o pico é logo no começo. Conforme a perna sobe, o braço de momento diminui, e a 45° a carga já caiu cerca de 30%.',
+      tip:'Gire levemente o pé para dentro e mantenha a perna um pouco atrás da linha do corpo: assim o glúteo médio trabalha mais que o TFL.'},
+    caneleiraPe: {nome:'Abdução em pé com caneleira', sub:'peso no tornozelo · tronco ereto', tag:'caneleira', flex:0, type:'standW', range:[0,40],
+      tau: function(t){ return {v:Math.sin(t*D)}; },
+      note:'Em pé, o peso pende quase sobre o quadril com a perna fechada: a carga é zero no início e só aparece conforme a perna abre. O pico vem no fim, com o glúteo médio encurtado. Para a mesma caneleira, é bem mais leve que deitado de lado.',
+      tip:'Prefira a versão deitada de lado ou a polia se o objetivo for carga no começo do movimento.'},
+    cadeira45: {nome:'Cadeira abdutora reclinada', sub:'encosto para trás · quadril a 45°', tag:'cadeira', flex:45, type:'chair', range:[0,45], trunk:-45,
+      tau: function(t){ return {v:0.9 + 0.1*(t/45)}; },
+      note:'A máquina gira junto com a coxa e tenta manter a resistência parecida em toda a amplitude. Com o tronco reclinado, o quadril fica a 45° de flexão: posição em que o glúteo médio e o TFL tiveram a maior ativação.',
+      tip:'Boa opção para o glúteo médio com carga alta; se quiser menos TFL, prefira a posição ereta ou inclinada à frente.'},
+    cadeira90: {nome:'Cadeira abdutora ereta', sub:'costas no encosto · quadril a 90°', tag:'cadeira', flex:90, type:'chair', range:[0,45], trunk:0,
+      tau: function(t){ return {v:0.9 + 0.1*(t/45)}; },
+      note:'Posição padrão. O glúteo médio continua alto, o TFL cai um pouco em relação a 45°, e as fibras superiores do glúteo máximo e o piriforme passam a ajudar a abrir a coxa.',
+      tip:'Mantenha a pelve encostada e a lombar neutra; não deixe o tronco ir para a frente para roubar a repetição.'},
+    cadeira135: {nome:'Cadeira abdutora inclinada à frente', sub:'tronco à frente · quadril a ~135°', tag:'cadeira', flex:135, type:'chair', range:[0,40], trunk:45,
+      tau: function(t){ return {v:0.9 + 0.1*(t/40)}; },
+      note:'Inclinar o tronco à frente leva o quadril a cerca de 135° de flexão. O TFL fica encurtado e quase sai de cena. O glúteo médio ativa um pouco menos, mas proporcionalmente mais que o TFL, e as fibras superiores do glúteo máximo ficam alongadas e bem alinhadas para abrir a coxa.',
+      tip:'É a posição chamada de "cadeira a 45°" em algumas academias (tronco a 45° à frente). Mantenha a coluna neutra e incline pelo quadril.'}
+  };
+  var ORDER = ['polia','caneleiraDeitado','caneleiraPe','cadeira45','cadeira90','cadeira135'];
+  var state = {v:'polia', s:0, playing:true, t0:null, pulley:0};
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) state.playing = false;
+
+  function curve(id){
+    var v = VAR[id], pts = [], mx = 0;
+    for (var i=0;i<=100;i++){ var t = v.range[0] + (v.range[1]-v.range[0])*i/100, r = v.tau(t, state.pulley/100); pts.push({t:t, v:r.v}); mx = Math.max(mx, r.v); }
+    pts.forEach(function(p){ p.n = mx > 0 ? Math.max(0,p.v)/mx : 0; });
+    var ip = 0; pts.forEach(function(p,i){ if (p.n > pts[ip].n) ip = i; });
+    return {pts:pts, peak:pts[ip], start:pts[0].n, end:pts[100].n};
+  }
+  function shape(c){
+    if (Math.min(c.start, c.end) > 0.8) return 'quase constante';
+    if (c.start >= 0.9 && c.end < c.start - 0.15) return 'decrescente: pesa no início';
+    if (c.end >= 0.9 && c.start < c.end - 0.15) return 'crescente: pesa no fim';
+    return 'pico no meio';
+  }
+  function fIdx(f){ return FLEX.indexOf(f); }
+
+  // ======== desenho ========
+  function fit(cv){
+    var r = cv.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio||1, 2.5);
+    var w = Math.max(1, Math.round(r.width*dpr)), h = Math.max(1, Math.round(r.height*dpr));
+    if (cv.width !== w || cv.height !== h){ cv.width = w; cv.height = h; }
+    return {w:w, h:h, dpr:dpr, cssW:r.width};
+  }
+  function drawStage(){
+    var cv = $('stage'), f = fit(cv), ctx = cv.getContext('2d'), v = VAR[state.v];
+    var t = v.range[0] + (v.range[1]-v.range[0])*state.s;
+    ctx.setTransform(1,0,0,1,0,0); ctx.fillStyle = C.surface; ctx.fillRect(0,0,f.w,f.h);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    var vw, sc;
+    function setView(x0, x1, y1){ vw = {x0:x0, x1:x1, y1:y1}; sc = f.w/(x1-x0); }
+    function T(p){ return {x:(p.x-vw.x0)*sc, y:(vw.y1-p.y)*sc}; }
+    function seg(a,b,w,col){ var p = T(a), q = T(b); ctx.strokeStyle = col; ctx.lineWidth = w*sc; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke(); }
+    function dot(a,r,col){ var p = T(a); ctx.fillStyle = col; ctx.beginPath(); ctx.arc(p.x,p.y,r*sc,0,Math.PI*2); ctx.fill(); }
+    var fs = Math.round((f.cssW < 380 ? 13.5 : 12.5)*f.dpr);
+    function label(s, x, y, col, al){ ctx.font = '600 '+fs+'px '+C.mono; ctx.textAlign = al||'left'; ctx.textBaseline = 'middle'; ctx.lineWidth = 5*f.dpr; ctx.strokeStyle = C.surface; ctx.strokeText(s,x,y); ctx.fillStyle = col; ctx.fillText(s,x,y); }
+    function arrow(from, dir, lenCm, col){
+      var a = T(from), b = T({x:from.x+dir.x*lenCm, y:from.y+dir.y*lenCm}); ctx.strokeStyle = col; ctx.lineWidth = 3*f.dpr; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+      var ang = Math.atan2(b.y-a.y, b.x-a.x); ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(b.x+Math.cos(ang)*4*f.dpr, b.y+Math.sin(ang)*4*f.dpr);
+      ctx.lineTo(b.x-Math.cos(ang-.45)*11*f.dpr, b.y-Math.sin(ang-.45)*11*f.dpr); ctx.lineTo(b.x-Math.cos(ang+.45)*11*f.dpr, b.y-Math.sin(ang+.45)*11*f.dpr); ctx.closePath(); ctx.fill();
+    }
+    var BODY = '#5f5650', WORK = C.accent, r = v.tau(t, state.pulley/100);
+    if (v.type === 'stand' || v.type === 'standW'){
+      setView(-130, 90, 110);
+      seg({x:-130,y:-92}, {x:90,y:-92}, .6, C.line);
+      var H = {x:0,y:0}, H2 = {x:-34,y:0}, A = {x:L*Math.sin(t*D), y:-L*Math.cos(t*D)};
+      seg(H2, {x:-34,y:-88}, 12, BODY); seg({x:-34,y:-90}, {x:-44,y:-90}, 6, BODY);
+      seg({x:-17,y:6}, {x:-17,y:60}, 26, BODY); dot({x:-17,y:80}, 11, BODY);
+      seg({x:-34,y:52}, {x:-52,y:10}, 7, BODY);
+      seg({x:0,y:52}, {x:14,y:14}, 7, BODY);
+      seg(H2, H, 10, BODY);
+      if (v.type === 'stand'){
+        var tw = T({x:-104,y:-92}), tt = T({x:-104,y:110}); ctx.fillStyle = '#26211d'; ctx.fillRect(tw.x - 4*sc, tt.y, 8*sc, tw.y - tt.y);
+        seg({x:-52,y:10}, {x:-100,y:30}, 5, BODY);
+        ctx.save(); ctx.setLineDash([6*f.dpr,6*f.dpr]); var l1 = T({x:A.x - r.F.x*200, y:A.y - r.F.y*200}), l2 = T({x:A.x + r.F.x*300, y:A.y + r.F.y*300});
+        ctx.strokeStyle = 'rgba(245,239,232,.25)'; ctx.lineWidth = 1.2*f.dpr; ctx.beginPath(); ctx.moveTo(l1.x,l1.y); ctx.lineTo(l2.x,l2.y); ctx.stroke(); ctx.restore();
+        seg(A, r.P, 1.2, C.cable);
+        var pp = T(r.P); ctx.strokeStyle = C.muted; ctx.lineWidth = 2.5*f.dpr; ctx.beginPath(); ctx.arc(pp.x,pp.y,6*sc,0,Math.PI*2); ctx.stroke();
+        seg(H, A, 13, WORK); dot(A, 4.5, C.fg);
+        var tt2 = (0-A.x)*r.F.x + (0-A.y)*r.F.y, Q = {x:A.x + r.F.x*tt2, y:A.y + r.F.y*tt2};
+        seg(H, Q, 1.3, C.fg); dot(Q, 2, C.fg);
+        label('polia', pp.x, pp.y - 16*f.dpr, C.cable, 'center');
+        label('braço de momento '+Math.round(Math.hypot(Q.x,Q.y))+' cm', 12*f.dpr, f.h - 16*f.dpr, C.fg);
+        label('cabo: força na direção da polia', 12*f.dpr, 16*f.dpr, C.muted);
+      } else {
+        seg(H, A, 13, WORK);
+        var wp = T(A); ctx.fillStyle = '#2a2420'; ctx.strokeStyle = C.fg; ctx.lineWidth = 2*f.dpr; ctx.beginPath(); ctx.arc(wp.x, wp.y, 7*sc, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+        arrow({x:A.x, y:A.y-8}, {x:0,y:-1}, 22, C.fg);
+        seg(H, {x:A.x, y:0}, 1.3, C.fg); dot({x:A.x,y:0}, 2, C.fg);
+        label('braço de momento '+Math.round(A.x)+' cm', 12*f.dpr, f.h - 16*f.dpr, C.fg);
+        label('caneleira: força vertical', 12*f.dpr, 16*f.dpr, C.muted);
+      }
+      dot(H, 5, C.fg);
+      label('vista de frente', f.w - 12*f.dpr, 16*f.dpr, C.dim, 'right');
+    } else if (v.type === 'lying'){
+      setView(-110, 110, 120);
+      var fy = -20; seg({x:-110,y:fy}, {x:110,y:fy}, .6, C.line);
+      var Hl = {x:0,y:0}, Al = {x:L*Math.cos(t*D), y:L*Math.sin(t*D)};
+      seg({x:-90,y:-6}, {x:-6,y:-6}, 26, BODY); dot({x:-102,y:-2}, 11, BODY);
+      seg({x:-70,y:-14}, {x:-70,y:fy+2}, 6, BODY);
+      seg({x:0,y:-12}, {x:L,y:-14}, 12, BODY);
+      seg(Hl, Al, 13, WORK);
+      var wp2 = T(Al); ctx.fillStyle = '#2a2420'; ctx.strokeStyle = C.fg; ctx.lineWidth = 2*f.dpr; ctx.beginPath(); ctx.arc(wp2.x, wp2.y, 7*sc, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      arrow({x:Al.x, y:Al.y-8}, {x:0,y:-1}, 22, C.fg);
+      ctx.save(); ctx.setLineDash([6*f.dpr,6*f.dpr]); var v1 = T({x:Al.x, y:fy}), v2 = T({x:Al.x, y:110}); ctx.strokeStyle = 'rgba(245,239,232,.25)'; ctx.lineWidth = 1.2*f.dpr; ctx.beginPath(); ctx.moveTo(v1.x,v1.y); ctx.lineTo(v2.x,v2.y); ctx.stroke(); ctx.restore();
+      seg(Hl, {x:Al.x, y:0}, 1.3, C.fg); dot({x:Al.x, y:0}, 2, C.fg); dot(Hl, 5, C.fg);
+      label('braço de momento '+Math.round(Al.x)+' cm', 12*f.dpr, f.h - 16*f.dpr, C.fg);
+      label('caneleira: força vertical', 12*f.dpr, 16*f.dpr, C.muted);
+      label('deitado de lado', f.w - 12*f.dpr, 16*f.dpr, C.dim, 'right');
+    } else {
+      // vista de cima das coxas + silhueta lateral
+      setView(-110, 110, 110);
+      var hipR = {x:20,y:30}, hipL = {x:-20,y:30}, Lt = 48;
+      seg({x:-34,y:44}, {x:34,y:44}, 20, BODY);
+      var kR = {x:hipR.x + Lt*Math.sin(t*D), y:hipR.y - Lt*Math.cos(t*D)}, kL = {x:hipL.x - Lt*Math.sin(t*D), y:hipL.y - Lt*Math.cos(t*D)};
+      seg(hipR, kR, 15, WORK); seg(hipL, kL, 15, WORK);
+      [[kR,1],[kL,-1]].forEach(function(q){
+        var k = q[0], s = q[1], tdir = {x:s*Math.cos(t*D), y:Math.sin(t*D)};
+        var pc = {x:k.x + tdir.x*10, y:k.y + tdir.y*10 + 6};
+        seg({x:pc.x - 3*s, y:pc.y - 10}, {x:pc.x - 3*s, y:pc.y + 6}, 6, '#3a332e');
+        arrow({x:pc.x + tdir.x*24, y:pc.y + tdir.y*24}, {x:-tdir.x, y:-tdir.y}, 14, C.fg);
+      });
+      dot(hipR, 5, C.fg); dot(hipL, 5, C.fg);
+      label('vista de cima', f.w - 12*f.dpr, 16*f.dpr, C.dim, 'right');
+      label('a máquina empurra os joelhos para dentro', 12*f.dpr, f.h - 16*f.dpr, C.fg);
+      // silhueta lateral (canto)
+      var ix = 14*f.dpr, iy = 30*f.dpr, iw = 118*f.dpr, ih = 108*f.dpr;
+      ctx.fillStyle = C.bg; ctx.strokeStyle = C.line; ctx.lineWidth = 1*f.dpr; ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(ix, iy, iw, ih, 10*f.dpr); else ctx.rect(ix,iy,iw,ih); ctx.fill(); ctx.stroke();
+      var u = f.dpr*1.05, hx = ix + 48*f.dpr, hy = iy + 70*f.dpr, tr = (v.trunk||0)*D;
+      function L2(x1,y1,x2,y2,w,col){ ctx.strokeStyle = col; ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); }
+      ctx.fillStyle = '#2a2420'; ctx.fillRect(hx - 28*u, hy + 4*u, 74*u, 7*u);
+      if (v.trunk < 0){ L2(hx - 6*u, hy, hx - 6*u - 46*Math.sin(-tr)*u, hy - 46*Math.cos(tr)*u, 4*u, '#3a332e'); }
+      else { L2(hx - 12*u, hy + 2*u, hx - 12*u, hy - 46*u, 4*u, '#3a332e'); }
+      var sx = hx + 50*Math.sin(tr)*u, sy = hy - 50*Math.cos(tr)*u;
+      L2(hx, hy, sx, sy, 7*u, C.bone); ctx.fillStyle = C.bone; ctx.beginPath(); ctx.arc(sx + 9*Math.sin(tr)*u, sy - 9*Math.cos(tr)*u, 7*u, 0, Math.PI*2); ctx.fill();
+      L2(hx, hy, hx + 40*u, hy, 7*u, C.accent); L2(hx + 40*u, hy, hx + 40*u, hy + 34*u, 6*u, C.bone);
+      ctx.font = '600 '+(fs*0.85)+'px '+C.mono; ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillStyle = C.fg;
+      ctx.fillText('quadril '+v.flex+'°', ix + 8*f.dpr, iy + 6*f.dpr);
+    }
+    return t;
+  }
+  function drawGraph(){
+    var cv = $('graph'), f = fit(cv), ctx = cv.getContext('2d'), W = 600, Hh = 260, sc = f.w/W, v = VAR[state.v], c = curve(state.v);
+    var narrow = f.cssW < 480, fs = narrow ? 17 : 12.5;
+    ctx.setTransform(1,0,0,1,0,0); ctx.fillStyle = C.surface; ctx.fillRect(0,0,f.w,f.h); ctx.setTransform(sc,0,0,sc,0,0);
+    var pad = {l: narrow ? 58 : 46, r:14, t:16, b: narrow ? 46 : 38};
+    function X(i){ return pad.l + i/100*(W-pad.l-pad.r); }
+    function Y(n){ return pad.t + (1.06-n)/1.06*(Hh-pad.t-pad.b); }
+    ctx.font = '500 '+fs+'px '+C.mono; ctx.textBaseline = 'middle'; ctx.textAlign = 'right';
+    [0,.5,1].forEach(function(n){ ctx.strokeStyle = n === 0 ? C.muted : C.line; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(pad.l, Y(n)); ctx.lineTo(W-pad.r, Y(n)); ctx.stroke(); ctx.fillStyle = C.muted; ctx.fillText(Math.round(n*100)+'%', pad.l-8, Y(n)); });
+    ctx.textBaseline = 'top'; ctx.textAlign = 'left'; ctx.fillStyle = C.muted; ctx.fillText(v.range[0]+'°', pad.l, Hh-pad.b+8);
+    ctx.textAlign = 'right'; ctx.fillText(v.range[1]+'°', W-pad.r, Hh-pad.b+8);
+    ctx.textAlign = 'center'; ctx.fillStyle = C.dim; ctx.fillText('abdução', W/2, Hh-pad.b+8);
+    ctx.beginPath(); c.pts.forEach(function(p,i){ var x = X(i), y = Y(p.n); if (i) ctx.lineTo(x,y); else ctx.moveTo(x,y); }); ctx.lineTo(X(100), Y(0)); ctx.lineTo(X(0), Y(0)); ctx.closePath(); ctx.fillStyle = 'rgba(255,107,26,.13)'; ctx.fill();
+    ctx.beginPath(); c.pts.forEach(function(p,i){ var x = X(i), y = Y(p.n); if (i) ctx.lineTo(x,y); else ctx.moveTo(x,y); }); ctx.strokeStyle = C.accent; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.stroke();
+    var ip = c.pts.indexOf(c.peak); ctx.fillStyle = C.accent; ctx.beginPath(); ctx.arc(X(ip), Y(1), 5, 0, Math.PI*2); ctx.fill();
+    var i0 = Math.round(state.s*100); ctx.strokeStyle = 'rgba(245,239,232,.3)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(X(i0), pad.t); ctx.lineTo(X(i0), Hh-pad.b); ctx.stroke();
+    ctx.fillStyle = C.surface; ctx.strokeStyle = C.accent; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(X(i0), Y(c.pts[i0].n), 6, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+    return c;
+  }
+  function benefit(id){
+    var v = VAR[id], fi = fIdx(v.flex);
+    var list = MUS.map(function(m){ var lv = m.lv[fi];
+      if (id === 'caneleiraDeitado' && m.k === 'tfl') lv = 2;
+      return {m:m, lv:lv, txt:m.byF[fi]}; });
+    if (id === 'caneleiraDeitado') list.forEach(function(x){ if (x.m.k === 'tfl') x.txt = 'Participa, mas cai com a perna levemente atrás do corpo e girada para dentro.'; });
+    return list.sort(function(a,b){ return b.lv - a.lv; });
+  }
+  function update(){
+    var t = drawStage(), c = drawGraph(), v = VAR[state.v];
+    $('posOut').textContent = Math.round(t)+'°';
+    $('pos').value = Math.round(state.s*1000);
+    if (v.cable) $('pulleyOut').textContent = state.pulley < 25 ? 'no chão' : (state.pulley > 75 ? 'na altura do quadril' : 'no meio');
+    $('badges').innerHTML = '<span class="badge hl">'+shape(c)+'</span><span class="badge">quadril a '+v.flex+'° de flexão</span><span class="badge">pico a '+Math.round(c.peak.t)+'° de abdução</span>';
+  }
+  var lastV = null;
+  function setVar(id){
+    state.v = id; var v = VAR[id];
+    ORDER.forEach(function(k){ $('pk-'+k).setAttribute('aria-pressed', k === id ? 'true' : 'false'); });
+    $('vName').textContent = v.nome; $('vSub').textContent = v.sub; $('pNote').textContent = v.note;
+    $('tip').innerHTML = '<span>dica</span>'+esc(v.tip);
+    $('pulleyWrap').hidden = !v.cable;
+    $('posLo').textContent = v.range[0] < 0 ? 'perna cruzada' : 'perna fechada';
+    $('ben').innerHTML = benefit(id).map(function(x){
+      return '<li class="bi">'+dots(x.lv, x.m.col)+'<div><b>'+x.m.n+'</b><p><em>por quê</em>'+esc(x.txt)+'</p></div></li>';
+    }).join('');
+    update();
+  }
+  var picker = $('picker');
+  ORDER.forEach(function(id){
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'pk'; b.id = 'pk-'+id;
+    b.innerHTML = '<span class="tg">'+VAR[id].tag+'</span><b>'+VAR[id].nome+'</b><small>'+VAR[id].sub+'</small>';
+    b.addEventListener('click', function(){ setVar(id); });
+    picker.appendChild(b);
+  });
+  function buildCmp(){
+    var save = state.pulley;
+    $('cmpBody').innerHTML = ORDER.map(function(id){
+      var v = VAR[id], c = curve(id), top = benefit(id).filter(function(x){ return x.lv >= 3; });
+      if (!top.length) top = benefit(id).slice(0,1);
+      return '<tr><td><b>'+v.nome+'</b><br><small>'+v.sub+'</small></td><td>'+v.flex+'°</td><td>'+shape(c)+'</td><td>'+top.map(function(x){ return '<span class="chipc" style="background:'+x.m.col+'">'+x.m.n.replace(' (fibras superiores)',' superior').replace(' (TFL)','')+'</span>'; }).join('')+'</td><td><small>'+top.map(function(x){ return x.txt; }).join(' ')+'</small></td></tr>';
+    }).join('');
+    state.pulley = save;
+  }
+  function tick(ts){
+    if (!state.playing) return;
+    if (state.t0 === null) state.t0 = ts;
+    var T = ((ts-state.t0) % 3800)/3800, s;
+    if (T < .08) s = 0; else if (T < .46) s = sm((T-.08)/.38); else if (T < .56) s = 1; else if (T < .94) s = 1 - sm((T-.56)/.38); else s = 0;
+    state.s = s; update(); requestAnimationFrame(tick);
+  }
+  function setPlaying(p){ var was = state.playing; state.playing = p; state.t0 = null; $('play').textContent = p ? 'Pausar' : 'Animar'; if (p && !was) requestAnimationFrame(tick); }
+  $('play').addEventListener('click', function(){ setPlaying(!state.playing); });
+  $('pos').addEventListener('input', function(e){ setPlaying(false); state.s = +e.target.value/1000; update(); });
+  $('pulley').addEventListener('input', function(e){ state.pulley = +e.target.value; update(); buildCmp(); });
+  if (window.ResizeObserver){ var ro = new ResizeObserver(function(){ update(); }); ro.observe($('stage')); ro.observe($('graph')); }
+  else window.addEventListener('resize', update);
+  $('play').textContent = state.playing ? 'Pausar' : 'Animar';
+  setVar('polia'); buildCmp();
+  if (state.playing) requestAnimationFrame(tick);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(update);
+})();
+</script>
+</body>
+</html>
