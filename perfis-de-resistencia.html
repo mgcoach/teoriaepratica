@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script>(function(){var e=true;try{e=window.self!==window.top}catch(x){}if(e)document.documentElement.classList.add("embed")})();</script>
+<title>Perfis de Resistência</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Explorador interativo de perfis de resistência: peso livre, cabo e elástico, comparados com a curva de força do músculo.">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: conceito (curva de resistência × curva de força, 4 formatos); explorador com palco do exercício + curvas sobrepostas; como mudar o perfil; aplicação e estudos. Visual escuro deliberado (identidade MG COACH). */
+:root{
+  --bg:#0a0a0a;
+  --surface:#13110f;
+  --surface-2:#1b1815;
+  --line:#2c2622;
+  --fg:#f5efe8;
+  --muted:#9d9188;
+  --dim:#5f5650;
+  --bone:#d9cfc4;
+  --accent:#ff6b1a;
+  --res:#ff6b1a;
+  --str:#5cc6ff;
+  --hard:#ffc24a;
+  --display:"Big Shoulders Display", Impact, "Arial Narrow", sans-serif;
+  --text:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--fg)}
+html{-webkit-text-size-adjust:100%;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font-family:var(--text);font-size:15px;line-height:1.5}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));display:flex;flex-direction:column;gap:22px}
+.back{font-family:var(--mono);font-size:12px;color:var(--muted);text-decoration:none;align-self:flex-start;border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+.back:hover{color:var(--fg);border-color:var(--muted)}
+.embed .back{display:none}
+header{display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.eyebrow b{color:var(--accent);font-weight:600}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(44px,9vw,86px);line-height:.9;text-transform:uppercase;margin:0;text-wrap:balance}
+h1 em{font-style:normal;color:var(--accent)}
+.lede{margin:0;max-width:64ch;color:var(--muted);font-size:16px}
+.lede strong{color:var(--fg);font-weight:600}
+h2.sec{margin:8px 0 0;font-family:var(--display);font-weight:900;font-size:clamp(30px,5vw,44px);line-height:.95;text-transform:uppercase}
+h2.sec span{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--accent);display:block;letter-spacing:.08em;margin-bottom:6px}
+.note{margin:0;color:var(--muted);font-size:14px;max-width:68ch}
+
+.concept{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.cc{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.cc h3{margin:0;font-family:var(--display);font-weight:700;font-size:24px;text-transform:uppercase;line-height:1}
+.cc.r h3{color:var(--res)} .cc.s h3{color:var(--str)}
+.cc p{margin:0;color:var(--muted);font-size:14.5px}
+.formula{font-family:var(--mono);font-size:14px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;align-self:flex-start;max-width:100%;overflow-x:auto}
+
+.shapes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.sh{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.sh svg{width:100%;height:auto;max-width:100%}
+.sh b{font-family:var(--display);font-weight:700;font-size:20px;text-transform:uppercase;line-height:1}
+.sh small{color:var(--muted);font-size:12.5px;line-height:1.35}
+
+.picker{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.picker::-webkit-scrollbar{display:none}
+.pk{flex:0 0 auto;display:flex;flex-direction:column;gap:1px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;cursor:pointer;color:var(--fg);font:inherit}
+.pk b{font-weight:700;font-size:14.5px}
+.pk small{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.pk[aria-pressed="true"]{border-color:var(--accent);background:var(--surface-2)}
+.pk[aria-pressed="true"] b{color:var(--accent)}
+
+.studio{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:14px;align-items:start}
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.stage-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.stage-head b{font-family:var(--display);font-weight:700;font-size:22px;text-transform:uppercase;line-height:1.05}
+.stage-head small{display:block;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.btn{font:600 13px/1 var(--text);color:var(--fg);background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:9px 14px;cursor:pointer;min-width:92px}
+.btn:hover{border-color:var(--muted)}
+.canvas-box{position:relative;width:100%;aspect-ratio:1/1;max-width:100%}
+.canvas-box canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.ctrl{padding:12px 14px 14px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:12px}
+.sl{display:flex;flex-direction:column;gap:6px}
+.sl label{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted)}
+.sl output{font-family:var(--mono);color:var(--fg);font-variant-numeric:tabular-nums}
+.sl .ends{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--dim)}
+input[type=range]{width:100%;margin:0;accent-color:var(--accent)}
+
+.side{display:flex;flex-direction:column;gap:14px;min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.panel h3{margin:0;font-family:var(--display);font-weight:700;font-size:24px;text-transform:uppercase;letter-spacing:.02em}
+.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.badge{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:5px 11px;background:var(--res);color:var(--bg)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:16px;height:3px;border-radius:2px;display:inline-block}
+.graph-box{position:relative;width:100%;aspect-ratio:600/300;max-width:100%}
+.graph-box canvas{position:absolute;inset:0;width:100%;height:100%}
+.kv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.kv div{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;min-width:0}
+.kv span{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.kv b{font-family:var(--display);font-weight:700;font-size:26px;line-height:1.05;font-variant-numeric:tabular-nums}
+.kv b small{font-size:14px;color:var(--muted)}
+
+.tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.tl{border:1px solid var(--line);border-radius:14px;padding:16px;background:var(--surface);display:flex;flex-direction:column;gap:6px;min-width:0}
+.tl h4{margin:0;font-size:16.5px;font-weight:700}
+.tl p{margin:0;color:var(--muted);font-size:14px}
+.tl .ex{font-size:13px;color:var(--fg)}
+.tl .ex b{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);margin-right:6px}
+.evid ul{margin:0;padding-left:18px;color:var(--muted);font-size:14px;display:flex;flex-direction:column;gap:6px}
+.evid ul b{color:var(--fg);font-weight:600}
+.refs{margin:0;padding-left:18px;color:var(--muted);font-size:13px;display:flex;flex-direction:column;gap:4px}
+footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+footer b{color:var(--accent);font-weight:600}
+
+@media (max-width:860px){
+  .studio{grid-template-columns:minmax(0,1fr)}
+  .shapes{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tools{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:560px){
+  .concept{grid-template-columns:minmax(0,1fr)}
+  .kv b{font-size:22px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./" target="_top">← Teoria e Prática</a>
+
+  <header>
+    <div class="eyebrow"><b>MG COACH</b> · Biomecânica do treino</div>
+    <h1>Perfis de <em>resistência</em></h1>
+    <p class="lede">A mesma carga não pesa igual em toda a amplitude. O <strong>perfil de resistência</strong> mostra onde o exercício cobra mais, e a <strong>curva de força</strong> mostra onde o músculo consegue produzir mais. O exercício fica difícil onde as duas se desencontram.</p>
+  </header>
+
+  <noscript><p class="note">Esta página precisa de JavaScript ativado para funcionar.</p></noscript>
+
+  <div class="concept">
+    <article class="cc r">
+      <h3>Curva de resistência</h3>
+      <p>É o torque que a carga produz na articulação em cada ângulo. Ela depende da carga, da direção da força (peso, cabo ou elástico) e do braço de momento.</p>
+      <div class="formula">Torque externo = força × braço de momento</div>
+    </article>
+    <article class="cc s">
+      <h3>Curva de força</h3>
+      <p>É o torque máximo que o músculo consegue produzir em cada ângulo. Ela depende da relação comprimento-tensão do músculo e do braço de momento do tendão, que também mudam ao longo do movimento.</p>
+      <div class="formula">Torque interno = força muscular × braço do tendão</div>
+    </article>
+  </div>
+
+  <div class="shapes" id="shapes"></div>
+
+  <h2 class="sec"><span>explorador</span>Escolha um exercício</h2>
+  <div class="picker" role="group" aria-label="Exercício" id="picker"></div>
+
+  <div class="studio">
+    <section class="stage" aria-label="Exercício">
+      <div class="stage-head">
+        <div aria-live="polite"><b id="exName">Rosca direta com halter</b><small id="exSub">em pé · peso livre</small></div>
+        <button type="button" class="btn" id="play">Pausar</button>
+      </div>
+      <div class="canvas-box"><canvas id="stage" role="img" aria-label="Articulação, segmento e carga com o braço de momento"></canvas></div>
+      <div class="ctrl">
+        <div class="sl">
+          <label for="ang"><span id="angLbl">Ângulo do cotovelo</span> <output id="angOut">0°</output></label>
+          <input type="range" id="ang" min="0" max="1000" step="1" value="0">
+          <div class="ends"><span id="angLo">início</span><span id="angHi">fim</span></div>
+        </div>
+        <div class="sl" id="pulleyWrap" hidden>
+          <label for="pulley"><span id="pulleyLbl">Altura da polia</span> <output id="pulleyOut">baixa</output></label>
+          <input type="range" id="pulley" min="0" max="100" step="1" value="0">
+          <div class="ends"><span>baixa</span><span>alta</span></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="side">
+      <section class="panel" aria-label="Perfil">
+        <div class="panel-head"><h3>Perfil</h3><span class="badge" id="badge">sino</span></div>
+        <div class="legend"><span><i style="background:var(--res)"></i>resistência (exercício)</span><span><i style="background:var(--str)"></i>força (músculo)</span><span><i style="background:var(--hard)"></i>ponto mais difícil</span></div>
+        <div class="graph-box"><canvas id="graph" role="img" aria-label="Curva de resistência e curva de força ao longo da amplitude"></canvas></div>
+        <div class="kv">
+          <div><span>resistência agora</span><b id="kRes">0<small>%</small></b></div>
+          <div><span>força agora</span><b id="kStr">0<small>%</small></b></div>
+          <div><span>esforço relativo</span><b id="kRel">0<small>%</small></b></div>
+        </div>
+        <p class="note" id="exNote"></p>
+      </section>
+    </div>
+  </div>
+
+  <h2 class="sec"><span>na prática</span>Como mudar o perfil</h2>
+  <div class="tools">
+    <article class="tl"><h4>Mudar a posição do corpo</h4><p>Girar o segmento fixo em relação à gravidade desloca o ponto em que o segmento móvel fica horizontal, que é onde o torque é máximo.</p><p class="ex"><b>exemplo</b>Rosca Scott cobra no início; rosca inclinada cobra no fim.</p></article>
+    <article class="tl"><h4>Trocar peso por cabo</h4><p>O cabo puxa na direção da polia, e não na vertical. Mudando a altura ou a posição da polia, você escolhe onde o torque aparece.</p><p class="ex"><b>exemplo</b>Elevação lateral no cabo mantém tensão no início, onde o halter não pesa.</p></article>
+    <article class="tl"><h4>Elásticos e correntes</h4><p>A tensão do elástico cresce conforme ele estica, e a corrente sai do chão e pesa mais conforme sobe. Os dois deixam o perfil mais crescente.</p><p class="ex"><b>exemplo</b>Agachamento ou supino com elástico, para cobrar mais o final.</p></article>
+    <article class="tl"><h4>Máquinas com came</h4><p>A polia de formato excêntrico muda o braço de momento do cabo ao longo do movimento, para aproximar a resistência da curva de força.</p><p class="ex"><b>exemplo</b>Cadeira flexora e peck deck com came.</p></article>
+    <article class="tl"><h4>Escolher a amplitude</h4><p>Quando o perfil é crescente ou decrescente, você pode trabalhar mais na parte que interessa, com amplitude parcial ou pausas.</p><p class="ex"><b>exemplo</b>Parciais na posição alongada.</p></article>
+    <article class="tl"><h4>Combinar exercícios</h4><p>Um exercício que cobra no alongado mais outro que cobra no encurtado cobrem toda a curva do músculo.</p><p class="ex"><b>exemplo</b>Crucifixo com halteres + crucifixo no cabo.</p></article>
+  </div>
+
+  <section class="panel evid" aria-label="Estudos">
+    <h3>O que dizem os estudos</h3>
+    <ul>
+      <li><b>Posição alongada parece favorecer a hipertrofia.</b> Extensão de cotovelo acima da cabeça, com o tríceps mais alongado, gerou cerca de 40% mais hipertrofia do que o tríceps na polia com o braço ao lado do corpo.</li>
+      <li><b>Parciais no alongado funcionam.</b> Na cadeira extensora, parciais feitas com o músculo alongado trouxeram adaptações melhores do que parciais com o músculo encurtado. Em treinados, parciais no alongado deram resultados parecidos com a amplitude completa.</li>
+      <li><b>As curvas de força são médias.</b> Elas variam entre pessoas, com o treino e com a fadiga. Use os desenhos para raciocinar sobre o exercício, não como valores exatos.</li>
+    </ul>
+    <ol class="refs">
+      <li>Maeo S et al. Triceps brachii hypertrophy is substantially greater after elbow extension training performed in the overhead versus neutral arm position. Eur J Sport Sci, 2023.</li>
+      <li>Pedrosa GF et al. Partial range of motion training elicits favorable improvements in muscular adaptations when carried out at long muscle lengths. Eur J Sport Sci, 2022.</li>
+      <li>Wolf M et al. Lengthened partial repetitions elicit similar muscular adaptations as a full range of motion during resistance training in trained individuals. 2024.</li>
+    </ol>
+    <p class="note">Modelo didático: a resistência é calculada pela geometria em um plano, com a força do peso, do cabo ou do elástico. As curvas de força são aproximações da literatura de dinamometria, normalizadas em 100% no pico.</p>
+  </section>
+
+  <footer>
+    <span><b>MG COACH</b> · Matheus Garrido · @matheusgarrido</span>
+    <span>Teoria e Prática</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var css = getComputedStyle(document.documentElement);
+  function tok(n){ return css.getPropertyValue(n).trim(); }
+  var C = {bg:tok('--bg'), surface:tok('--surface'), surface2:tok('--surface-2'), line:tok('--line'), fg:tok('--fg'), muted:tok('--muted'), dim:tok('--dim'),
+           bone:tok('--bone'), accent:tok('--accent'), res:tok('--res'), str:tok('--str'), hard:tok('--hard'), mono:tok('--mono')};
+  var $ = function(id){ return document.getElementById(id); };
+  var D = Math.PI/180;
+
+  // ---------- formatos (miniaturas)
+  var SHAPES = [
+    ['Crescente','cobra mais no fim do movimento', function(x){ return 0.15+0.85*x*x; }],
+    ['Decrescente','cobra mais no início', function(x){ return 1-0.85*x*x; }],
+    ['Sino','cobra mais no meio', function(x){ return 0.25+0.75*Math.sin(x*Math.PI); }],
+    ['Plano','tensão parecida na amplitude toda', function(x){ return 0.75+0.08*Math.sin(x*6); }]
+  ];
+  $('shapes').innerHTML = SHAPES.map(function(s){
+    var pts = []; for (var i=0;i<=40;i++){ var x = i/40; pts.push((8+x*184).toFixed(1)+','+(70-s[2](x)*58).toFixed(1)); }
+    return '<div class="sh"><svg viewBox="0 0 200 80" aria-hidden="true"><line x1="8" y1="72" x2="192" y2="72" stroke="'+C.line+'"/><polyline points="'+pts.join(' ')+'" fill="none" stroke="'+C.res+'" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg><b>'+s[0]+'</b><small>'+s[1]+'</small></div>';
+  }).join('');
+
+  // ---------- curvas de força (normalizadas no pico)
+  var STR = {
+    flexCot: function(t){ var d = (t-90)/90; return t <= 90 ? 1-0.45*d*d : 1-1.1*d*d; },
+    extCot:  function(f){ var d = (f-90)/90; return 1-0.5*d*d; },             // f = flexão do cotovelo
+    abdOmb:  function(a){ return 1-0.35*(a/90); },
+    aduHor:  function(a){ return 1-0.4*(a/100); }
+  };
+
+  // ---------- exercícios
+  // seg: ângulo do segmento móvel (graus, matemático) em função do parâmetro θ; prox: direção do segmento fixo
+  var EX = {
+    rosca: {nome:'Rosca direta com halter', sub:'em pé · peso livre', lbl:'Ângulo do cotovelo (flexão)', r:[0,140], prox:-90, seg:function(t){ return -90+t; }, dir:1,
+      L:34, force:'peso', str:function(t){ return STR.flexCot(t); }, ends:['braço estendido','cotovelo fechado'],
+      note:'O antebraço fica horizontal a 90° de flexão, onde o torque é máximo. A força dos flexores do cotovelo também é maior perto de 90°, então as curvas combinam bem. No começo e no fim, a carga quase não pesa.'},
+    scott: {nome:'Rosca Scott', sub:'braço apoiado a 45° · peso livre', lbl:'Ângulo do cotovelo (flexão)', r:[0,120], prox:-45, seg:function(t){ return -45+t; }, dir:1,
+      L:34, force:'peso', str:function(t){ return STR.flexCot(t); }, ends:['braço estendido','cotovelo fechado'],
+      note:'Com o braço inclinado à frente, o antebraço fica horizontal logo aos 45° de flexão. O perfil é decrescente: cobra mais com o bíceps alongado e quase nada no fim.'},
+    inclinada: {nome:'Rosca no banco inclinado', sub:'braço atrás do tronco · peso livre', lbl:'Ângulo do cotovelo (flexão)', r:[30,140], prox:-120, seg:function(t){ return -120+t; }, dir:1,
+      L:34, force:'peso', str:function(t){ return STR.flexCot(t); }, ends:['antebraço vertical','cotovelo fechado'],
+      note:'Com o braço atrás do corpo, o antebraço só fica horizontal aos 120° de flexão. O perfil é crescente: quase sem torque no começo e pico perto do final. O ombro estendido alonga a cabeça longa do bíceps, mas a carga pesa mais no fim da flexão do cotovelo.'},
+    roscaCabo: {nome:'Rosca no cabo', sub:'polia à frente · cabo', lbl:'Ângulo do cotovelo (flexão)', r:[0,140], prox:-90, seg:function(t){ return -90+t; }, dir:1,
+      L:34, force:'cabo', pulley:function(u){ return {x:18, y:-110+u*95}; }, str:function(t){ return STR.flexCot(t); }, ends:['braço estendido','cotovelo fechado'],
+      note:'O cabo puxa a mão na direção da polia, e não na vertical. Com a polia baixa e perto, o perfil fica parecido com o do halter, com pico um pouco antes de 90°. Suba a polia e o pico vai para mais tarde, com mais tensão perto do fim da flexão.'},
+    roscaElastico: {nome:'Rosca com elástico', sub:'preso sob os pés · elástico', lbl:'Ângulo do cotovelo (flexão)', r:[0,140], prox:-90, seg:function(t){ return -90+t; }, dir:1,
+      L:34, force:'elastico', anchor:{x:0, y:-110}, L0:70, str:function(t){ return STR.flexCot(t); }, ends:['braço estendido','cotovelo fechado'],
+      note:'A tensão cresce conforme o elástico estica, e ele estica mais quanto mais a mão sobe. O perfil fica fortemente crescente: leve no início e pesado no fim, quando os flexores já perdem força.'},
+    lateral: {nome:'Elevação lateral com halter', sub:'vista de frente · peso livre', lbl:'Abdução do ombro', r:[0,90], prox:90, seg:function(t){ return -90+t; }, dir:1,
+      L:60, force:'peso', str:function(t){ return STR.abdOmb(t); }, ends:['braço ao lado do corpo','braço na horizontal'],
+      note:'Com o braço ao lado do corpo, o halter não gera torque no ombro. A resistência cresce até a horizontal, justamente onde os abdutores produzem menos força. Por isso o topo é o ponto mais difícil.'},
+    lateralCabo: {nome:'Elevação lateral no cabo', sub:'polia baixa do lado oposto · cabo', lbl:'Abdução do ombro', r:[0,90], prox:90, seg:function(t){ return -90+t; }, dir:1,
+      L:60, force:'cabo', pulley:function(u){ return {x:-30, y:-100+u*80}; }, str:function(t){ return STR.abdOmb(t); }, ends:['braço ao lado do corpo','braço na horizontal'],
+      note:'Com a polia do lado oposto, o cabo cruza na frente do corpo e já gera torque com o braço para baixo. O perfil fica mais plano e o início do movimento passa a ser trabalhado.'},
+    crucifixo: {nome:'Crucifixo com halteres', sub:'deitado · peso livre', lbl:'Adução horizontal', r:[0,100], prox:180, seg:function(t){ return -10+t; }, dir:1,
+      L:60, force:'peso', str:function(t){ return STR.aduHor(t); }, ends:['braço aberto','braço na vertical'],
+      note:'Com o braço aberto, o halter fica longe do ombro e o torque é máximo. Conforme o braço sobe, a linha da carga se aproxima do ombro e, no topo, o torque some. O perfil é decrescente, com o peitoral cobrado no alongado.'},
+    crucifixoCabo: {nome:'Crucifixo no cabo', sub:'deitado · polias laterais · cabo', lbl:'Adução horizontal', r:[0,100], prox:180, seg:function(t){ return -10+t; }, dir:1,
+      L:60, force:'cabo', pulley:function(u){ return {x:95, y:-30+u*40}; }, str:function(t){ return STR.aduHor(t); }, ends:['braço aberto','braço na vertical'],
+      note:'O cabo puxa para o lado, na direção da polia. Mesmo com o braço na vertical ainda há braço de momento, então o peitoral continua trabalhando no topo. É o complemento natural do crucifixo com halteres.'},
+    coice: {nome:'Tríceps coice com halter', sub:'braço paralelo ao chão · peso livre', lbl:'Extensão do cotovelo', r:[0,90], prox:0, seg:function(t){ return -90-t; }, dir:-1,
+      L:33, force:'peso', str:function(t){ return STR.extCot(90-t); }, ends:['cotovelo a 90°','cotovelo estendido'],
+      note:'O antebraço começa na vertical e termina na horizontal. O torque é zero no início e máximo na extensão completa, onde o tríceps já produz menos força. Veja a animação própria do coice no Teoria e Prática.'}
+  };
+  var ORDER = ['rosca','scott','inclinada','roscaCabo','roscaElastico','lateral','lateralCabo','crucifixo','crucifixoCabo','coice'];
+
+  var state = {ex:'rosca', s:0, playing:true, t0:null, pulley:0};
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) state.playing = false;
+
+  function calc(ex, t){
+    var psi = ex.seg(t)*D, H = {x:ex.L*Math.cos(psi), y:ex.L*Math.sin(psi)}, F, mag = 1, P = null;
+    if (ex.force === 'peso') F = {x:0, y:-1};
+    else if (ex.force === 'cabo'){ P = ex.pulley(state.pulley/100); var dx = P.x-H.x, dy = P.y-H.y, n = Math.hypot(dx,dy); F = {x:dx/n, y:dy/n}; }
+    else { P = ex.anchor; var ax = P.x-H.x, ay = P.y-H.y, an = Math.hypot(ax,ay); F = {x:ax/an, y:ay/an}; mag = Math.max(0, an-ex.L0)/40; }
+    var cross = H.x*F.y - H.y*F.x;
+    var tau = -ex.dir*cross*mag;            // positivo = resiste ao movimento concêntrico
+    // pé da perpendicular da articulação à linha de força
+    var k = -(H.x*F.x + H.y*F.y), Q = {x:H.x + k*F.x, y:H.y + k*F.y};
+    return {H:H, F:F, P:P, tau:tau, mag:mag, Q:Q, arm:Math.abs(cross)};
+  }
+  function curve(ex){
+    var out = [], mx = 0;
+    for (var i=0;i<=100;i++){ var t = ex.r[0]+(ex.r[1]-ex.r[0])*i/100, c = calc(ex,t); out.push({t:t, r:c.tau, s:ex.str(t)}); mx = Math.max(mx, c.tau); }
+    out.forEach(function(o){ o.rn = mx > 0 ? Math.max(0,o.r)/mx : 0; o.rel = o.s > 0 ? o.rn/o.s : 0; });
+    return {pts:out, max:mx};
+  }
+  function classify(pts){
+    var mx = 0, mn = 9, im = 0; pts.forEach(function(p,i){ if (p.rn > mx){ mx = p.rn; im = i; } });
+    pts.forEach(function(p){ mn = Math.min(mn, p.rn); });
+    var lo = pts.slice(15, 86).reduce(function(a,p){ return Math.min(a,p.rn); }, 9);
+    if (lo > 0.7) return 'plano';
+    if (im < 30 || (pts[0].rn >= 0.6 && im < 45)) return 'decrescente';
+    if (im > 70) return 'crescente';
+    return 'sino';
+  }
+
+  // ---------- desenho
+  function fit(cv){
+    var r = cv.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio||1, 2.5);
+    var w = Math.max(1, Math.round(r.width*dpr)), h = Math.max(1, Math.round(r.height*dpr));
+    if (cv.width !== w || cv.height !== h){ cv.width = w; cv.height = h; }
+    return {w:w, h:h, dpr:dpr, cssW:r.width};
+  }
+  function drawStage(){
+    var cv = $('stage'), f = fit(cv), ctx = cv.getContext('2d'), sc = f.w/400, ex = EX[state.ex];
+    var t = ex.r[0]+(ex.r[1]-ex.r[0])*state.s, c = calc(ex, t);
+    ctx.setTransform(1,0,0,1,0,0); ctx.fillStyle = C.surface; ctx.fillRect(0,0,f.w,f.h);
+    ctx.setTransform(sc,0,0,sc,0,0); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    var U = ex.L > 40 ? 2.3 : 3.4, O = {x:200, y:ex.L > 40 ? 190 : 170};
+    function T(p){ return {x:O.x + p.x*U, y:O.y - p.y*U}; }
+    var fs = f.cssW < 360 ? 16 : 13;
+    // segmento fixo
+    var pr = ex.prox*D, PS = T({x:Math.cos(pr)*ex.L*0.95, y:Math.sin(pr)*ex.L*0.95});
+    ctx.strokeStyle = C.dim; ctx.lineWidth = 16; ctx.beginPath(); ctx.moveTo(O.x,O.y); ctx.lineTo(PS.x,PS.y); ctx.stroke();
+    // linha de força estendida
+    var Hs = T(c.H), FL = {x:c.F.x*U, y:-c.F.y*U};
+    ctx.save(); ctx.setLineDash([6,6]); ctx.strokeStyle = 'rgba(245,239,232,.35)'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(Hs.x - FL.x*400, Hs.y - FL.y*400); ctx.lineTo(Hs.x + FL.x*400, Hs.y + FL.y*400); ctx.stroke(); ctx.restore();
+    // cabo / elástico
+    if (c.P){
+      var Ps = T(c.P);
+      if (ex.force === 'cabo'){ ctx.strokeStyle = C.str; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(Hs.x,Hs.y); ctx.lineTo(Ps.x,Ps.y); ctx.stroke();
+        ctx.strokeStyle = C.muted; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(Ps.x,Ps.y,10,0,Math.PI*2); ctx.stroke(); }
+      else { ctx.strokeStyle = C.hard; ctx.lineWidth = 2 + 4*Math.min(1,c.mag/2); ctx.beginPath(); ctx.moveTo(Hs.x,Hs.y); ctx.lineTo(Ps.x,Ps.y); ctx.stroke();
+        ctx.fillStyle = C.muted; ctx.fillRect(Ps.x-14, Ps.y, 28, 5); }
+    }
+    // segmento móvel
+    ctx.strokeStyle = C.accent; ctx.lineWidth = 14; ctx.beginPath(); ctx.moveTo(O.x,O.y); ctx.lineTo(Hs.x,Hs.y); ctx.stroke();
+    // braço de momento
+    var Qs = T(c.Q);
+    if (c.arm*U > 3){
+      ctx.strokeStyle = C.fg; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(O.x,O.y); ctx.lineTo(Qs.x,Qs.y); ctx.stroke();
+      ctx.fillStyle = C.fg; ctx.beginPath(); ctx.arc(Qs.x,Qs.y,4,0,Math.PI*2); ctx.fill();
+    }
+    // carga
+    if (ex.force === 'peso'){ ctx.fillStyle = '#2a2420'; ctx.strokeStyle = C.fg; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(Hs.x,Hs.y,14,0,Math.PI*2); ctx.fill(); ctx.stroke(); }
+    else { ctx.fillStyle = C.surface; ctx.strokeStyle = C.fg; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(Hs.x,Hs.y,7,0,Math.PI*2); ctx.fill(); ctx.stroke(); }
+    // seta da força
+    var aL = 44*(ex.force === 'elastico' ? Math.min(2, c.mag) : 1), A2 = {x:Hs.x + c.F.x*aL, y:Hs.y - c.F.y*aL};
+    if (aL > 4){
+      ctx.strokeStyle = C.fg; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(Hs.x,Hs.y); ctx.lineTo(A2.x,A2.y); ctx.stroke();
+      var ang = Math.atan2(A2.y-Hs.y, A2.x-Hs.x); ctx.fillStyle = C.fg; ctx.beginPath(); ctx.moveTo(A2.x+Math.cos(ang)*4, A2.y+Math.sin(ang)*4);
+      ctx.lineTo(A2.x-Math.cos(ang-.45)*12, A2.y-Math.sin(ang-.45)*12); ctx.lineTo(A2.x-Math.cos(ang+.45)*12, A2.y-Math.sin(ang+.45)*12); ctx.closePath(); ctx.fill();
+    }
+    // articulação com brilho proporcional
+    var cv2 = curve(ex), rn = cv2.max > 0 ? Math.max(0,c.tau)/cv2.max : 0;
+    ctx.fillStyle = 'rgba(255,107,26,'+(0.12+0.3*rn)+')'; ctx.beginPath(); ctx.arc(O.x,O.y,12+26*rn,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = C.fg; ctx.beginPath(); ctx.arc(O.x,O.y,6,0,Math.PI*2); ctx.fill();
+    // rótulos
+    ctx.font = '600 '+fs+'px '+C.mono; ctx.textBaseline = 'middle';
+    function tag(txt, x, y, col, al){ ctx.textAlign = al||'left'; ctx.lineWidth = 6; ctx.strokeStyle = C.surface; ctx.strokeText(txt,x,y); ctx.fillStyle = col; ctx.fillText(txt,x,y); }
+    tag('braço de momento '+(c.arm*(ex.L > 40 ? 1 : 1)).toFixed(0)+' cm', 14, 386, C.fg, 'left');
+    tag(Math.round(t)+'°', O.x+16, O.y-18, C.fg, 'left');
+    ctx.font = '500 '+(fs*0.88)+'px '+C.mono; ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillStyle = C.muted;
+    ctx.fillText(ex.force === 'peso' ? 'peso: força sempre vertical' : (ex.force === 'cabo' ? 'cabo: força na direção da polia' : 'elástico: força cresce ao esticar'), 14, 12);
+    return {t:t, c:c, rn:rn};
+  }
+
+  function drawGraph(cur){
+    var cv = $('graph'), f = fit(cv), ctx = cv.getContext('2d'), W = 600, Hh = 300, sc = f.w/W, ex = EX[state.ex];
+    var narrow = f.cssW < 480, fs = narrow ? 18 : 12.5;
+    ctx.setTransform(1,0,0,1,0,0); ctx.fillStyle = C.surface; ctx.fillRect(0,0,f.w,f.h);
+    ctx.setTransform(sc,0,0,sc,0,0);
+    var pad = {l: narrow ? 62 : 48, r:16, t:16, b: narrow ? 50 : 40};
+    var cv2 = curve(ex), pts = cv2.pts;
+    function X(i){ return pad.l + i/100*(W-pad.l-pad.r); }
+    function Y(v){ return pad.t + (1.08-v)/1.08*(Hh-pad.t-pad.b); }
+    ctx.font = '500 '+fs+'px '+C.mono; ctx.textBaseline = 'middle'; ctx.textAlign = 'right';
+    [0,.5,1].forEach(function(v){ ctx.strokeStyle = v === 0 ? C.muted : C.line; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(pad.l, Y(v)); ctx.lineTo(W-pad.r, Y(v)); ctx.stroke(); ctx.fillStyle = C.muted; ctx.fillText(Math.round(v*100)+'%', pad.l-8, Y(v)); });
+    ctx.textBaseline = 'top'; ctx.textAlign = 'left'; ctx.fillStyle = C.muted; ctx.fillText(Math.round(ex.r[0])+'°', pad.l, Hh-pad.b+8);
+    ctx.textAlign = 'right'; ctx.fillText(Math.round(ex.r[1])+'°', W-pad.r, Hh-pad.b+8);
+    ctx.textAlign = 'center'; ctx.fillStyle = C.dim; ctx.fillText(ex.lbl.toLowerCase(), W/2, Hh-pad.b+8);
+    // ponto mais difícil (maior razão resistência/força)
+    var hi = 0, iHi = 0; pts.forEach(function(p,i){ if (p.rel > hi){ hi = p.rel; iHi = i; } });
+    ctx.fillStyle = 'rgba(255,194,74,.12)'; ctx.fillRect(X(Math.max(0,iHi-6)), pad.t, X(Math.min(100,iHi+6))-X(Math.max(0,iHi-6)), Hh-pad.t-pad.b);
+    // força
+    ctx.save(); ctx.setLineDash([7,6]); ctx.strokeStyle = C.str; ctx.lineWidth = 3;
+    ctx.beginPath(); pts.forEach(function(p,i){ var x = X(i), y = Y(p.s); if (i) ctx.lineTo(x,y); else ctx.moveTo(x,y); }); ctx.stroke(); ctx.restore();
+    // resistência
+    ctx.beginPath(); pts.forEach(function(p,i){ var x = X(i), y = Y(p.rn); if (i) ctx.lineTo(x,y); else ctx.moveTo(x,y); });
+    ctx.lineTo(X(100), Y(0)); ctx.lineTo(X(0), Y(0)); ctx.closePath(); ctx.fillStyle = 'rgba(255,107,26,.13)'; ctx.fill();
+    ctx.beginPath(); pts.forEach(function(p,i){ var x = X(i), y = Y(p.rn); if (i) ctx.lineTo(x,y); else ctx.moveTo(x,y); });
+    ctx.strokeStyle = C.res; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.stroke();
+    ctx.fillStyle = C.hard; ctx.beginPath(); ctx.arc(X(iHi), Y(pts[iHi].rn), 6, 0, Math.PI*2); ctx.fill();
+    // cursor
+    var i0 = Math.round(state.s*100);
+    ctx.strokeStyle = 'rgba(245,239,232,.3)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(X(i0), pad.t); ctx.lineTo(X(i0), Hh-pad.b); ctx.stroke();
+    ctx.fillStyle = C.surface; ctx.strokeStyle = C.res; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(X(i0), Y(pts[i0].rn), 6, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+    return {pts:pts, iHi:iHi};
+  }
+
+  function update(){
+    var cur = drawStage(), g = drawGraph(cur), ex = EX[state.ex], p = g.pts[Math.round(state.s*100)];
+    $('angOut').textContent = Math.round(cur.t)+'°';
+    $('ang').value = Math.round(state.s*1000);
+    $('kRes').innerHTML = Math.round(p.rn*100)+'<small>%</small>';
+    $('kStr').innerHTML = Math.round(p.s*100)+'<small>%</small>';
+    var relMax = g.pts.reduce(function(a,q){ return Math.max(a,q.rel); }, 0);
+    $('kRel').innerHTML = Math.round(relMax > 0 ? p.rel/relMax*100 : 0)+'<small>%</small>';
+    $('badge').textContent = classify(g.pts);
+    if (ex.force === 'cabo') $('pulleyOut').textContent = state.pulley < 25 ? 'baixa' : (state.pulley > 75 ? 'alta' : 'média');
+  }
+  function setEx(id){
+    state.ex = id; var ex = EX[id];
+    ORDER.forEach(function(k){ $('pk-'+k).setAttribute('aria-pressed', k === id ? 'true' : 'false'); });
+    $('exName').textContent = ex.nome; $('exSub').textContent = ex.sub; $('exNote').textContent = ex.note;
+    $('angLbl').textContent = ex.lbl; $('angLo').textContent = ex.ends[0]; $('angHi').textContent = ex.ends[1];
+    $('pulleyWrap').hidden = ex.force !== 'cabo';
+    if (ex.force === 'cabo'){ state.pulley = 0; $('pulley').value = 0; $('pulleyLbl').textContent = id === 'crucifixoCabo' ? 'Altura da polia em relação ao banco' : 'Altura da polia'; }
+    update();
+  }
+  var picker = $('picker');
+  ORDER.forEach(function(k){
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'pk'; b.id = 'pk-'+k;
+    b.innerHTML = '<b>'+EX[k].nome+'</b><small>'+EX[k].sub+'</small>';
+    b.addEventListener('click', function(){ setEx(k); });
+    picker.appendChild(b);
+  });
+  function sm(x){ return x*x*(3-2*x); }
+  function tick(ts){
+    if (!state.playing) return;
+    if (state.t0 === null) state.t0 = ts;
+    var T = ((ts-state.t0) % 4400)/4400, s;
+    if (T < .08) s = 0; else if (T < .5) s = sm((T-.08)/.42); else if (T < .58) s = 1; else if (T < .95) s = 1 - sm((T-.58)/.37); else s = 0;
+    state.s = s; update(); requestAnimationFrame(tick);
+  }
+  function setPlaying(v){ var was = state.playing; state.playing = v; state.t0 = null; $('play').textContent = v ? 'Pausar' : 'Animar'; if (v && !was) requestAnimationFrame(tick); }
+  $('play').addEventListener('click', function(){ setPlaying(!state.playing); });
+  $('ang').addEventListener('input', function(e){ setPlaying(false); state.s = +e.target.value/1000; update(); });
+  $('pulley').addEventListener('input', function(e){ state.pulley = +e.target.value; update(); });
+  if (window.ResizeObserver){ var ro = new ResizeObserver(function(){ update(); }); ro.observe($('stage')); ro.observe($('graph')); }
+  else window.addEventListener('resize', update);
+  $('play').textContent = state.playing ? 'Pausar' : 'Animar';
+  setEx('rosca');
+  if (state.playing) requestAnimationFrame(tick);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(update);
+})();
+</script>
+</body>
+</html>
