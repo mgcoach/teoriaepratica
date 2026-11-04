@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script>(function(){var e=true;try{e=window.self!==window.top}catch(x){}if(e)document.documentElement.classList.add("embed")})();</script>
+<title>Sistemas Energéticos</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Aeróbio e anaeróbio na musculação e no cardio: como a contribuição de cada sistema muda com o tempo e a intensidade, e o que sobe e o que desce.">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: três sistemas (cartões com potência × capacidade); explorador 1: esforço máximo × duração (área empilhada); explorador 2: cardio por intensidade e duração; explorador 3: séries de musculação e recuperação da fosfocreatina; tabelas "o que sobe e o que desce" e musculação × cardio; mitos e estudos. Visual escuro deliberado (identidade MG COACH). */
+:root{
+  --bg:#0a0a0a;
+  --surface:#13110f;
+  --surface-2:#1b1815;
+  --line:#2c2622;
+  --fg:#f5efe8;
+  --muted:#9d9188;
+  --dim:#5f5650;
+  --accent:#ff6b1a;
+  --pcr:#ffc24a;
+  --gly:#ff6b1a;
+  --aer:#5cc6ff;
+  --fat:#7ee08a;
+  --cho:#ff9a5c;
+  --lac:#ff6b9a;
+  --display:"Big Shoulders Display", Impact, "Arial Narrow", sans-serif;
+  --text:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--fg)}
+html{-webkit-text-size-adjust:100%;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font-family:var(--text);font-size:15px;line-height:1.5}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1100px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));display:flex;flex-direction:column;gap:22px}
+.back{font-family:var(--mono);font-size:12px;color:var(--muted);text-decoration:none;align-self:flex-start;border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+.back:hover{color:var(--fg);border-color:var(--muted)}
+.embed .back{display:none}
+header{display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.eyebrow b{color:var(--accent);font-weight:600}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(44px,9vw,86px);line-height:.9;text-transform:uppercase;margin:0;text-wrap:balance}
+h1 em{font-style:normal;color:var(--accent)}
+.lede{margin:0;max-width:66ch;color:var(--muted);font-size:16px}
+.lede strong{color:var(--fg);font-weight:600}
+h2.sec{margin:8px 0 0;font-family:var(--display);font-weight:900;font-size:clamp(30px,5vw,44px);line-height:.95;text-transform:uppercase}
+h2.sec span{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--accent);display:block;letter-spacing:.08em;margin-bottom:6px}
+.note{margin:0;color:var(--muted);font-size:14px;max-width:72ch}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.panel h3{margin:0;font-family:var(--display);font-weight:700;font-size:24px;text-transform:uppercase;letter-spacing:.02em}
+.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+
+.systems{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.sys{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0;box-shadow:inset 0 4px 0 var(--c)}
+.sys .k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--c)}
+.sys h3{margin:0;font-family:var(--display);font-weight:900;font-size:30px;line-height:.95;text-transform:uppercase}
+.sys p{margin:0;font-size:14px;color:var(--muted)}
+.sys .eq{font-family:var(--mono);font-size:12.5px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 10px;overflow-x:auto}
+.meter{display:grid;grid-template-columns:6.4em minmax(0,1fr);gap:8px;align-items:center;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.meter div{height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden}
+.meter div i{display:block;height:100%;background:var(--c)}
+.facts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:13.5px}
+.facts li{display:flex;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding-top:4px}
+.facts li span{color:var(--muted)}
+.facts li b{font-weight:600;text-align:right}
+
+.ex{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:14px;align-items:start}
+.graph-box{position:relative;width:100%;aspect-ratio:600/300;max-width:100%}
+.graph-box canvas{position:absolute;inset:0;width:100%;height:100%}
+.sl{display:flex;flex-direction:column;gap:6px}
+.sl label{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted)}
+.sl output{font-family:var(--mono);color:var(--fg);font-variant-numeric:tabular-nums}
+.sl .ends{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--dim)}
+input[type=range]{width:100%;margin:0;accent-color:var(--accent)}
+.presets{display:flex;gap:6px;flex-wrap:wrap}
+.pre{font:600 12px/1 var(--text);color:var(--muted);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 11px;cursor:pointer}
+.pre:hover{color:var(--fg);border-color:var(--muted)}
+.stack{display:flex;height:34px;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+.stack span{display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:600;color:var(--bg);white-space:nowrap;overflow:hidden;transition:flex-basis .2s}
+.big{display:flex;flex-direction:column;gap:2px}
+.big b{font-family:var(--display);font-weight:900;font-size:34px;line-height:1;text-transform:uppercase}
+.big small{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.kv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.kv div{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:9px 11px;min-width:0}
+.kv span{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.kv b{display:block;font-family:var(--display);font-weight:700;font-size:24px;line-height:1.05;font-variant-numeric:tabular-nums}
+.kv b small{font-size:13px;color:var(--muted)}
+.kv i{display:block;font-style:normal;font-size:11.5px;color:var(--muted)}
+.tabs{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--bg)}
+.tabs button{font:600 13px/1 var(--text);color:var(--muted);background:transparent;border:0;border-radius:999px;padding:8px 13px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.zone{display:flex;gap:10px;align-items:flex-start;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.zone .pill{flex:0 0 auto;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:4px 10px;color:var(--bg)}
+.zone p{margin:0;font-size:14px}
+.updown{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.updown div{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;min-width:0}
+.updown h4{margin:0 0 6px;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase}
+.updown .u h4{color:var(--accent)} .updown .d h4{color:var(--aer)}
+.updown ul{margin:0;padding-left:16px;font-size:13.5px;display:flex;flex-direction:column;gap:3px}
+
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:700px;font-size:14px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+tr:last-child td{border-bottom:0}
+.ar{font-family:var(--mono);font-weight:600;white-space:nowrap}
+.ar.up{color:var(--accent)} .ar.dn{color:var(--aer)} .ar.eq{color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.card{border:1px solid var(--line);border-radius:14px;padding:16px;background:var(--surface);display:flex;flex-direction:column;gap:6px;min-width:0}
+.card h4{margin:0;font-size:16.5px;font-weight:700;line-height:1.25}
+.card p{margin:0;color:var(--muted);font-size:14px}
+.card .tag{align-self:flex-start;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;border-radius:999px;padding:3px 9px;border:1px solid currentColor;color:var(--accent)}
+.refs{margin:0;padding-left:18px;color:var(--muted);font-size:13px;display:flex;flex-direction:column;gap:4px}
+footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+footer b{color:var(--accent);font-weight:600}
+
+@media (max-width:900px){
+  .systems,.ex,.cards{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:480px){ .kv b{font-size:20px} .updown{grid-template-columns:minmax(0,1fr)} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./" target="_top">← Teoria e Prática</a>
+
+  <header>
+    <div class="eyebrow"><b>MG COACH</b> · Fisiologia do exercício</div>
+    <h1>Sistemas energéticos: <em>aeróbio × anaeróbio</em></h1>
+    <p class="lede">O músculo só usa uma moeda: o <strong>ATP</strong>. E ele guarda tão pouco que acabaria em 2 a 3 segundos de esforço máximo. Três sistemas repõem esse ATP o tempo todo, <strong>sempre juntos</strong>. O que muda com o tempo e a intensidade é quanto cada um contribui.</p>
+  </header>
+
+  <div class="systems">
+    <article class="sys" style="--c:var(--pcr)">
+      <span class="k">anaeróbio alático</span><h3>ATP-CP (fosfagênio)</h3>
+      <div class="eq">PCr + ADP → ATP + creatina</div>
+      <p>A fosfocreatina doa fosfato para refazer o ATP na hora, pela enzima creatina quinase. É o mais rápido, mas o estoque é pequeno.</p>
+      <div class="meter">potência<div><i style="width:100%"></i></div></div>
+      <div class="meter">capacidade<div><i style="width:8%"></i></div></div>
+      <ul class="facts"><li><span>predomina</span><b>primeiros ~10 s de esforço máximo</b></li><li><span>usa oxigênio</span><b>não</b></li><li><span>recuperação</span><b>metade em ~30–60 s, quase total em 3–5 min</b></li></ul>
+    </article>
+    <article class="sys" style="--c:var(--gly)">
+      <span class="k">anaeróbio lático</span><h3>Glicolítico</h3>
+      <div class="eq">glicose/glicogênio → piruvato → lactato</div>
+      <p>Quebra a glicose no citoplasma sem precisar de oxigênio. Quando o piruvato é produzido mais rápido do que a mitocôndria consegue usar, ele vira lactato, e íons H⁺ se acumulam.</p>
+      <div class="meter">potência<div><i style="width:65%"></i></div></div>
+      <div class="meter">capacidade<div><i style="width:25%"></i></div></div>
+      <ul class="facts"><li><span>predomina</span><b>~15 s a ~1 min de esforço intenso</b></li><li><span>ATP por glicose</span><b>2 (3 a partir do glicogênio)</b></li><li><span>subproduto</span><b>lactato e H⁺ (pH cai)</b></li></ul>
+    </article>
+    <article class="sys" style="--c:var(--aer)">
+      <span class="k">aeróbio</span><h3>Oxidativo</h3>
+      <div class="eq">carboidrato/gordura + O₂ → CO₂ + H₂O + ATP</div>
+      <p>Acontece na mitocôndria. Usa carboidrato, gordura e um pouco de proteína. É o mais lento para produzir ATP, mas praticamente não acaba.</p>
+      <div class="meter">potência<div><i style="width:30%"></i></div></div>
+      <div class="meter">capacidade<div><i style="width:100%"></i></div></div>
+      <ul class="facts"><li><span>predomina</span><b>a partir de ~1–2 min</b></li><li><span>ATP por glicose</span><b>~30–32</b></li><li><span>subproduto</span><b>CO₂ e água</b></li></ul>
+    </article>
+  </div>
+
+  <noscript><p class="note">Esta página precisa de JavaScript ativado para funcionar.</p></noscript>
+
+  <h2 class="sec"><span>explorador 1 · tempo</span>Esforço máximo: quanto tempo dura?</h2>
+  <section class="panel" aria-label="Contribuição por duração">
+    <div class="ex">
+      <div class="graph-box"><canvas id="g1" role="img" aria-label="Contribuição de cada sistema pela duração do esforço máximo"></canvas></div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="big"><small>duração do esforço máximo</small><b id="dOut">30 s</b></div>
+        <div class="sl">
+          <label for="dur">Arraste a duração <output id="dOut2">30 s</output></label>
+          <input type="range" id="dur" min="0" max="1000" step="1" value="380">
+          <div class="ends"><span>5 s</span><span>60 min</span></div>
+        </div>
+        <div class="presets" id="p1"></div>
+        <div class="stack" id="stack1"></div>
+        <div class="zone"><span class="pill" id="z1Pill" style="background:var(--gly)">—</span><p id="z1Text"></p></div>
+      </div>
+    </div>
+    <p class="note">Até 4 minutos, os valores vêm de uma revisão que reuniu os estudos de contribuição aeróbia e anaeróbia em esforço máximo: os dois sistemas se igualam por volta de 79 segundos. A divisão do anaeróbio entre fosfocreatina e glicólise e os valores acima de 4 minutos são estimativas didáticas.</p>
+  </section>
+
+  <h2 class="sec"><span>explorador 2 · intensidade</span>Cardio contínuo</h2>
+  <section class="panel" aria-label="Cardio por intensidade e duração">
+    <div class="ex">
+      <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+        <div class="panel-head"><span class="note" style="font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase">ver no gráfico</span>
+          <div class="tabs" role="group" aria-label="Gráfico"><button type="button" data-g="fuel" aria-pressed="true">Combustível</button><button type="button" data-g="lac" aria-pressed="false">Lactato</button></div></div>
+        <div class="graph-box"><canvas id="g2" role="img" aria-label="Gordura e carboidrato, ou lactato, pela intensidade"></canvas></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="sl">
+          <label for="int">Intensidade <output id="iOut">60% do VO₂máx</output></label>
+          <input type="range" id="int" min="20" max="100" step="1" value="60">
+          <div class="ends"><span>caminhada leve</span><span>máximo</span></div>
+        </div>
+        <div class="sl">
+          <label for="time">Tempo de exercício <output id="tOut">30 min</output></label>
+          <input type="range" id="time" min="1" max="180" step="1" value="30">
+          <div class="ends"><span>1 min</span><span>3 h</span></div>
+        </div>
+        <div class="zone"><span class="pill" id="z2Pill">—</span><p id="z2Text"></p></div>
+        <div class="kv">
+          <div><span>gordura</span><b id="kFat">0<small>%</small></b><i>da energia</i></div>
+          <div><span>carboidrato</span><b id="kCho">0<small>%</small></b><i>da energia</i></div>
+          <div><span>lactato</span><b id="kLac">0<small>mmol/L</small></b><i id="kLacT">estável</i></div>
+          <div><span>freq. cardíaca</span><b id="kHr">0<small>%</small></b><i>da máxima</i></div>
+          <div><span>glicogênio</span><b id="kGly">0<small>%</small></b><i>restante no músculo</i></div>
+          <div><span>QR</span><b id="kRer">0</b><i>0,7 gordura · 1,0 carbo</i></div>
+        </div>
+      </div>
+    </div>
+    <div class="updown"><div class="u"><h4>O que sobe agora</h4><ul id="upList"></ul></div><div class="d"><h4>O que desce agora</h4><ul id="dnList"></ul></div></div>
+    <p class="note">Modelo de uma pessoa treinada típica. Os limiares e o ponto de máxima oxidação de gordura variam bastante entre pessoas e mudam com o treino e a alimentação.</p>
+  </section>
+
+  <h2 class="sec"><span>explorador 3 · musculação</span>A série e o descanso</h2>
+  <section class="panel" aria-label="Séries de musculação">
+    <div class="ex">
+      <div class="graph-box"><canvas id="g3" role="img" aria-label="Fosfocreatina do músculo ao longo de três séries e dos descansos"></canvas></div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="sl">
+          <label for="reps">Repetições por série (até perto da falha) <output id="rOut">10 reps · 30 s</output></label>
+          <input type="range" id="reps" min="2" max="25" step="1" value="10">
+          <div class="ends"><span>2</span><span>25</span></div>
+        </div>
+        <div class="sl">
+          <label for="rest">Descanso entre séries <output id="restOut">90 s</output></label>
+          <input type="range" id="rest" min="20" max="300" step="5" value="90">
+          <div class="ends"><span>20 s</span><span>5 min</span></div>
+        </div>
+        <div class="stack" id="stack3"></div>
+        <div class="kv" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+          <div><span>PCr no fim da série</span><b id="kP1">0<small>%</small></b><i>do repouso</i></div>
+          <div><span>PCr antes da próxima</span><b id="kP2">0<small>%</small></b><i>após o descanso</i></div>
+        </div>
+        <div class="zone"><span class="pill" id="z3Pill" style="background:var(--pcr)">—</span><p id="z3Text"></p></div>
+      </div>
+    </div>
+    <p class="note">Uma série até perto da falha é um esforço máximo curto: por isso a musculação é majoritariamente anaeróbia durante a série. No descanso, o sistema aeróbio é que recarrega a fosfocreatina. Modelo com meia-vida de recuperação de cerca de 40 s; depois de sprints de 30 s, a recuperação é mais lenta (cerca de 65% em 1,5 min e 85% em 6 min).</p>
+  </section>
+
+  <section class="panel" aria-label="O que sobe e o que desce">
+    <h3>O que sobe e o que desce</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Variável</th><th>Com mais intensidade</th><th>Com mais tempo (mesma intensidade)</th><th>Por quê</th></tr></thead>
+      <tbody>
+        <tr><td>Uso de carboidrato</td><td><span class="ar up">↑ sobe</span></td><td><span class="ar dn">↓ desce aos poucos</span></td><td>Fibras rápidas e glicólise entram com a intensidade; com o tempo, o glicogênio acaba e a gordura assume mais.</td></tr>
+        <tr><td>Uso de gordura (% da energia)</td><td><span class="ar dn">↓ desce</span></td><td><span class="ar up">↑ sobe</span></td><td>A oxidação de gordura é lenta; em intensidade alta, não acompanha a demanda.</td></tr>
+        <tr><td>Gordura (gramas por minuto)</td><td><span class="ar eq">sobe até ~50–65% e depois cai</span></td><td><span class="ar up">↑ sobe</span></td><td>O pico absoluto (FatMax) fica em intensidade moderada.</td></tr>
+        <tr><td>Lactato no sangue</td><td><span class="ar up">↑ sobe, acelera após os limiares</span></td><td><span class="ar eq">estável abaixo do 2º limiar; sobe acima dele</span></td><td>Acima do 2º limiar, a produção passa a remoção.</td></tr>
+        <tr><td>Íons H⁺ (acidez)</td><td><span class="ar up">↑ sobe</span></td><td><span class="ar up">↑ sobe se acima do limiar</span></td><td>Vêm da glicólise rápida e da quebra de ATP; atrapalham a contração.</td></tr>
+        <tr><td>Fosfocreatina</td><td><span class="ar dn">↓ cai mais rápido</span></td><td><span class="ar dn">↓ cai e estabiliza</span></td><td>É o primeiro estoque a ser usado.</td></tr>
+        <tr><td>Glicogênio muscular</td><td><span class="ar dn">↓ cai mais rápido</span></td><td><span class="ar dn">↓ cai</span></td><td>Quando chega perto do fim, a intensidade sustentável cai.</td></tr>
+        <tr><td>Frequência cardíaca e VO₂</td><td><span class="ar up">↑ sobe</span></td><td><span class="ar up">↑ deriva para cima</span></td><td>Desidratação, calor e fadiga aumentam a FC mesmo com ritmo igual.</td></tr>
+        <tr><td>Quociente respiratório (QR)</td><td><span class="ar up">↑ vai para 1,0</span></td><td><span class="ar dn">↓ desce</span></td><td>Reflete a troca de gordura por carboidrato.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="panel" aria-label="Musculação e cardio">
+    <h3>Musculação × cardio</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th></th><th>Musculação (séries até perto da falha)</th><th>Cardio contínuo</th><th>Intervalado (HIIT)</th></tr></thead>
+      <tbody>
+        <tr><td><b>Esforço</b></td><td>10 a 60 s muito intensos, com pausas</td><td>Minutos a horas em intensidade constante</td><td>Estímulos de 10 s a 4 min com pausas</td></tr>
+        <tr><td><b>Sistema na hora</b></td><td>ATP-CP e glicolítico</td><td>Oxidativo</td><td>Os três, conforme a duração do estímulo</td></tr>
+        <tr><td><b>No descanso</b></td><td>Oxidativo recarrega a PCr e remove o lactato</td><td>—</td><td>Oxidativo recarrega a PCr</td></tr>
+        <tr><td><b>Combustível</b></td><td>PCr e glicogênio</td><td>Gordura e carboidrato, conforme a intensidade</td><td>PCr, glicogênio e gordura nas pausas</td></tr>
+        <tr><td><b>Adaptações</b></td><td>Mais força e massa; mais PCr e enzimas glicolíticas; mais tolerância ao H⁺</td><td>Mais mitocôndrias, capilares e enzimas oxidativas; mais uso de gordura</td><td>Mistura das duas, com grande ganho de VO₂máx</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <h2 class="sec"><span>mitos</span>O que não é bem assim</h2>
+  <div class="cards">
+    <article class="card"><span class="tag">lactato</span><h4>Lactato não causa a dor do dia seguinte</h4><p>O lactato é removido do sangue em menos de uma hora após o treino. A dor tardia vem de microlesões e da inflamação nas fibras, principalmente nas ações excêntricas.</p></article>
+    <article class="card"><span class="tag">lactato</span><h4>Lactato é combustível, não lixo</h4><p>O coração, o fígado e as fibras tipo I usam o lactato como energia ou para fazer glicose de novo. A acidez que atrapalha a contração vem principalmente dos íons H⁺.</p></article>
+    <article class="card"><span class="tag">sistemas</span><h4>Nenhum sistema trabalha sozinho</h4><p>Mesmo num sprint de 10 s, o aeróbio fornece perto de 10% da energia. Em qualquer atividade os três estão ativos; o que muda é quem predomina.</p></article>
+    <article class="card"><span class="tag">zona de queima</span><h4>A "zona de queima de gordura" engana</h4><p>Em intensidade baixa, a gordura é uma fatia maior da energia, mas o gasto total é menor. Para perder gordura, conta o balanço de energia do dia, não a fonte de combustível do treino.</p></article>
+    <article class="card"><span class="tag">descanso</span><h4>Descanso curto não é melhor para hipertrofia</h4><p>Em homens treinados, descansar 3 minutos gerou mais força e mais hipertrofia do que descansar 1 minuto, porque permitiu manter mais repetições com a mesma carga.</p></article>
+    <article class="card"><span class="tag">aeróbio</span><h4>O aeróbio ajuda a musculação</h4><p>Um sistema aeróbio melhor recarrega a fosfocreatina e remove o lactato mais rápido entre as séries.</p></article>
+  </div>
+
+  <section class="panel" aria-label="Referências">
+    <h3>Referências</h3>
+    <ol class="refs">
+      <li>Gastin PB, Suppiah H. Anaerobic and aerobic energy system contribution during maximal exercise (revisão), 2026.</li>
+      <li>Gastin PB. Energy system interaction and relative contribution during maximal exercise. Sports Med, 2001.</li>
+      <li>Romijn JA et al. Regulation of endogenous fat and carbohydrate metabolism in relation to exercise intensity and duration. Am J Physiol, 1993.</li>
+      <li>Bogdanis GC et al. Recovery of power output and muscle metabolites following 30 s of maximal sprint cycling in man. J Physiol, 1995.</li>
+      <li>Achten J, Jeukendrup AE. Optimizing fat oxidation through exercise and diet. Nutrition, 2004.</li>
+      <li>Seiler S. What is best practice for training intensity and duration distribution in endurance athletes? Int J Sports Physiol Perform, 2010.</li>
+      <li>Schoenfeld BJ et al. Longer interset rest periods enhance muscle strength and hypertrophy in resistance-trained men. J Strength Cond Res, 2016.</li>
+    </ol>
+  </section>
+
+  <footer>
+    <span><b>MG COACH</b> · Matheus Garrido · @matheusgarrido</span>
+    <span>Teoria e Prática</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var css = getComputedStyle(document.documentElement);
+  function tok(n){ return css.getPropertyValue(n).trim(); }
+  var C = {bg:tok('--bg'), surface:tok('--surface'), line:tok('--line'), fg:tok('--fg'), muted:tok('--muted'), dim:tok('--dim'), accent:tok('--accent'),
+           pcr:tok('--pcr'), gly:tok('--gly'), aer:tok('--aer'), fat:tok('--fat'), cho:tok('--cho'), lac:tok('--lac'), mono:tok('--mono')};
+  var $ = function(id){ return document.getElementById(id); };
+  function fit(cv){ var r = cv.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio||1, 2.5); var w = Math.max(1, Math.round(r.width*dpr)), h = Math.max(1, Math.round(r.height*dpr)); if (cv.width !== w || cv.height !== h){ cv.width = w; cv.height = h; } return {w:w, h:h, cssW:r.width}; }
+  function prep(cv, H){ var f = fit(cv), ctx = cv.getContext('2d'), sc = f.w/600; ctx.setTransform(1,0,0,1,0,0); ctx.fillStyle = C.surface; ctx.fillRect(0,0,f.w,f.h); ctx.setTransform(sc,0,0,sc,0,0); return {ctx:ctx, narrow:f.cssW < 480, fs:f.cssW < 480 ? 17 : 12}; }
+  function fmtT(s){ if (s < 60) return Math.round(s)+' s'; var m = s/60; if (m < 10) return (Math.round(m*10)/10).toString().replace('.',',')+' min'; return Math.round(m)+' min'; }
+  function stackHTML(parts){ return parts.map(function(p){ return '<span style="flex-basis:'+(p[1]*100)+'%;background:'+p[2]+'">'+(p[1] > .1 ? p[0]+' '+Math.round(p[1]*100)+'%' : (p[1] > .05 ? Math.round(p[1]*100)+'%' : ''))+'</span>'; }).join(''); }
+
+  // ===== 1 · duração =====
+  var AER = [[5,6],[10,9],[15,14],[20,18],[30,25],[45,34],[60,42],[75,49],[90,54],[120,62],[180,72],[240,78],[600,90],[1800,96],[3600,98]];
+  function aerFrac(d){
+    if (d <= AER[0][0]) return AER[0][1]/100;
+    for (var i=1;i<AER.length;i++){ if (d <= AER[i][0]){ var a = AER[i-1], b = AER[i], t = (Math.log(d)-Math.log(a[0]))/(Math.log(b[0])-Math.log(a[0])); return (a[1] + (b[1]-a[1])*t)/100; } }
+    return .98;
+  }
+  function split(d){ var ae = aerFrac(d), an = 1 - ae, ps = .12 + .45*Math.exp(-d/25); return {pcr:an*ps, gly:an*(1-ps), aer:ae}; }
+  var LMIN = Math.log(5), LMAX = Math.log(3600);
+  function dFromS(s){ return Math.exp(LMIN + (LMAX-LMIN)*s); }
+  function sFromD(d){ return (Math.log(d)-LMIN)/(LMAX-LMIN); }
+  var EX1 = [['sprint 100 m',10],['série de musculação',35],['400 m',50],['800 m',115],['1.500 m',230],['5 km',900],['10 km',2400]];
+  $('p1').innerHTML = EX1.map(function(e,i){ return '<button type="button" class="pre" data-i="'+i+'">'+e[0]+' · '+fmtT(e[1])+'</button>'; }).join('');
+  $('p1').addEventListener('click', function(e){ var b = e.target.closest('.pre'); if (!b) return; $('dur').value = Math.round(sFromD(EX1[+b.dataset.i][1])*1000); draw1(); });
+  function draw1(){
+    var d = dFromS(+$('dur').value/1000), sp = split(d), P = prep($('g1')), ctx = P.ctx, H = 300, fs = P.fs;
+    var pad = {l:P.narrow ? 54 : 42, r:12, t:14, b:P.narrow ? 46 : 36};
+    function X(dd){ return pad.l + sFromD(dd)*(600-pad.l-pad.r); }
+    function Y(v){ return pad.t + (1-v)*(H-pad.t-pad.b); }
+    var n = 160, layers = [['pcr',C.pcr],['gly',C.gly],['aer',C.aer]];
+    var base = []; for (var i=0;i<=n;i++) base.push(0);
+    layers.forEach(function(L){
+      ctx.beginPath(); var top = [];
+      for (var i=0;i<=n;i++){ var dd = dFromS(i/n), v = split(dd)[L[0]]; top.push(base[i] + v); }
+      for (var i2=0;i2<=n;i2++) ctx.lineTo(X(dFromS(i2/n)), Y(top[i2]));
+      for (var i3=n;i3>=0;i3--) ctx.lineTo(X(dFromS(i3/n)), Y(base[i3]));
+      ctx.closePath(); ctx.fillStyle = L[1]; ctx.globalAlpha = .85; ctx.fill(); ctx.globalAlpha = 1;
+      base = top;
+    });
+    ctx.font = '500 '+fs+'px '+C.mono; ctx.textBaseline = 'middle'; ctx.textAlign = 'right'; ctx.fillStyle = C.muted;
+    [0,.5,1].forEach(function(v){ ctx.fillText(Math.round(v*100)+'%', pad.l-6, Y(v)); });
+    ctx.strokeStyle = 'rgba(10,10,10,.6)'; ctx.setLineDash([4,4]); ctx.beginPath(); ctx.moveTo(pad.l, Y(.5)); ctx.lineTo(600-pad.r, Y(.5)); ctx.stroke(); ctx.setLineDash([]);
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillStyle = C.muted;
+    [[5,'5 s'],[10,'10 s'],[30,'30 s'],[60,'1 min'],[120,'2'],[300,'5 min'],[900,'15'],[3600,'60 min']].forEach(function(t){ ctx.fillText(t[1], X(t[0]), H-pad.b+8); });
+    ctx.fillStyle = '#0a0a0a'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.font = '700 '+fs+'px '+C.mono;
+    ctx.fillText('ATP-CP', X(5.3), Y(.82)); ctx.fillText('glicolítico', X(16), Y(.45)); ctx.fillText('aeróbio', X(400), Y(.35));
+    var x = X(d); ctx.strokeStyle = C.fg; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, H-pad.b); ctx.stroke();
+    var e79 = X(79); ctx.fillStyle = C.fg; ctx.beginPath(); ctx.arc(e79, Y(.5), 4, 0, Math.PI*2); ctx.fill();
+    ctx.font = '600 '+(fs*.9)+'px '+C.mono; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom'; ctx.fillStyle = C.fg; ctx.fillText('~79 s: empate', e79 + 6, Y(.5) - 4);
+    $('dOut').textContent = fmtT(d); $('dOut2').textContent = fmtT(d);
+    $('stack1').innerHTML = stackHTML([['ATP-CP', sp.pcr, C.pcr],['glicolítico', sp.gly, C.gly],['aeróbio', sp.aer, C.aer]]);
+    var main = sp.aer >= Math.max(sp.pcr, sp.gly) ? 'aer' : (sp.pcr > sp.gly ? 'pcr' : 'gly');
+    var Z = {pcr:['ATP-CP predomina','Esforço explosivo e curtíssimo: a fosfocreatina segura a maior parte do ATP. A glicólise já está a pleno e o aeróbio contribui com uma fatia pequena.'],
+             gly:['glicolítico predomina','A fosfocreatina já caiu bastante e a glicólise carrega o esforço. O lactato e o H⁺ sobem rápido: é a ardência e a queda de força perto do fim.'],
+             aer:['aeróbio predomina', d < 300 ? 'Mesmo sendo um esforço máximo, a maior parte da energia já vem da mitocôndria. A parte anaeróbia ainda decide o ritmo e o sprint final.' : 'Em esforços longos, quase toda a energia é aeróbia. O limite passa a ser a capacidade da mitocôndria e as reservas de glicogênio.']};
+    $('z1Pill').textContent = Z[main][0]; $('z1Pill').style.background = {pcr:C.pcr, gly:C.gly, aer:C.aer}[main]; $('z1Text').textContent = Z[main][1];
+  }
+
+  // ===== 2 · cardio =====
+  var LT1 = 68, LT2 = 82;
+  function fatFrac0(I){ return .85/(1 + Math.exp((I-65)/15)); }
+  function fatFrac(I, t){ var f0 = fatFrac0(I); return Math.min(.9, f0 + (1-f0)*.3*(1-Math.exp(-t/70))*(1 - .6/(1 + Math.exp(-(I-LT2)/2.5)))); }
+  function lac0(I){ return .9 + .25*Math.exp((I-55)/11); }
+  function lacT(I, t){ var L = lac0(I); if (I > LT2) L += (I-LT2)*.04*Math.min(t, tte(I)); return Math.min(L, 16); }
+  function tte(I){ return I <= LT2 ? 999 : 60*Math.exp(-(I-LT2)/7.5); }
+  function glycogen(I, t){ var g = 100, dt = 1; for (var k=0;k<t;k+=dt){ g -= .0125*(1-fatFrac(I,k))*I*dt*(g < 30 ? .6 : 1); } return Math.max(0, g); }
+  var gmode = 'fuel';
+  document.querySelectorAll('.tabs button').forEach(function(b){ b.addEventListener('click', function(){ gmode = b.dataset.g; document.querySelectorAll('.tabs button').forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); draw2(); }); });
+  function draw2(){
+    var I = +$('int').value, t = +$('time').value, P = prep($('g2')), ctx = P.ctx, H = 300, fs = P.fs;
+    var pad = {l:P.narrow ? 58 : 46, r:12, t:16, b:P.narrow ? 46 : 36};
+    function X(i){ return pad.l + (i-20)/80*(600-pad.l-pad.r); }
+    ctx.font = '500 '+fs+'px '+C.mono;
+    // faixas dos limiares
+    [[20,LT1,'rgba(126,224,138,.06)','zona 1'],[LT1,LT2,'rgba(255,194,74,.06)','zona 2'],[LT2,100,'rgba(255,107,154,.07)','zona 3']].forEach(function(z){ ctx.fillStyle = z[2]; ctx.fillRect(X(z[0]), pad.t, X(z[1])-X(z[0]), H-pad.t-pad.b); ctx.fillStyle = C.dim; ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillText(z[3], (X(z[0])+X(z[1]))/2, pad.t + 2); });
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillStyle = C.muted;
+    [20,40,60,80,100].forEach(function(v){ ctx.fillText(v+'%', X(v), H-pad.b+8); });
+    ctx.fillStyle = C.dim; ctx.fillText('intensidade (% do VO₂máx)', 300, H-pad.b+8+fs+2);
+    if (gmode === 'fuel'){
+      function Y(v){ return pad.t + 18 + (1-v)*(H-pad.t-18-pad.b); }
+      ctx.beginPath(); for (var i=20;i<=100;i++) ctx.lineTo(X(i), Y(fatFrac(i, t))); ctx.lineTo(X(100), Y(0)); ctx.lineTo(X(20), Y(0)); ctx.closePath(); ctx.fillStyle = C.fat; ctx.globalAlpha = .75; ctx.fill();
+      ctx.beginPath(); for (var j=20;j<=100;j++) ctx.lineTo(X(j), Y(fatFrac(j, t))); ctx.lineTo(X(100), Y(1)); ctx.lineTo(X(20), Y(1)); ctx.closePath(); ctx.fillStyle = C.cho; ctx.fill(); ctx.globalAlpha = 1;
+      // gordura absoluta
+      var mx = 0, im = 20; for (var k=20;k<=100;k++){ var a = fatFrac(k,t)*k; if (a > mx){ mx = a; im = k; } }
+      ctx.beginPath(); for (var k2=20;k2<=100;k2++) ctx.lineTo(X(k2), Y(fatFrac(k2,t)*k2/mx*.9)); ctx.strokeStyle = C.fg; ctx.lineWidth = 2.5; ctx.setLineDash([6,5]); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = C.fg; ctx.beginPath(); ctx.arc(X(im), Y(.9), 5, 0, Math.PI*2); ctx.fill();
+      ctx.font = '700 '+fs+'px '+C.mono; ctx.textBaseline = 'bottom'; ctx.textAlign = 'center'; ctx.fillStyle = C.fg; ctx.fillText('FatMax ~'+im+'%', X(im), Y(.9) - 8);
+      ctx.fillStyle = '#0a0a0a'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillText('gordura', X(23), Y(.2)); ctx.textAlign = 'right'; ctx.fillText('carboidrato', X(98), Y(.85));
+      ctx.font = '500 '+fs+'px '+C.mono; ctx.textAlign = 'right'; ctx.fillStyle = C.muted; [0,.5,1].forEach(function(v){ ctx.fillText(Math.round(v*100)+'%', pad.l-6, Y(v)); });
+      ctx.textAlign = 'left'; ctx.fillStyle = C.fg; ctx.fillText('- - - gordura em gramas por minuto', pad.l+6, H-pad.b-12);
+      var xi = X(I); ctx.strokeStyle = C.fg; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(xi, pad.t+18); ctx.lineTo(xi, H-pad.b); ctx.stroke();
+    } else {
+      function Y2(v){ return pad.t + 18 + (1 - v/12)*(H-pad.t-18-pad.b); }
+      ctx.textAlign = 'right'; ctx.textBaseline = 'middle'; ctx.fillStyle = C.muted; [0,2,4,8,12].forEach(function(v){ ctx.strokeStyle = C.line; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(pad.l, Y2(v)); ctx.lineTo(600-pad.r, Y2(v)); ctx.stroke(); ctx.fillText(v, pad.l-6, Y2(v)); });
+      ctx.beginPath(); for (var i2=20;i2<=100;i2++) ctx.lineTo(X(i2), Y2(Math.min(12, lac0(i2)))); ctx.strokeStyle = C.lac; ctx.lineWidth = 4; ctx.stroke();
+      [[LT1,'1º limiar (LT1)'],[LT2,'2º limiar (LT2)']].forEach(function(L, n){ var x = X(L[0]); ctx.strokeStyle = C.fg; ctx.lineWidth = 1.2; ctx.setLineDash([4,4]); ctx.beginPath(); ctx.moveTo(x, pad.t+18); ctx.lineTo(x, H-pad.b); ctx.stroke(); ctx.setLineDash([]); ctx.fillStyle = C.fg; ctx.textAlign = n ? 'left' : 'right'; ctx.textBaseline = 'top'; ctx.font = '600 '+(fs*.9)+'px '+C.mono; ctx.fillText(L[1], x + (n ? 5 : -5), Y2(11.5)); });
+      ctx.fillStyle = C.lac; ctx.beginPath(); ctx.arc(X(I), Y2(Math.min(12, lac0(I))), 6, 0, Math.PI*2); ctx.fill();
+      ctx.font = '500 '+fs+'px '+C.mono; ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillStyle = C.dim; ctx.fillText('mmol/L', 4, 2);
+    }
+    var ff = fatFrac(I, t), L = lacT(I, t), hr = Math.min(100, 35 + .65*I + (I < LT2 ? .06*t : .12*Math.min(t, tte(I)))), g = glycogen(I, t), rer = .71 + .29*(1-ff);
+    var stable = I <= LT2;
+    $('iOut').textContent = I+'% do VO₂máx'; $('tOut').textContent = t < 60 ? t+' min' : (Math.floor(t/60)+' h'+(t%60 ? ' '+(t%60)+' min' : ''));
+    $('kFat').innerHTML = Math.round(ff*100)+'<small>%</small>'; $('kCho').innerHTML = Math.round((1-ff)*100)+'<small>%</small>';
+    $('kLac').innerHTML = L.toFixed(1).replace('.',',')+'<small>mmol/L</small>'; $('kLacT').textContent = stable ? 'estável' : 'subindo sem parar';
+    $('kHr').innerHTML = Math.round(hr)+'<small>%</small>'; $('kGly').innerHTML = Math.round(g)+'<small>%</small>'; $('kRer').textContent = rer.toFixed(2).replace('.',',');
+    var zp, zt, zc;
+    if (I < LT1){ zp = 'zona 1 · leve'; zc = C.fat; zt = 'Abaixo do 1º limiar: dá para conversar. O lactato fica perto do repouso e a gordura é uma parte grande da energia. Dá para sustentar por horas.'; }
+    else if (I <= LT2){ zp = 'zona 2 · moderado'; zc = C.pcr; zt = 'Entre os limiares: a respiração aumenta e a fala fica curta. O lactato sobe, mas se estabiliza. Dá para sustentar por cerca de 1 hora ou mais, conforme o treino.'; }
+    else { zp = 'zona 3 · intenso'; zc = C.lac; var T = tte(I); zt = 'Acima do 2º limiar: o lactato não estabiliza e o carboidrato domina. Dá para sustentar só cerca de '+(T < 60 ? Math.round(T)+' min' : '1 h')+' antes da exaustão.'; }
+    if (t > tte(I)) zt += ' Neste tempo, a pessoa já teria parado ou baixado o ritmo.';
+    if (g < 20) zt += ' Glicogênio muito baixo: é o famoso "bater na parede".';
+    $('z2Pill').textContent = zp; $('z2Pill').style.background = zc; $('z2Text').textContent = zt;
+    var up = ['Frequência cardíaca (deriva)', 'Uso de gordura (% da energia)'], dn = ['Glicogênio muscular', 'Uso de carboidrato (% da energia)'];
+    if (!stable){ up = ['Lactato e H⁺ (sem estabilizar)', 'Frequência cardíaca e VO₂', 'Ventilação']; dn = ['Glicogênio muscular, rápido', 'Fosfocreatina', 'pH do músculo']; }
+    if (I < 40){ up = ['Uso de gordura (% da energia)', 'Frequência cardíaca (pouco)']; dn = ['Glicogênio, devagar']; }
+    $('upList').innerHTML = up.map(function(x){ return '<li>'+x+'</li>'; }).join(''); $('dnList').innerHTML = dn.map(function(x){ return '<li>'+x+'</li>'; }).join('');
+  }
+
+  // ===== 3 · musculação =====
+  function draw3(){
+    var reps = +$('reps').value, rest = +$('rest').value, dur = reps*3, sp = split(dur), P = prep($('g3')), ctx = P.ctx, H = 300, fs = P.fs;
+    var pad = {l:P.narrow ? 58 : 46, r:12, t:22, b:P.narrow ? 46 : 36};
+    var floor = .25 + .1*Math.exp(-dur/40), tau = 12, rtau = 55;
+    function during(p0, t){ return floor + (p0 - floor)*Math.exp(-t/tau); }
+    function recov(p, t){ return 1 - (1 - p)*Math.exp(-t/rtau); }
+    var series = [], p = 1, T = 0, ends = [], starts = [];
+    for (var s=0;s<3;s++){
+      starts.push(p);
+      for (var k=0;k<=dur;k+=1){ series.push([T+k, during(p, k), 1]); }
+      p = during(p, dur); T += dur; ends.push(p);
+      if (s < 2){ var p0 = p; for (var k2=0;k2<=rest;k2+=2){ series.push([T+k2, recov(p0, k2), 0]); } p = recov(p0, rest); T += rest; }
+    }
+    function X(t){ return pad.l + t/T*(600-pad.l-pad.r); }
+    function Y(v){ return pad.t + (1-v)*(H-pad.t-pad.b); }
+    ctx.font = '500 '+fs+'px '+C.mono; ctx.textBaseline = 'middle'; ctx.textAlign = 'right';
+    [0,.5,1].forEach(function(v){ ctx.strokeStyle = v === 0 ? C.muted : C.line; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(pad.l, Y(v)); ctx.lineTo(600-pad.r, Y(v)); ctx.stroke(); ctx.fillStyle = C.muted; ctx.fillText(Math.round(v*100)+'%', pad.l-6, Y(v)); });
+    var Tc = 0;
+    for (var s2=0;s2<3;s2++){ ctx.fillStyle = 'rgba(255,107,26,.12)'; ctx.fillRect(X(Tc), pad.t, X(Tc+dur)-X(Tc), H-pad.t-pad.b); ctx.fillStyle = C.accent; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'; ctx.font = '600 '+(fs*.9)+'px '+C.mono; ctx.fillText('série '+(s2+1), X(Tc+dur/2), pad.t - 4); Tc += dur + rest; }
+    ctx.beginPath(); series.forEach(function(q,i){ var x = X(q[0]), y = Y(q[1]); if (i) ctx.lineTo(x,y); else ctx.moveTo(x,y); }); ctx.strokeStyle = C.pcr; ctx.lineWidth = 3.5; ctx.lineJoin = 'round'; ctx.stroke();
+    ctx.font = '500 '+fs+'px '+C.mono; ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillStyle = C.dim; ctx.fillText('fosfocreatina do músculo (% do repouso)', pad.l, H-pad.b+8);
+    ctx.textAlign = 'right'; ctx.fillText(fmtT(T)+' no total', 600-pad.r, H-pad.b+8);
+    $('rOut').textContent = reps+' reps · '+dur+' s'; $('restOut').textContent = fmtT(rest);
+    $('stack3').innerHTML = stackHTML([['ATP-CP', sp.pcr, C.pcr],['glicolítico', sp.gly, C.gly],['aeróbio', sp.aer, C.aer]]);
+    $('kP1').innerHTML = Math.round(ends[0]*100)+'<small>%</small>'; $('kP2').innerHTML = Math.round(starts[1]*100)+'<small>%</small>';
+    var zp, zt;
+    if (starts[1] > .93){ zp = 'recarga quase completa'; zt = 'A fosfocreatina volta quase toda: a próxima série começa com o mesmo "combustível rápido". Bom para força e para manter repetições com a mesma carga.'; }
+    else if (starts[1] > .75){ zp = 'recarga parcial'; zt = 'A maior parte da fosfocreatina voltou. A próxima série rende um pouco menos, principalmente nas primeiras repetições.'; }
+    else { zp = 'recarga curta'; zt = 'Pouca fosfocreatina recuperada: a próxima série depende mais da glicólise, o lactato e o H⁺ se acumulam, e as repetições caem com a mesma carga.'; }
+    if (reps <= 5) zt += ' Séries curtas e pesadas usam mais ATP-CP: descansos de 3 a 5 min ajudam a manter a carga.';
+    $('z3Pill').textContent = zp; $('z3Text').textContent = zt;
+  }
+
+  ['dur'].forEach(function(id){ $(id).addEventListener('input', draw1); });
+  ['int','time'].forEach(function(id){ $(id).addEventListener('input', draw2); });
+  ['reps','rest'].forEach(function(id){ $(id).addEventListener('input', draw3); });
+  function all(){ draw1(); draw2(); draw3(); }
+  if (window.ResizeObserver){ var ro = new ResizeObserver(all); ['g1','g2','g3'].forEach(function(id){ ro.observe($(id)); }); } else window.addEventListener('resize', all);
+  all();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(all);
+})();
+</script>
+</body>
+</html>
