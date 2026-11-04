@@ -169,7 +169,7 @@ footer b{color:var(--accent);font-weight:600}
   <h2 class="sec"><span>explorador 1 · tempo</span>Esforço máximo: quanto tempo dura?</h2>
   <section class="panel" aria-label="Contribuição por duração">
     <div class="ex">
-      <div class="graph-box"><canvas id="g1" role="img" aria-label="Contribuição de cada sistema pela duração do esforço máximo"></canvas></div>
+      <div style="display:flex;flex-direction:column;gap:6px;min-width:0"><div class="graph-box"><canvas id="g1" role="img" aria-label="Contribuição de cada sistema pela duração do esforço máximo"></canvas></div><p class="note" style="font-size:12.5px">↔ Toque ou arraste dentro do gráfico para mudar a duração.</p></div>
       <div style="display:flex;flex-direction:column;gap:12px">
         <div class="big"><small>duração do esforço máximo</small><b id="dOut">30 s</b></div>
         <div class="sl">
@@ -192,6 +192,7 @@ footer b{color:var(--accent);font-weight:600}
         <div class="panel-head"><span class="note" style="font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase">ver no gráfico</span>
           <div class="tabs" role="group" aria-label="Gráfico"><button type="button" data-g="fuel" aria-pressed="true">Combustível</button><button type="button" data-g="lac" aria-pressed="false">Lactato</button></div></div>
         <div class="graph-box"><canvas id="g2" role="img" aria-label="Gordura e carboidrato, ou lactato, pela intensidade"></canvas></div>
+        <p class="note" style="font-size:12.5px">↔ Toque ou arraste dentro do gráfico para mudar a intensidade.</p>
       </div>
       <div style="display:flex;flex-direction:column;gap:12px">
         <div class="sl">
@@ -302,7 +303,7 @@ footer b{color:var(--accent);font-weight:600}
 
   <footer>
     <span><b>MG COACH</b> · Matheus Garrido · @matheusgarrido</span>
-    <span>Teoria e Prática</span>
+    <span>Teoria e Prática · versão 04/11 07:00</span>
   </footer>
 </div>
 
@@ -315,6 +316,7 @@ footer b{color:var(--accent);font-weight:600}
   var $ = function(id){ return document.getElementById(id); };
   function fit(cv){ var r = cv.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio||1, 2.5); var w = Math.max(1, Math.round(r.width*dpr)), h = Math.max(1, Math.round(r.height*dpr)); if (cv.width !== w || cv.height !== h){ cv.width = w; cv.height = h; } return {w:w, h:h, cssW:r.width}; }
   function prep(cv, H){ var f = fit(cv), ctx = cv.getContext('2d'), sc = f.w/600; ctx.setTransform(1,0,0,1,0,0); ctx.fillStyle = C.surface; ctx.fillRect(0,0,f.w,f.h); ctx.setTransform(sc,0,0,sc,0,0); return {ctx:ctx, narrow:f.cssW < 480, fs:f.cssW < 480 ? 17 : 12}; }
+  function handle(ctx, x, y, fs){ ctx.fillStyle = C.fg; ctx.beginPath(); ctx.arc(x, y, 13, 0, Math.PI*2); ctx.fill(); ctx.fillStyle = '#0a0a0a'; ctx.font = '700 '+(fs*1.05)+'px '+C.mono; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('↔', x, y + 1); }
   function fmtT(s){ if (s < 60) return Math.round(s)+' s'; var m = s/60; if (m < 10) return (Math.round(m*10)/10).toString().replace('.',',')+' min'; return Math.round(m)+' min'; }
   function stackHTML(parts){ return parts.map(function(p){ return '<span style="flex-basis:'+(p[1]*100)+'%;background:'+p[2]+'">'+(p[1] > .1 ? p[0]+' '+Math.round(p[1]*100)+'%' : (p[1] > .05 ? Math.round(p[1]*100)+'%' : ''))+'</span>'; }).join(''); }
 
@@ -351,10 +353,10 @@ footer b{color:var(--accent);font-weight:600}
     [0,.5,1].forEach(function(v){ ctx.fillText(Math.round(v*100)+'%', pad.l-6, Y(v)); });
     ctx.strokeStyle = 'rgba(10,10,10,.6)'; ctx.setLineDash([4,4]); ctx.beginPath(); ctx.moveTo(pad.l, Y(.5)); ctx.lineTo(600-pad.r, Y(.5)); ctx.stroke(); ctx.setLineDash([]);
     ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillStyle = C.muted;
-    [[5,'5 s'],[10,'10 s'],[30,'30 s'],[60,'1 min'],[120,'2'],[300,'5 min'],[900,'15'],[3600,'60 min']].forEach(function(t){ ctx.fillText(t[1], X(t[0]), H-pad.b+8); });
+    [[5,'5 s'],[10,'10 s'],[30,'30 s'],[60,'1 min'],[120,'2'],[300,'5 min'],[900,'15'],[3600,'60 min']].forEach(function(t, n, a){ ctx.textAlign = n === 0 ? 'left' : (n === a.length-1 ? 'right' : 'center'); ctx.fillText(t[1], X(t[0]), H-pad.b+8); });
     ctx.fillStyle = '#0a0a0a'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.font = '700 '+fs+'px '+C.mono;
     ctx.fillText('ATP-CP', X(5.3), Y(.82)); ctx.fillText('glicolítico', X(16), Y(.45)); ctx.fillText('aeróbio', X(400), Y(.35));
-    var x = X(d); ctx.strokeStyle = C.fg; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, H-pad.b); ctx.stroke();
+    var x = X(d); ctx.strokeStyle = C.fg; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, H-pad.b); ctx.stroke(); handle(ctx, x, H-pad.b-22, fs);
     var e79 = X(79); ctx.fillStyle = C.fg; ctx.beginPath(); ctx.arc(e79, Y(.5), 4, 0, Math.PI*2); ctx.fill();
     ctx.font = '600 '+(fs*.9)+'px '+C.mono; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom'; ctx.fillStyle = C.fg; ctx.fillText('~79 s: empate', e79 + 6, Y(.5) - 4);
     $('dOut').textContent = fmtT(d); $('dOut2').textContent = fmtT(d);
@@ -398,13 +400,13 @@ footer b{color:var(--accent);font-weight:600}
       ctx.fillStyle = '#0a0a0a'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillText('gordura', X(23), Y(.2)); ctx.textAlign = 'right'; ctx.fillText('carboidrato', X(98), Y(.85));
       ctx.font = '500 '+fs+'px '+C.mono; ctx.textAlign = 'right'; ctx.fillStyle = C.muted; [0,.5,1].forEach(function(v){ ctx.fillText(Math.round(v*100)+'%', pad.l-6, Y(v)); });
       ctx.textAlign = 'left'; ctx.fillStyle = C.fg; ctx.fillText('- - - gordura em gramas por minuto', pad.l+6, H-pad.b-12);
-      var xi = X(I); ctx.strokeStyle = C.fg; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(xi, pad.t+18); ctx.lineTo(xi, H-pad.b); ctx.stroke();
+      var xi = X(I); ctx.strokeStyle = C.fg; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(xi, pad.t+18); ctx.lineTo(xi, H-pad.b); ctx.stroke(); handle(ctx, xi, H-pad.b-22, fs);
     } else {
       function Y2(v){ return pad.t + 18 + (1 - v/12)*(H-pad.t-18-pad.b); }
       ctx.textAlign = 'right'; ctx.textBaseline = 'middle'; ctx.fillStyle = C.muted; [0,2,4,8,12].forEach(function(v){ ctx.strokeStyle = C.line; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(pad.l, Y2(v)); ctx.lineTo(600-pad.r, Y2(v)); ctx.stroke(); ctx.fillText(v, pad.l-6, Y2(v)); });
       ctx.beginPath(); for (var i2=20;i2<=100;i2++) ctx.lineTo(X(i2), Y2(Math.min(12, lac0(i2)))); ctx.strokeStyle = C.lac; ctx.lineWidth = 4; ctx.stroke();
       [[LT1,'1º limiar (LT1)'],[LT2,'2º limiar (LT2)']].forEach(function(L, n){ var x = X(L[0]); ctx.strokeStyle = C.fg; ctx.lineWidth = 1.2; ctx.setLineDash([4,4]); ctx.beginPath(); ctx.moveTo(x, pad.t+18); ctx.lineTo(x, H-pad.b); ctx.stroke(); ctx.setLineDash([]); ctx.fillStyle = C.fg; ctx.textAlign = n ? 'left' : 'right'; ctx.textBaseline = 'top'; ctx.font = '600 '+(fs*.9)+'px '+C.mono; ctx.fillText(L[1], x + (n ? 5 : -5), Y2(11.5)); });
-      ctx.fillStyle = C.lac; ctx.beginPath(); ctx.arc(X(I), Y2(Math.min(12, lac0(I))), 6, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = C.lac; ctx.beginPath(); ctx.arc(X(I), Y2(Math.min(12, lac0(I))), 6, 0, Math.PI*2); ctx.fill(); ctx.strokeStyle = C.fg; ctx.lineWidth = 2; ctx.setLineDash([3,4]); ctx.beginPath(); ctx.moveTo(X(I), pad.t+18); ctx.lineTo(X(I), H-pad.b); ctx.stroke(); ctx.setLineDash([]); handle(ctx, X(I), H-pad.b-22, fs);
       ctx.font = '500 '+fs+'px '+C.mono; ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillStyle = C.dim; ctx.fillText('mmol/L', 4, 2);
     }
     var ff = fatFrac(I, t), L = lacT(I, t), hr = Math.min(100, 35 + .65*I + (I < LT2 ? .06*t : .12*Math.min(t, tte(I)))), g = glycogen(I, t), rer = .71 + .29*(1-ff);
@@ -464,6 +466,18 @@ footer b{color:var(--accent);font-weight:600}
   ['int','time'].forEach(function(id){ $(id).addEventListener('input', draw2); });
   ['reps','rest'].forEach(function(id){ $(id).addEventListener('input', draw3); });
   function all(){ draw1(); draw2(); draw3(); }
+  // arrastar ou tocar no gráfico muda o valor
+  function chartDrag(cv, padL, padR, input, toVal){
+    cv.style.touchAction = 'pan-y'; cv.style.cursor = 'ew-resize';
+    var down = false, sx = 0, sy = 0, decided = false, horiz = false;
+    function apply(clientX){ var r = cv.getBoundingClientRect(), narrow = r.width < 480, x = (clientX - r.left)/r.width*600; var fr = Math.max(0, Math.min(1, (x - padL(narrow))/(600 - padL(narrow) - padR))); input.value = toVal(fr); input.dispatchEvent(new Event('input', {bubbles:true})); }
+    cv.addEventListener('pointerdown', function(e){ down = true; decided = e.pointerType === 'mouse'; horiz = decided; sx = e.clientX; sy = e.clientY; if (decided){ apply(e.clientX); try{ cv.setPointerCapture(e.pointerId); }catch(_){} } });
+    cv.addEventListener('pointermove', function(e){ if (!down) return; if (!decided){ var dx = Math.abs(e.clientX-sx), dy = Math.abs(e.clientY-sy); if (dx + dy < 5) return; decided = true; horiz = dx >= dy; if (horiz){ try{ cv.setPointerCapture(e.pointerId); }catch(_){} } } if (horiz) apply(e.clientX); });
+    function end(e){ if (down && !decided && e.type === 'pointerup') apply(sx); down = false; }
+    cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', function(){ down = false; });
+  }
+  chartDrag($('g1'), function(n){ return n ? 54 : 42; }, 12, $('dur'), function(fr){ return Math.round(fr*1000); });
+  chartDrag($('g2'), function(n){ return n ? 58 : 46; }, 12, $('int'), function(fr){ return Math.round(20 + fr*80); });
   if (window.ResizeObserver){ var ro = new ResizeObserver(all); ['g1','g2','g3'].forEach(function(id){ ro.observe($(id)); }); } else window.addEventListener('resize', all);
   all();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(all);

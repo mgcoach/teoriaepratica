@@ -171,6 +171,7 @@ iframe{flex:1;width:100%;border:0;background:var(--bg);display:block}
    - id: nome curto, sem espaço nem acento (vira o link: .../#id)
    - arquivo: nome exato do arquivo .html
    ================================================================ */
+var VERSAO = '20261104-0700'; // mude a cada publicação para o celular não usar páginas antigas guardadas
 var ASSUNTOS = [
   { grupo: 'Fisiologia', id: 'sistemas-energeticos', titulo: 'Sistemas energéticos: aeróbio × anaeróbio', resumo: 'Tempo, intensidade, musculação e cardio: o que sobe e o que desce.', arquivo: 'sistemas-energeticos.html' },
   { grupo: 'Fisiologia', id: 'contracao', titulo: 'Contração muscular: do impulso ao relaxamento', resumo: 'As 12 etapas, do potencial de ação ao relaxamento, animadas.', arquivo: 'contracao-muscular.html' },
@@ -237,10 +238,10 @@ var ASSUNTOS = [
     }
     $('home').hidden = true; $('viewer').hidden = false;
     var frame = $('frame');
-    if (frame.getAttribute('src') !== a.arquivo) frame.setAttribute('src', a.arquivo);
+    var src = a.arquivo + '?v=' + VERSAO; if (frame.getAttribute('src') !== src) frame.setAttribute('src', src);
     frame.title = a.titulo;
     $('crumb').innerHTML = esc(a.grupo)+' / <b>'+esc(a.titulo)+'</b>';
-    $('ext').href = a.arquivo;
+    $('ext').href = src;
     document.title = a.titulo + ' · Teoria e Prática';
   }
   window.addEventListener('hashchange', route);
