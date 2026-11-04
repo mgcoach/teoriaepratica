@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script>(function(){var e=true;try{e=window.self!==window.top}catch(x){}if(e)document.documentElement.classList.add("embed")})();</script>
+<title>Contração Muscular</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Contração muscular passo a passo, do potencial de ação no neurônio motor ao relaxamento, com animações e a ligação com o treino.">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: linha do tempo com 12 etapas reais (numeração = sequência); palco animado que troca de cena (neurônio, junção, túbulo T, filamentos, sarcômero) + texto da etapa; depois somação/tétano interativo, tipos de fibra e ligação com o treino. Visual escuro deliberado (identidade MG COACH). */
+:root{
+  --bg:#0a0a0a;
+  --surface:#13110f;
+  --surface-2:#1b1815;
+  --line:#2c2622;
+  --fg:#f5efe8;
+  --muted:#9d9188;
+  --dim:#5f5650;
+  --accent:#ff6b1a;
+  --na:#5cc6ff;
+  --k:#a59bff;
+  --ca:#7ee08a;
+  --ach:#ffc24a;
+  --atp:#ff6b9a;
+  --actin:#d9cfc4;
+  --myo:#ff6b1a;
+  --display:"Big Shoulders Display", Impact, "Arial Narrow", sans-serif;
+  --text:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--fg)}
+html{-webkit-text-size-adjust:100%;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font-family:var(--text);font-size:15px;line-height:1.5}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1100px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));display:flex;flex-direction:column;gap:22px}
+.back{font-family:var(--mono);font-size:12px;color:var(--muted);text-decoration:none;align-self:flex-start;border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+.back:hover{color:var(--fg);border-color:var(--muted)}
+.embed .back{display:none}
+header{display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.eyebrow b{color:var(--accent);font-weight:600}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(44px,9vw,86px);line-height:.9;text-transform:uppercase;margin:0;text-wrap:balance}
+h1 em{font-style:normal;color:var(--accent)}
+.lede{margin:0;max-width:66ch;color:var(--muted);font-size:16px}
+.lede strong{color:var(--fg);font-weight:600}
+h2.sec{margin:8px 0 0;font-family:var(--display);font-weight:900;font-size:clamp(30px,5vw,44px);line-height:.95;text-transform:uppercase}
+h2.sec span{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--accent);display:block;letter-spacing:.08em;margin-bottom:6px}
+.note{margin:0;color:var(--muted);font-size:14px;max-width:70ch}
+
+/* linha do tempo */
+.timeline{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px}
+.tl{appearance:none;border:0;background:var(--surface);border-top:4px solid var(--line);padding:8px 4px 6px;cursor:pointer;color:var(--muted);font:600 12px/1 var(--mono);display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;border-radius:0 0 8px 8px}
+.tl small{font:500 9.5px/1.15 var(--mono);color:var(--dim);text-align:center;letter-spacing:.02em;text-transform:uppercase}
+.tl.done{border-top-color:#6b3a1c;color:var(--fg)}
+.tl[aria-current="step"]{border-top-color:var(--accent);color:var(--accent);background:var(--surface-2)}
+.tl[aria-current="step"] small{color:var(--fg)}
+.phases{display:grid;grid-template-columns:4fr 1fr 2fr 4fr 1fr;gap:4px;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.phases span{border-bottom:1px solid var(--line);padding-bottom:4px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.studio{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px;align-items:start}
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.stage-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.stage-head span{font-family:var(--mono);font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+svg.scene{display:block;width:100%;height:auto;max-width:100%;background:var(--surface)}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 14px;border-top:1px solid var(--line);flex-wrap:wrap}
+.btn{font:600 13px/1 var(--text);color:var(--fg);background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:10px 16px;cursor:pointer}
+.btn:hover{border-color:var(--muted)}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.btn:disabled{opacity:.4;cursor:default}
+.auto{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.auto input{accent-color:var(--accent);width:16px;height:16px;margin:0}
+.info{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.info .num{font-family:var(--display);font-weight:900;font-size:64px;line-height:.8;color:var(--accent)}
+.info .where{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.info h3{margin:0;font-family:var(--display);font-weight:700;font-size:30px;line-height:1;text-transform:uppercase;text-wrap:balance}
+.info p{margin:0;font-size:15.5px;line-height:1.55}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:11.5px;font-weight:600;border-radius:999px;padding:4px 10px;border:1px solid currentColor}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;color:var(--muted);padding-top:4px;border-top:1px solid var(--line)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.key{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:13.5px;color:var(--muted)}
+.key b{color:var(--fg)}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.panel h3{margin:0;font-family:var(--display);font-weight:700;font-size:24px;text-transform:uppercase;letter-spacing:.02em}
+.twitch{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:14px;align-items:start}
+.graph-box{position:relative;width:100%;aspect-ratio:600/260;max-width:100%}
+.graph-box canvas{position:absolute;inset:0;width:100%;height:100%}
+.sl{display:flex;flex-direction:column;gap:6px}
+.sl label{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted)}
+.sl output{font-family:var(--mono);color:var(--fg)}
+.sl .ends{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--dim)}
+input[type=range]{width:100%;margin:0;accent-color:var(--accent)}
+.state-pill{align-self:flex-start;font-family:var(--mono);font-size:12px;font-weight:600;border-radius:999px;padding:5px 11px;background:var(--accent);color:var(--bg)}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:680px;font-size:14px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+tr:last-child td{border-bottom:0}
+td b{font-family:var(--display);font-size:20px;text-transform:uppercase}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.card{border:1px solid var(--line);border-radius:14px;padding:16px;background:var(--surface);display:flex;flex-direction:column;gap:6px;min-width:0}
+.card h4{margin:0;font-size:16.5px;font-weight:700;line-height:1.25}
+.card p{margin:0;color:var(--muted);font-size:14px}
+.card .tag{align-self:flex-start;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;border-radius:999px;padding:3px 9px;border:1px solid currentColor;color:var(--accent)}
+.refs{margin:0;padding-left:18px;color:var(--muted);font-size:13px;display:flex;flex-direction:column;gap:4px}
+footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+footer b{color:var(--accent);font-weight:600}
+
+@media (max-width:900px){
+  .studio,.twitch{grid-template-columns:minmax(0,1fr)}
+  .cards{grid-template-columns:minmax(0,1fr)}
+  .timeline{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .phases{display:none}
+}
+@media (max-width:420px){ .tl small{display:none} .info h3{font-size:26px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./" target="_top">← Teoria e Prática</a>
+
+  <header>
+    <div class="eyebrow"><b>MG COACH</b> · Fisiologia do exercício</div>
+    <h1>Contração muscular: <em>do impulso ao relaxamento</em></h1>
+    <p class="lede">Entre decidir mover e o músculo encurtar acontecem doze etapas em poucos milissegundos. Um <strong>sinal elétrico</strong> vira um <strong>sinal químico</strong>, depois uma <strong>liberação de cálcio</strong> e, no fim, um <strong>movimento mecânico</strong> movido a ATP. Avance pelas etapas e veja cada uma animada.</p>
+  </header>
+
+  <noscript><p class="note">Esta página precisa de JavaScript ativado para funcionar.</p></noscript>
+
+  <div>
+    <div class="phases" aria-hidden="true"><span>sinal elétrico e químico</span><span>na fibra</span><span>cálcio</span><span>pontes cruzadas</span><span>fim</span></div>
+    <nav class="timeline" id="timeline" aria-label="Etapas da contração"></nav>
+  </div>
+
+  <div class="studio">
+    <section class="stage" aria-label="Animação da etapa">
+      <div class="stage-head"><span id="sceneName">neurônio motor</span><span id="stepCount">1 / 12</span></div>
+      <svg class="scene" id="scene" viewBox="0 0 600 380" role="img" aria-label="Animação da etapa"></svg>
+      <div class="nav">
+        <button type="button" class="btn" id="prev">← Anterior</button>
+        <label class="auto"><input type="checkbox" id="auto"> avançar sozinho</label>
+        <button type="button" class="btn pri" id="next">Próxima →</button>
+      </div>
+    </section>
+    <section class="info" aria-live="polite">
+      <div class="num" id="iNum">01</div>
+      <span class="where" id="iWhere">onde: medula espinhal e axônio</span>
+      <h3 id="iTitle">—</h3>
+      <p id="iText"></p>
+      <div class="chips" id="iChips"></div>
+      <div class="key" id="iKey"></div>
+      <div class="legend"><span><i style="background:var(--na)"></i>Na⁺</span><span><i style="background:var(--k)"></i>K⁺</span><span><i style="background:var(--ca)"></i>Ca²⁺</span><span><i style="background:var(--ach)"></i>acetilcolina</span><span><i style="background:var(--atp)"></i>ATP</span></div>
+    </section>
+  </div>
+
+  <h2 class="sec"><span>da fibra ao movimento</span>Como a força aumenta</h2>
+  <section class="panel" aria-label="Somação e tétano">
+    <div class="twitch">
+      <div>
+        <div class="graph-box"><canvas id="tw" role="img" aria-label="Força de uma unidade motora conforme a frequência de disparo"></canvas></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <span class="state-pill" id="twState">abalo isolado</span>
+        <div class="sl">
+          <label for="hz">Frequência de disparo do neurônio <output id="hzOut">5 Hz</output></label>
+          <input type="range" id="hz" min="2" max="60" step="1" value="5">
+          <div class="ends"><span>2 Hz</span><span>60 Hz</span></div>
+        </div>
+        <p class="note" id="twText"></p>
+        <p class="note">O sistema nervoso aumenta a força de dois jeitos: <b style="color:var(--fg)">recrutando mais unidades motoras</b>, das pequenas para as grandes, e <b style="color:var(--fg)">aumentando a frequência de disparo</b> de cada uma.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" aria-label="Tipos de fibra">
+    <h3>Tipos de fibra</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Tipo</th><th>Velocidade</th><th>Metabolismo</th><th>Fadiga</th><th>Recrutamento</th><th>Onde aparece mais</th></tr></thead>
+      <tbody>
+        <tr><td><b>Tipo I</b><br><small style="color:var(--muted)">lenta, vermelha</small></td><td>Lenta</td><td>Oxidativo: muitas mitocôndrias, capilares e mioglobina</td><td>Muito resistente</td><td>Primeiro, em qualquer esforço</td><td>Postura, caminhada, cardio longo</td></tr>
+        <tr><td><b>Tipo IIa</b><br><small style="color:var(--muted)">rápida, intermediária</small></td><td>Rápida</td><td>Oxidativo e glicolítico</td><td>Intermediária</td><td>Com esforço moderado a alto</td><td>Séries de musculação, corridas de média distância</td></tr>
+        <tr><td><b>Tipo IIx</b><br><small style="color:var(--muted)">rápida, branca</small></td><td>Muito rápida</td><td>Glicolítico, depende de fosfocreatina e glicogênio</td><td>Rápida</td><td>Só em esforços muito altos ou perto da falha</td><td>Sprints, saltos, cargas máximas</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">A ordem de recrutamento segue o princípio do tamanho (Henneman): unidades pequenas, de fibras tipo I, entram primeiro; as grandes, de tipo II, entram conforme a força ou a fadiga aumentam. Por isso uma série com carga leve levada perto da falha também acaba recrutando as fibras rápidas.</p>
+  </section>
+
+  <h2 class="sec"><span>na prática</span>O que isso muda no treino</h2>
+  <div class="cards">
+    <article class="card"><span class="tag">ATP</span><h4>ATP para contrair e para relaxar</h4><p>A miosina precisa de ATP para soltar a actina e a bomba SERCA precisa de ATP para devolver o cálcio. Por isso, na fadiga, o músculo também demora mais para relaxar. Veja como o ATP é reposto na página de sistemas energéticos.</p></article>
+    <article class="card"><span class="tag">fadiga</span><h4>Menos cálcio, mais fosfato</h4><p>Em esforços intensos, o fosfato (Pi) e os íons H⁺ se acumulam. Eles atrapalham o golpe de força e a liberação e a ação do cálcio na troponina, e a força cai mesmo com o comando nervoso igual.</p></article>
+    <article class="card"><span class="tag">intenção</span><h4>Empurrar rápido recruta mais</h4><p>A intenção de mover a carga o mais rápido possível aumenta a frequência de disparo e o recrutamento das unidades grandes, mesmo quando a carga é pesada e a barra se move devagar.</p></article>
+    <article class="card"><span class="tag">falha</span><h4>Perto da falha, todas as fibras trabalham</h4><p>Conforme as unidades pequenas fadigam, o sistema nervoso recruta as grandes para manter a força. Isso ajuda a explicar por que cargas leves e pesadas, levadas perto da falha, geram hipertrofia parecida.</p></article>
+    <article class="card"><span class="tag">creatina</span><h4>Mais fosfocreatina, mais ATP rápido</h4><p>A suplementação de creatina aumenta a fosfocreatina do músculo, que repõe ATP nos primeiros segundos de esforço intenso. O efeito aparece mais em séries curtas e repetidas.</p></article>
+    <article class="card"><span class="tag">cãibra e rigor</span><h4>Sem ATP, a ponte não solta</h4><p>No rigor mortis, a falta de ATP deixa as cabeças de miosina presas à actina. Durante a vida, isso mostra por que o ATP é necessário tanto para gerar força quanto para encerrá-la.</p></article>
+  </div>
+
+  <section class="panel" aria-label="Referências">
+    <h3>Referências</h3>
+    <ol class="refs">
+      <li>Hall JE, Hall ME. Guyton & Hall: Tratado de Fisiologia Médica. Capítulos de contração do músculo esquelético e transmissão neuromuscular.</li>
+      <li>Powers SK, Howley ET. Fisiologia do Exercício: Teoria e Aplicação ao Condicionamento e ao Desempenho.</li>
+      <li>Allen DG, Lamb GD, Westerblad H. Skeletal muscle fatigue: cellular mechanisms. Physiol Rev, 2008.</li>
+      <li>Henneman E. Relation between size of neurons and their susceptibility to discharge. Science, 1957.</li>
+    </ol>
+    <p class="note">Animações esquemáticas: tamanhos e quantidades foram simplificados para mostrar a sequência, não a escala real.</p>
+  </section>
+
+  <footer>
+    <span><b>MG COACH</b> · Matheus Garrido · @matheusgarrido</span>
+    <span>Teoria e Prática</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var css = getComputedStyle(document.documentElement);
+  function tok(n){ return css.getPropertyValue(n).trim(); }
+  var C = {bg:tok('--bg'), surface:tok('--surface'), s2:tok('--surface-2'), line:tok('--line'), fg:tok('--fg'), muted:tok('--muted'), dim:tok('--dim'), accent:tok('--accent'),
+           na:tok('--na'), k:tok('--k'), ca:tok('--ca'), ach:tok('--ach'), atp:tok('--atp'), actin:tok('--actin'), myo:tok('--myo'), mono:tok('--mono')};
+  var $ = function(id){ return document.getElementById(id); };
+  var NS = 'http://www.w3.org/2000/svg';
+  var svg = $('scene');
+  function el(tag, a, p){ var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); (p||svg).appendChild(e); return e; }
+  function txt(x, y, s, col, size, anchor, weight, p){ var t = el('text', {x:x, y:y, fill:col||C.muted, 'font-family':C.mono, 'font-size':size||12, 'text-anchor':anchor||'start', 'font-weight':weight||500}, p); t.textContent = s; return t; }
+  function clear(){ while (svg.firstChild) svg.removeChild(svg.firstChild); el('rect', {x:0, y:0, width:600, height:380, fill:C.surface}); }
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var STEPS = [
+    {s:'neuron', w:'medula espinhal e axônio', t:'Potencial de ação no neurônio motor',
+     p:'O comando sai do córtex motor e chega ao neurônio motor na medula. No axônio, canais de sódio se abrem e o sódio entra: a membrana vai de cerca de −70 mV para +30 mV (despolarização). Depois o potássio sai e a membrana volta ao repouso (repolarização). Com a mielina, o impulso salta de nó em nó, o que o torna muito mais rápido.',
+     c:[['Na⁺ entra','na'],['K⁺ sai','k'],['mielina','fg']], k:'<b>Tudo ou nada:</b> se o estímulo passa do limiar, o potencial de ação acontece sempre com o mesmo tamanho. O que muda a força é quantas vezes ele dispara e quantos neurônios disparam.'},
+    {s:'nmj', ph:'release', w:'terminal do axônio', t:'Cálcio entra e libera acetilcolina',
+     p:'Quando o potencial de ação chega ao terminal do axônio, canais de cálcio dependentes de voltagem se abrem. O cálcio que entra faz as vesículas se fundirem à membrana e liberarem acetilcolina na fenda sináptica.',
+     c:[['Ca²⁺','ca'],['vesículas','fg'],['acetilcolina','ach']], k:'<b>Sinal elétrico vira químico:</b> o neurônio não toca na fibra. Quem atravessa a fenda é a acetilcolina.'},
+    {s:'nmj', ph:'bind', w:'placa motora', t:'Acetilcolina abre os receptores da fibra',
+     p:'A acetilcolina se liga aos receptores nicotínicos da placa motora. Eles são canais: abrem e deixam o sódio entrar na fibra. Isso gera o potencial de placa motora, normalmente grande o suficiente para disparar um potencial de ação na fibra muscular.',
+     c:[['receptor nicotínico','ach'],['Na⁺ entra','na']], k:'<b>Margem de segurança:</b> cada potencial de ação do neurônio gera um potencial de ação na fibra. A junção neuromuscular é feita para não falhar.'},
+    {s:'ttub', ph:'ap', w:'sarcolema e túbulos T', t:'O sinal entra na fibra pelos túbulos T',
+     p:'O potencial de ação se espalha pelo sarcolema, a membrana da fibra, e entra pelos túbulos T, invaginações que levam o sinal ao interior da fibra, perto de cada miofibrila.',
+     c:[['sarcolema','fg'],['túbulo T','accent']], k:'<b>Por que túbulos T:</b> as fibras são grossas. Sem eles, o sinal demoraria demais para chegar às miofibrilas do centro.'},
+    {s:'ttub', ph:'release', w:'tríade: túbulo T e retículo', t:'O retículo sarcoplasmático libera cálcio',
+     p:'No túbulo T, o receptor de di-hidropiridina (DHPR) funciona como sensor de voltagem. Quando a membrana despolariza, ele muda de forma e puxa o receptor de rianodina (RyR1) do retículo sarcoplasmático. O RyR1 abre e o cálcio armazenado sai para o citoplasma.',
+     c:[['DHPR','accent'],['RyR1','ca'],['Ca²⁺ sai','ca']], k:'<b>Acoplamento excitação-contração:</b> é a passagem do sinal elétrico (membrana) para o químico (cálcio). No músculo esquelético, ela é mecânica: o DHPR puxa o RyR1 diretamente.'},
+    {s:'fil', ph:'reveal', w:'miofibrila: filamento fino', t:'Cálcio na troponina: os sítios ficam livres',
+     p:'Em repouso, a tropomiosina cobre os sítios de ligação da actina. O cálcio se liga à troponina C, o complexo da troponina muda de forma e arrasta a tropomiosina. Os sítios ficam expostos para a miosina.',
+     c:[['Ca²⁺','ca'],['troponina','ach'],['tropomiosina','na']], k:'<b>Interruptor:</b> o cálcio é o que liga e desliga a contração. Sem cálcio, a tropomiosina bloqueia a actina.'},
+    {s:'fil', ph:'attach', w:'miofibrila: ponte cruzada', t:'A miosina se liga à actina',
+     p:'A cabeça da miosina já está armada, com ADP e fosfato (Pi) presos, de uma hidrólise de ATP anterior. Com os sítios livres, ela se liga à actina e forma a ponte cruzada.',
+     c:[['miosina','accent'],['ADP + Pi','atp'],['actina','fg']], k:'<b>Energia guardada:</b> a cabeça está como uma mola carregada pela quebra do ATP anterior.'},
+    {s:'fil', ph:'stroke', w:'miofibrila: golpe de força', t:'Golpe de força: a actina desliza',
+     p:'A saída do fosfato dispara o golpe de força: a cabeça gira e puxa o filamento de actina em direção ao centro do sarcômero, cerca de 10 nm por ciclo. Depois o ADP sai e a cabeça fica presa à actina.',
+     c:[['Pi sai','atp'],['ADP sai','atp'],['~10 nm','fg']], k:'<b>É aqui que a força acontece.</b> Milhares de cabeças fazem isso de forma alternada, para o filamento não escorregar de volta.'},
+    {s:'fil', ph:'detach', w:'miofibrila: soltura e rearme', t:'ATP solta e rearma a miosina',
+     p:'Um novo ATP se liga à cabeça da miosina, e ela se solta da actina. A miosina quebra esse ATP em ADP e Pi, e a energia rearma a cabeça para o próximo ciclo. O ciclo se repete enquanto houver cálcio e ATP.',
+     c:[['ATP liga','atp'],['hidrólise','atp'],['novo ciclo','fg']], k:'<b>Sem ATP, a cabeça não solta.</b> É o que acontece no rigor mortis.'},
+    {s:'sarc', w:'sarcômero', t:'O sarcômero encurta',
+     p:'Os filamentos deslizam uns sobre os outros e as linhas Z se aproximam. A banda I e a zona H diminuem; a banda A, que é o comprimento da miosina, não muda. Os filamentos não encurtam, eles deslizam. Milhares de sarcômeros em série encurtam a fibra.',
+     c:[['linha Z','fg'],['banda A constante','accent'],['banda I e zona H diminuem','na']], k:'<b>Teoria dos filamentos deslizantes:</b> por isso a força depende do comprimento do músculo, que define quantas pontes cruzadas conseguem se formar.'},
+    {s:'nmj', ph:'ache', w:'fenda sináptica', t:'Fim do estímulo: a acetilcolina é degradada',
+     p:'Quando o neurônio para de disparar, a acetilcolina para de ser liberada. A que está na fenda é quebrada pela acetilcolinesterase em acetato e colina, e a colina volta ao terminal para fabricar nova acetilcolina. Os receptores fecham e a fibra repolariza.',
+     c:[['acetilcolinesterase','k'],['acetato + colina','ach']], k:'<b>Desliga rápido:</b> a enzima quebra a acetilcolina em menos de um milissegundo, para cada impulso gerar só uma resposta.'},
+    {s:'ttub', ph:'serca', w:'retículo sarcoplasmático', t:'Relaxamento: o cálcio volta ao retículo',
+     p:'Sem novos potenciais de ação, o RyR1 fecha. A bomba SERCA devolve o cálcio para o retículo sarcoplasmático, gastando ATP. O cálcio sai da troponina, a tropomiosina volta a cobrir os sítios e a fibra relaxa.',
+     c:[['SERCA','ca'],['ATP','atp'],['tropomiosina cobre','na']], k:'<b>Relaxar também gasta energia.</b> Sem ATP para a SERCA, o cálcio fica no citoplasma e o músculo não relaxa direito.'}
+  ];
+  var SHORT = ['impulso','terminal','placa','túbulo T','cálcio','troponina','ligação','golpe','ATP','sarcômero','ACh fim','relaxa'];
+  var SCN = {neuron:'neurônio motor', nmj:'junção neuromuscular', ttub:'túbulo T e retículo', fil:'filamentos de actina e miosina', sarc:'sarcômero'};
+  var COLOR = {na:C.na, k:C.k, ca:C.ca, ach:C.ach, atp:C.atp, fg:C.fg, accent:C.accent};
+
+  var tl = $('timeline');
+  STEPS.forEach(function(s, i){
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'tl'; b.id = 'tl-'+i;
+    b.innerHTML = String(i+1).padStart(2,'0') + '<small>'+SHORT[i]+'</small>';
+    b.setAttribute('aria-label', 'Etapa '+(i+1)+': '+s.t);
+    b.addEventListener('click', function(){ go(i); });
+    tl.appendChild(b);
+  });
+
+  var state = {i:0, t0:null, auto:false, autoT:0};
+  function go(i){
+    state.i = Math.max(0, Math.min(STEPS.length-1, i)); state.t0 = null; state.autoT = 0;
+    var s = STEPS[state.i];
+    for (var k=0;k<STEPS.length;k++){ var b = $('tl-'+k); b.classList.toggle('done', k < state.i); if (k === state.i) b.setAttribute('aria-current','step'); else b.removeAttribute('aria-current'); }
+    $('iNum').textContent = String(state.i+1).padStart(2,'0');
+    $('iWhere').textContent = 'onde: '+s.w;
+    $('iTitle').textContent = s.t; $('iText').textContent = s.p;
+    $('iChips').innerHTML = s.c.map(function(c){ return '<span class="chip" style="color:'+COLOR[c[1]]+'">'+c[0]+'</span>'; }).join('');
+    $('iKey').innerHTML = s.k;
+    $('sceneName').textContent = SCN[s.s];
+    $('stepCount').textContent = (state.i+1)+' / '+STEPS.length;
+    $('prev').disabled = state.i === 0; $('next').textContent = state.i === STEPS.length-1 ? 'Recomeçar ↺' : 'Próxima →';
+    if (reduce) draw(1.2);
+  }
+  $('prev').addEventListener('click', function(){ go(state.i-1); });
+  $('next').addEventListener('click', function(){ go(state.i === STEPS.length-1 ? 0 : state.i+1); });
+  $('auto').addEventListener('change', function(e){ state.auto = e.target.checked; state.autoT = 0; });
+  document.addEventListener('keydown', function(e){ if (e.target.tagName === 'INPUT') return; if (e.key === 'ArrowRight') go(state.i+1); if (e.key === 'ArrowLeft') go(state.i-1); });
+
+  function cl(x){ return Math.max(0, Math.min(1, x)); }
+  function ease(x){ x = cl(x); return x*x*(3-2*x); }
+  function lerp(a,b,t){ return a+(b-a)*t; }
+
+  // ===== cenas =====
+  function sceneNeuron(t){
+    var T = (t % 3.2)/3.2;
+    el('circle', {cx:70, cy:150, r:36, fill:'#2a2420', stroke:C.dim, 'stroke-width':2});
+    el('circle', {cx:70, cy:150, r:12, fill:C.dim});
+    [[40,120,8,92],[42,180,10,206],[70,114,62,80],[96,124,120,96]].forEach(function(d){ el('line', {x1:d[0], y1:d[1], x2:d[2], y2:d[3], stroke:C.dim, 'stroke-width':4, 'stroke-linecap':'round'}); });
+    txt(70, 206, 'corpo celular', C.muted, 11, 'middle');
+    el('line', {x1:106, y1:150, x2:520, y2:150, stroke:C.dim, 'stroke-width':6});
+    var nodes = [];
+    for (var x=130; x<500; x+=70){ el('rect', {x:x, y:138, width:58, height:24, rx:12, fill:'#3a332e'}); nodes.push(x+64); }
+    nodes.unshift(116);
+    txt(160, 128, 'mielina', C.muted, 11);
+    txt(nodes[2], 182, 'nó', C.muted, 11, 'middle');
+    el('path', {d:'M520 150 L560 120 M520 150 L566 150 M520 150 L560 180', stroke:C.dim, 'stroke-width':5, 'stroke-linecap':'round', fill:'none'});
+    el('rect', {x:566, y:96, width:30, height:110, rx:8, fill:'#4a2a1a'});
+    txt(581, 222, 'fibra', C.muted, 11, 'middle');
+    var idx = Math.floor(T*nodes.length*1.1); idx = Math.min(nodes.length-1, idx);
+    nodes.forEach(function(nx, i){
+      var on = i === idx, past = i < idx;
+      el('circle', {cx:nx, cy:150, r:on ? 11 : 5, fill:on ? C.accent : (past ? '#6b3a1c' : C.line)});
+      if (on){
+        for (var j=0;j<3;j++) el('circle', {cx:nx - 8 + j*8, cy:126 - (T*60 % 8), r:3.5, fill:C.na});
+        for (var j2=0;j2<2;j2++) el('circle', {cx:nx - 4 + j2*8, cy:178 + (T*60 % 8), r:3.5, fill:C.k});
+      }
+    });
+    txt(nodes[idx], 112, 'Na⁺ entra', C.na, 11, 'middle', 600);
+    // gráfico de potencial
+    var gx = 70, gy = 250, gw = 460, gh = 110;
+    el('rect', {x:gx-10, y:gy-14, width:gw+20, height:gh+28, rx:10, fill:C.bg, stroke:C.line});
+    function vm(u){ if (u < .2) return -70; if (u < .3) return -70 + 100*ease((u-.2)/.1); if (u < .45) return 30 - 115*ease((u-.3)/.15); if (u < .7) return -85 + 15*ease((u-.45)/.25); return -70; }
+    function Y(v){ return gy + (40 - v)/130*gh; }
+    el('line', {x1:gx, y1:Y(-70), x2:gx+gw, y2:Y(-70), stroke:C.line, 'stroke-dasharray':'4 4'});
+    el('line', {x1:gx, y1:Y(-55), x2:gx+gw, y2:Y(-55), stroke:'#3a332e', 'stroke-dasharray':'2 5'});
+    txt(gx+gw-4, Y(-55)-4, 'limiar −55', C.dim, 10, 'end');
+    var d = '', u0 = (T*1.15) % 1;
+    for (var i=0;i<=100;i++){ var u = i/100; d += (i ? 'L' : 'M') + (gx + u*gw).toFixed(1) + ',' + Y(vm(u)).toFixed(1); }
+    el('path', {d:d, fill:'none', stroke:C.accent, 'stroke-width':3});
+    el('circle', {cx:gx + u0*gw, cy:Y(vm(u0)), r:5, fill:C.fg});
+    txt(gx, gy-2, '+30 mV', C.dim, 10); txt(gx, Y(-70)+14, '−70 mV repouso', C.dim, 10);
+    txt(gx + .26*gw, Y(10), 'despolarização', C.na, 10.5, 'end', 600);
+    txt(gx + .40*gw, Y(-20), 'repolarização', C.k, 10.5, 'start', 600);
+  }
+
+  function sceneNMJ(t, ph){
+    var T = (t % 3.6)/3.6;
+    // terminal
+    el('path', {d:'M120 20 L480 20 Q520 20 520 70 L520 150 Q520 160 510 160 L90 160 Q80 160 80 150 L80 70 Q80 20 120 20 Z', fill:'#2a2420', stroke:C.dim, 'stroke-width':2});
+    txt(300, 44, 'terminal do axônio', C.muted, 12, 'middle');
+    // fibra
+    var fy = 214;
+    var fold = 'M40 '+fy;
+    for (var x=40; x<=560; x+=40){ fold += ' L'+(x+14)+' '+fy+' L'+(x+16)+' '+(fy+34)+' L'+(x+24)+' '+(fy+34)+' L'+(x+26)+' '+fy; }
+    el('path', {d:fold+' L580 '+fy+' L580 370 L20 370 L20 '+fy+' Z', fill:'#4a2a1a', stroke:'#7a4a2c', 'stroke-width':2});
+    txt(300, 352, 'fibra muscular (placa motora)', C.muted, 12, 'middle');
+    txt(28, 190, 'fenda', C.dim, 11);
+    var chX = [170, 300, 430], recX = [];
+    for (var rx=60; rx<=560; rx+=40) recX.push(rx+20);
+    chX.forEach(function(x){ el('rect', {x:x-7, y:152, width:14, height:16, rx:3, fill:C.ca, opacity:.85}); });
+    recX.forEach(function(x){ el('rect', {x:x-6, y:fy-6, width:12, height:12, rx:3, fill:(ph === 'bind' ? C.ach : '#7a5a2a')}); });
+    // vesículas
+    var ves = [[150,100],[200,120],[250,96],[300,124],[350,100],[400,118],[450,98],[180,72],[330,70],[420,74]];
+    var rel = ph === 'release' ? ease((T-.25)/.35) : (ph === 'bind' ? 1 : 0);
+    ves.forEach(function(v, i){
+      var target = chX[i % 3], fuse = i < 6 ? rel : 0;
+      var cx = lerp(v[0], target + ((i%2) ? 14 : -14), fuse), cy = lerp(v[1], 150, fuse);
+      if (ph === 'ache') fuse = 0;
+      el('circle', {cx:cx, cy:cy, r:fuse > .95 ? 0 : 13, fill:'none', stroke:C.ach, 'stroke-width':2, opacity:.9});
+      if (fuse < .95) for (var j=0;j<3;j++) el('circle', {cx:cx - 5 + j*5, cy:cy + ((j%2) ? 3 : -3), r:2.4, fill:C.ach});
+    });
+    if (ph === 'release'){
+      var ca = ease(T/.3);
+      chX.forEach(function(x){ for (var j=0;j<3;j++) el('circle', {cx:x - 8 + j*8, cy:lerp(196, 130, ca) - j*6, r:4, fill:C.ca}); });
+      txt(300, 186, 'Ca²⁺ entra', C.ca, 12, 'middle', 600);
+      if (T > .55){ var d = ease((T-.55)/.45); chX.forEach(function(x){ for (var j=0;j<6;j++) el('circle', {cx:x - 30 + j*12, cy:lerp(162, fy-10, d) + (j%2)*4, r:3, fill:C.ach}); }); }
+    }
+    if (ph === 'bind'){
+      recX.forEach(function(x, i){
+        el('circle', {cx:x, cy:fy-12, r:3.4, fill:C.ach});
+        var d = ((T*1.4 + i*0.13) % 1);
+        el('circle', {cx:x, cy:lerp(fy-26, fy+44, d), r:3.6, fill:C.na, opacity:1 - d*0.4});
+      });
+      txt(300, 186, 'ACh liga nos receptores', C.ach, 12, 'middle', 600);
+      txt(300, 290, 'Na⁺ entra → potencial de placa motora', C.na, 12.5, 'middle', 600);
+      var pulse = (T*2) % 1;
+      el('line', {x1:300 - pulse*260, y1:268, x2:300 + pulse*260, y2:268, stroke:C.accent, 'stroke-width':3, opacity:1 - pulse});
+    }
+    if (ph === 'ache'){
+      recX.forEach(function(x){ el('rect', {x:x-6, y:fy-6, width:12, height:12, rx:3, fill:'#3a332e'}); });
+      [110, 230, 350, 470].forEach(function(x, i){
+        var u = (T + i*.17) % 1;
+        el('path', {d:'M'+(x-12)+' 188 l12 -10 l12 10 l-12 10 z', fill:C.k});
+        if (u < .5){ el('circle', {cx:x + 22 - u*40, cy:188, r:4, fill:C.ach}); }
+        else { var v = ease((u-.5)/.5); el('circle', {cx:x - 6, cy:lerp(188, 150, v), r:3.4, fill:'#c9b27a'}); el('circle', {cx:x + 8, cy:lerp(188, 206, v), r:3, fill:'#8a7d73'}); }
+      });
+      txt(300, 290, 'acetilcolinesterase: ACh → acetato + colina', C.k, 12.5, 'middle', 600);
+      txt(300, 310, 'a colina volta ao terminal para fabricar nova ACh', C.muted, 11.5, 'middle');
+    }
+  }
+
+  function sceneTTub(t, ph){
+    var T = (t % 3.4)/3.4;
+    el('rect', {x:0, y:40, width:600, height:340, fill:'#2a1a12'});
+    el('path', {d:'M0 40 L270 40 L270 330 Q300 350 330 330 L330 40 L600 40', fill:'none', stroke:C.fg, 'stroke-width':3});
+    txt(20, 30, 'sarcolema', C.muted, 12); txt(300, 362, 'túbulo T', C.accent, 12, 'middle', 600);
+    // retículo
+    [[70,150,190,120],[340,150,190,120]].forEach(function(r){ el('rect', {x:r[0], y:r[1], width:r[2], height:r[3], rx:24, fill:'#1d3a2a', stroke:C.ca, 'stroke-width':2}); });
+    txt(165, 140, 'retículo sarcoplasmático', C.ca, 11.5, 'middle'); txt(435, 140, 'retículo sarcoplasmático', C.ca, 11.5, 'middle');
+    // DHPR e RyR
+    var open = ph === 'release' ? ease((T-.15)/.2) : 0;
+    [[270, -1],[330, 1]].forEach(function(d){
+      var x = d[0], s = d[1];
+      el('rect', {x:x - (s < 0 ? 10 : 0), y:196, width:10, height:26, rx:3, fill:C.accent, transform:'rotate('+(s*open*25)+' '+(x)+' 209)'});
+      el('rect', {x:(s < 0 ? 252 : 340), y:192 + open*(-6), width:8, height:34 + open*12, rx:3, fill:open > .5 ? C.ca : '#3a6a4a'});
+    });
+    txt(300, 186, 'DHPR', C.accent, 11, 'middle', 600);
+    txt(300, 246, 'RyR1', C.ca, 11, 'middle', 600);
+    // cálcio
+    var caIn = 18, rng = 7;
+    function rand(i){ var x = Math.sin(i*12.9898)*43758.5453; return x - Math.floor(x); }
+    for (var i=0;i<caIn;i++){
+      var side = i % 2, bx = side ? 360 + rand(i)*150 : 90 + rand(i)*150, by = 168 + rand(i+3)*86;
+      var out = 0;
+      if (ph === 'release') out = ease((T-.3 - rand(i+7)*.2)/.35);
+      if (ph === 'serca') out = 1 - ease((T-.05 - rand(i+7)*.3)/.45);
+      var ox = side ? 420 + rand(i+9)*170 : 10 + rand(i+9)*170, oy = 290 + rand(i+11)*60;
+      if (ph === 'ap') out = 0;
+      el('circle', {cx:lerp(bx, ox, out), cy:lerp(by, oy, out), r:4.2, fill:C.ca});
+    }
+    if (ph === 'ap'){
+      var u = T, px, py;
+      if (u < .45){ px = lerp(40, 270, u/.45); py = 40; } else { px = 270; py = lerp(40, 320, (u-.45)/.55); }
+      el('circle', {cx:px, cy:py, r:10, fill:C.accent}); el('circle', {cx:600 - px, cy:py, r:10, fill:C.accent});
+      el('rect', {x:150, y:84, width:300, height:24, rx:12, fill:C.bg}); txt(300, 101, 'potencial de ação desce pelo túbulo T', C.accent, 12, 'middle', 600);
+    }
+    if (ph === 'release') txt(300, 300, 'Ca²⁺ sai para o citoplasma', C.ca, 12.5, 'middle', 600);
+    if (ph === 'serca'){
+      [[120,270],[210,270],[390,270],[480,270]].forEach(function(p, i){
+        el('rect', {x:p[0]-9, y:p[1]-8, width:18, height:16, rx:4, fill:C.ca});
+        var u = (T + i*.2) % 1; el('circle', {cx:p[0] + 14, cy:p[1] + 8 + u*20, r:3.5, fill:C.atp, opacity:1-u});
+      });
+      txt(300, 136 - 100 + 4, '', C.ca, 1); el('rect', {x:150, y:46, width:300, height:26, rx:13, fill:C.bg}); txt(300, 64, 'SERCA bombeia o Ca²⁺ de volta (gasta ATP)', C.ca, 12.5, 'middle', 600);
+    }
+  }
+
+  function sceneFil(t, ph){
+    var cycle = (t % 3.2)/3.2;
+    var ay = 120, my = 270;
+    var slide = 0, revealed = 1;
+    if (ph === 'reveal'){ revealed = ease((t % 3.2 - .6)/1.0); }
+    var sub = cycle;
+    var stroke = ph === 'reveal' ? 0 : ease((sub - .3)/.25);
+    var totalSlide = ph === 'reveal' ? 0 : (Math.floor(t/3.2) % 6)*14 + stroke*14;
+    // actina
+    for (var x = -40; x < 640; x += 18){
+      var xx = x - (totalSlide % 36);
+      el('circle', {cx:xx, cy:ay, r:9, fill:C.actin, opacity:.9});
+      el('circle', {cx:xx + 9, cy:ay + 13, r:9, fill:'#b8ab9e', opacity:.9});
+    }
+    txt(14, ay - 26, 'actina (filamento fino)', C.muted, 11.5);
+    // sítios
+    var sites = [];
+    for (var s = 60; s < 600; s += 108){ var sx = s - (totalSlide % 108); sites.push(sx); el('circle', {cx:sx, cy:ay + 6, r:4.5, fill:revealed > .5 ? C.accent : '#3a332e'}); }
+    // tropomiosina
+    var tpy = lerp(ay + 6, ay - 14, revealed);
+    el('path', {d:'M0 '+tpy+' Q150 '+(tpy-4)+' 300 '+tpy+' T600 '+tpy, stroke:C.na, 'stroke-width':5, fill:'none', opacity:.9});
+    // troponina
+    for (var tp = 30; tp < 600; tp += 108){
+      var tx = tp - (totalSlide % 108);
+      el('circle', {cx:tx, cy:tpy - 4, r:7, fill:C.ach}); el('circle', {cx:tx + 9, cy:tpy - 2, r:6, fill:'#d8a53a'}); el('circle', {cx:tx + 4, cy:tpy + 6, r:5, fill:'#b88a2a'});
+      if (ph === 'reveal' && revealed > .1) el('circle', {cx:tx - 6, cy:lerp(tpy - 60, tpy - 10, Math.min(1, revealed*1.5)), r:4.5, fill:C.ca});
+      else if (ph !== 'reveal') el('circle', {cx:tx - 6, cy:tpy - 10, r:4.5, fill:C.ca});
+    }
+    txt(586, tpy - 22, 'tropomiosina', C.na, 11, 'end', 600);
+    // miosina
+    el('rect', {x:0, y:my, width:600, height:26, rx:13, fill:'#5a2a10'});
+    txt(14, my + 54, 'miosina (filamento grosso)', C.muted, 11.5);
+    var heads = [150, 300, 450];
+    heads.forEach(function(hx, i){
+      var phase = ph === 'reveal' ? -1 : sub;
+      var angle, attached, label = '';
+      var offs = (i - 1)*0.0;
+      if (ph === 'reveal'){ angle = -35; attached = false; }
+      else {
+        if (phase < .3){ angle = -35; attached = ease(phase/.3) > .6; }
+        else if (phase < .55){ angle = lerp(-35, 15, ease((phase-.3)/.25)); attached = true; }
+        else if (phase < .75){ angle = 15; attached = phase < .62; }
+        else { angle = lerp(15, -35, ease((phase-.75)/.25)); attached = false; }
+      }
+      var base = {x:hx, y:my}, a = angle*Math.PI/180, neckL = 60;
+      var tip = {x:base.x + Math.sin(a)*neckL, y:base.y - Math.cos(a)*neckL};
+      var reach = attached ? 1 : (ph === 'reveal' ? 0 : (phase < .3 ? ease(phase/.3) : 0));
+      var hy = lerp(tip.y + 8, ay + 26, reach*0.92);
+      el('line', {x1:base.x, y1:base.y, x2:tip.x, y2:hy + 10, stroke:'#8a4a1a', 'stroke-width':6, 'stroke-linecap':'round'});
+      el('ellipse', {cx:tip.x, cy:hy, rx:16, ry:11, fill:C.myo, transform:'rotate('+(angle)+' '+tip.x+' '+hy+')'});
+      // moléculas
+      if (ph !== 'reveal'){
+        if (phase < .4) { el('circle', {cx:tip.x - 6, cy:hy + 2, r:3.6, fill:C.atp}); el('circle', {cx:tip.x + 5, cy:hy + 2, r:2.6, fill:'#ffb3c9'}); }
+        else if (phase < .5) { el('circle', {cx:tip.x - 6, cy:hy + 2, r:3.6, fill:C.atp}); el('circle', {cx:tip.x + 20 + (phase-.4)*200, cy:hy + 16 + (phase-.4)*120, r:2.6, fill:'#ffb3c9'}); }
+        else if (phase < .62) { el('circle', {cx:tip.x - 18 - (phase-.5)*200, cy:hy + 20, r:3.6, fill:C.atp, opacity:1-(phase-.5)*6}); }
+        else if (phase < .75) { el('circle', {cx:tip.x, cy:lerp(hy + 60, hy + 2, ease((phase-.6)/.1)), r:4.4, fill:C.atp}); }
+        else { el('circle', {cx:tip.x - 6, cy:hy + 2, r:3.6, fill:C.atp}); el('circle', {cx:tip.x + 5, cy:hy + 2, r:2.6, fill:'#ffb3c9'}); }
+      }
+    });
+    // rótulo de fase
+    var lbl = '', on = '';
+    if (ph === 'reveal'){ lbl = revealed > .5 ? 'Ca²⁺ na troponina: tropomiosina sai, sítios livres' : 'repouso: tropomiosina cobre os sítios'; }
+    else {
+      if (sub < .3){ lbl = '1 · ligação à actina (ADP + Pi presos)'; on = 'attach'; }
+      else if (sub < .55){ lbl = '2 · golpe de força: Pi sai, a cabeça gira'; on = 'stroke'; }
+      else if (sub < .62){ lbl = '2 · ADP sai: cabeça presa à actina'; on = 'stroke'; }
+      else if (sub < .75){ lbl = '3 · ATP liga: a cabeça solta'; on = 'detach'; }
+      else { lbl = '3 · ATP → ADP + Pi: cabeça rearmada'; on = 'detach'; }
+    }
+    var hl = on === ph;
+    el('rect', {x:60, y:186, width:480, height:30, rx:15, fill:hl || ph === 'reveal' ? C.accent : C.s2, opacity:hl || ph === 'reveal' ? 1 : .9});
+    txt(300, 206, lbl, hl || ph === 'reveal' ? C.bg : C.fg, 12.5, 'middle', 600);
+    if (ph !== 'reveal'){ txt(586, 350, 'a actina desliza ←', C.muted, 11.5, 'end'); }
+  }
+
+  function sceneSarc(t){
+    var T = (t % 3.6)/3.6, c = T < .5 ? ease(T/.5) : 1 - ease((T-.5)/.5);
+    var cx = 300, half = lerp(250, 175, c), zl = cx - half, zr = cx + half, Lact = 150, Lmyo = 160;
+    el('rect', {x:0, y:60, width:600, height:220, fill:'#1d1512'});
+    // banda A
+    el('rect', {x:cx - Lmyo, y:70, width:Lmyo*2, height:200, fill:'rgba(255,107,26,.07)'});
+    // Z
+    [zl, zr].forEach(function(z){ el('path', {d:'M'+z+' 70 l-8 20 l16 20 l-16 20 l16 20 l-16 20 l16 20 l-16 20 l16 20 l-8 20', fill:'none', stroke:C.fg, 'stroke-width':3}); });
+    // actina
+    [100, 140, 200, 240].forEach(function(y){
+      el('line', {x1:zl, y1:y, x2:zl + Lact, y2:y, stroke:C.actin, 'stroke-width':4});
+      el('line', {x1:zr, y1:y, x2:zr - Lact, y2:y, stroke:C.actin, 'stroke-width':4});
+    });
+    // miosina
+    [120, 170, 220].forEach(function(y){
+      el('line', {x1:cx - Lmyo, y1:y, x2:cx + Lmyo, y2:y, stroke:C.myo, 'stroke-width':9, 'stroke-linecap':'round'});
+      for (var x = cx - Lmyo + 10; x < cx + Lmyo - 8; x += 16){ if (Math.abs(x - cx) < 14) continue; var s = x < cx ? -1 : 1; el('line', {x1:x, y1:y - 5, x2:x + s*6, y2:y - 13, stroke:C.myo, 'stroke-width':3}); el('line', {x1:x, y1:y + 5, x2:x + s*6, y2:y + 13, stroke:C.myo, 'stroke-width':3}); }
+    });
+    el('line', {x1:cx, y1:74, x2:cx, y2:266, stroke:C.muted, 'stroke-width':1.5, 'stroke-dasharray':'3 4'});
+    // medidas
+    function dim(x1, x2, y, label, col){ el('line', {x1:x1, y1:y, x2:x2, y2:y, stroke:col, 'stroke-width':2}); el('line', {x1:x1, y1:y-6, x2:x1, y2:y+6, stroke:col, 'stroke-width':2}); el('line', {x1:x2, y1:y-6, x2:x2, y2:y+6, stroke:col, 'stroke-width':2}); txt((x1+x2)/2, y - 9, label, col, 11.5, 'middle', 600); }
+    dim(zl, zr, 304, 'sarcômero (Z a Z) '+(half*2/150*1.2).toFixed(2)+' µm', C.fg);
+    dim(cx - Lmyo, cx + Lmyo, 336, 'banda A: não muda', C.accent);
+    var hz = Math.max(0, (zr - Lact) - (zl + Lact));
+    dim(zl, cx - Lmyo, 362, 'banda I', C.na); dim(cx + Lmyo, zr, 362, 'banda I', C.na);
+    if (hz > 4) dim(zl + Lact, zr - Lact, 52, 'zona H', C.k); else txt(cx, 50, 'zona H quase some', C.k, 11.5, 'middle', 600);
+    txt(zl, 290 - 230, 'Z', C.fg, 13, 'middle', 700); txt(zr, 60, 'Z', C.fg, 13, 'middle', 700); txt(cx, 286, 'linha M', C.muted, 10.5, 'middle');
+  }
+
+  function draw(t){
+    clear(); var s = STEPS[state.i];
+    if (s.s === 'neuron') sceneNeuron(t);
+    else if (s.s === 'nmj') sceneNMJ(t, s.ph);
+    else if (s.s === 'ttub') sceneTTub(t, s.ph);
+    else if (s.s === 'fil') sceneFil(t, s.ph);
+    else sceneSarc(t);
+  }
+  var last = null;
+  function loop(ts){
+    if (state.t0 === null) state.t0 = ts;
+    var t = (ts - state.t0)/1000;
+    if (state.auto){ if (last !== null) state.autoT += (ts - last)/1000; if (state.autoT > 7){ go(state.i === STEPS.length-1 ? 0 : state.i+1); } }
+    last = ts;
+    draw(t);
+    requestAnimationFrame(loop);
+  }
+  go(0);
+  if (reduce) draw(1.2); else requestAnimationFrame(loop);
+
+  // ===== somação e tétano =====
+  var tw = $('tw');
+  function fit(cv){ var r = cv.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio||1, 2.5); var w = Math.max(1, Math.round(r.width*dpr)), h = Math.max(1, Math.round(r.height*dpr)); if (cv.width !== w || cv.height !== h){ cv.width = w; cv.height = h; } return {w:w, h:h, cssW:r.width}; }
+  function twitch(ms){ if (ms < 0) return 0; var tp = 40; return (ms/tp)*Math.exp(1 - ms/tp); }
+  function drawTw(){
+    var hz = +$('hz').value, f = fit(tw), ctx = tw.getContext('2d'), W = 600, H = 260, sc = f.w/W, narrow = f.cssW < 480, fs = narrow ? 17 : 12;
+    ctx.setTransform(1,0,0,1,0,0); ctx.fillStyle = C.surface; ctx.fillRect(0,0,f.w,f.h); ctx.setTransform(sc,0,0,sc,0,0);
+    var pad = {l:narrow ? 58 : 44, r:12, t:16, b:narrow ? 44 : 34}, dur = 1000, isi = 1000/hz;
+    var pts = [], mx = 0;
+    for (var ms=0; ms<=dur; ms+=2){ var s = 0; for (var k=0; k*isi < ms && k*isi < 700; k++) s += twitch(ms - k*isi); var force = 3.6*(1 - Math.exp(-s/2.6)); pts.push([ms, force]); }
+    function X(ms){ return pad.l + ms/dur*(W-pad.l-pad.r); }
+    function Y(v){ return pad.t + (1 - v/3.7)*(H-pad.t-pad.b); }
+    ctx.font = '500 '+fs+'px '+C.mono; ctx.textBaseline = 'middle'; ctx.textAlign = 'right';
+    [[0,'0'],[1,'1 abalo'],[3.6,'máx']].forEach(function(g){ ctx.strokeStyle = g[0] === 0 ? C.muted : C.line; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(pad.l, Y(g[0])); ctx.lineTo(W-pad.r, Y(g[0])); ctx.stroke(); ctx.fillStyle = C.muted; ctx.fillText(g[1], pad.l-6, Y(g[0])); });
+    for (var k=0; k*isi < 700; k++){ ctx.strokeStyle = C.na; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(X(k*isi), H-pad.b); ctx.lineTo(X(k*isi), H-pad.b-10); ctx.stroke(); }
+    ctx.beginPath(); pts.forEach(function(p,i){ var x = X(p[0]), y = Y(p[1]); if (i) ctx.lineTo(x,y); else ctx.moveTo(x,y); });
+    ctx.strokeStyle = C.accent; ctx.lineWidth = 3.5; ctx.lineJoin = 'round'; ctx.stroke();
+    ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillStyle = C.dim; ctx.fillText('impulsos do neurônio', pad.l, H-pad.b+8); ctx.textAlign = 'right'; ctx.fillText('1 s', W-pad.r, H-pad.b+8);
+    var st, tx;
+    if (hz <= 6){ st = 'abalo isolado'; tx = 'Cada impulso gera um abalo, e a fibra relaxa por completo antes do próximo. A força é baixa.'; }
+    else if (hz <= 20){ st = 'somação'; tx = 'O próximo impulso chega antes do relaxamento completo: os abalos se somam e a força sobe, porque ainda há cálcio no citoplasma.'; }
+    else if (hz <= 40){ st = 'tétano incompleto'; tx = 'A força fica alta com pequenas oscilações. É a faixa mais comum em contrações voluntárias fortes.'; }
+    else { st = 'tétano completo'; tx = 'Os impulsos são tão frequentes que o cálcio não chega a voltar ao retículo: a força fica no máximo daquela fibra, sem oscilar.'; }
+    $('twState').textContent = st; $('twText').textContent = tx; $('hzOut').textContent = hz+' Hz';
+  }
+  $('hz').addEventListener('input', drawTw);
+  if (window.ResizeObserver) new ResizeObserver(drawTw).observe(tw); else window.addEventListener('resize', drawTw);
+  drawTw();
+})();
+</script>
+</body>
+</html>
