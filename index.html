@@ -171,7 +171,7 @@ iframe{flex:1;width:100%;border:0;background:var(--bg);display:block}
    - id: nome curto, sem espaço nem acento (vira o link: .../#id)
    - arquivo: nome exato do arquivo .html
    ================================================================ */
-var VERSAO = '20261104-0700'; // mude a cada publicação para o celular não usar páginas antigas guardadas
+var VERSAO = '20261104-0705'; // mude a cada publicação para o celular não usar páginas antigas guardadas
 var ASSUNTOS = [
   { grupo: 'Fisiologia', id: 'sistemas-energeticos', titulo: 'Sistemas energéticos: aeróbio × anaeróbio', resumo: 'Tempo, intensidade, musculação e cardio: o que sobe e o que desce.', arquivo: 'sistemas-energeticos.html' },
   { grupo: 'Fisiologia', id: 'contracao', titulo: 'Contração muscular: do impulso ao relaxamento', resumo: 'As 12 etapas, do potencial de ação ao relaxamento, animadas.', arquivo: 'contracao-muscular.html' },
@@ -222,7 +222,20 @@ var ASSUNTOS = [
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape') setMenu(false); });
   list.addEventListener('click', function(e){ if (e.target.closest('.item')) setMenu(false); });
 
+  // No celular, cada assunto abre como página própria (o Safari do iPhone trava controles dentro de quadros).
+  var MOBILE = window.matchMedia && window.matchMedia('(max-width: 860px)').matches;
+  function pageUrl(a){ return a.arquivo + '?v=' + VERSAO; }
+  if (MOBILE){
+    document.addEventListener('click', function(e){
+      var link = e.target.closest('a[href^="#"]'); if (!link) return;
+      var id = link.getAttribute('href').slice(1), a = ASSUNTOS.filter(function(x){ return x.id === id; })[0];
+      if (!a) return; e.preventDefault(); setMenu(false); location.href = pageUrl(a);
+    });
+    var hid = decodeURIComponent(location.hash.replace(/^#/, '')), ha = ASSUNTOS.filter(function(x){ return x.id === hid; })[0];
+    if (ha){ history.replaceState(null, '', location.pathname); location.replace(pageUrl(ha)); }
+  }
   function route(){
+    if (MOBILE){ $('viewer').hidden = true; $('home').hidden = false; $('frame').removeAttribute('src'); return; }
     var id = decodeURIComponent(location.hash.replace(/^#/, ''));
     var a = ASSUNTOS.filter(function(x){ return x.id === id; })[0];
     var links = list.querySelectorAll('.item');
