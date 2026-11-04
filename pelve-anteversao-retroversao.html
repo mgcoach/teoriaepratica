@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script>(function(){var e=true;try{e=window.self!==window.top}catch(x){}if(e)document.documentElement.classList.add("embed")})();</script>
+<title>Anteversão e Retroversão Pélvica</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Animação interativa da inclinação pélvica: lordose, quadril e comprimento dos músculos que formam o binário de forças da pelve.">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: palco anatômico em vista lateral (pelve gira sobre a cabeça do fêmur) ao lado do painel de ângulos e comprimento muscular; binário de forças, reações em cadeia, aplicação no treino e evidências. Visual escuro deliberado (identidade MG COACH). */
+:root{
+  --bg:#0a0a0a;
+  --surface:#13110f;
+  --surface-2:#1b1815;
+  --line:#2c2622;
+  --fg:#f5efe8;
+  --muted:#9d9188;
+  --dim:#5f5650;
+  --bone:#d9cfc4;
+  --accent:#ff6b1a;
+  --ante:#ff6b1a;
+  --retro:#5cc6ff;
+  --display:"Big Shoulders Display", Impact, "Arial Narrow", sans-serif;
+  --text:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--fg)}
+html{-webkit-text-size-adjust:100%;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font-family:var(--text);font-size:15px;line-height:1.5}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));display:flex;flex-direction:column;gap:22px}
+.back{font-family:var(--mono);font-size:12px;color:var(--muted);text-decoration:none;align-self:flex-start;border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+.back:hover{color:var(--fg);border-color:var(--muted)}
+.embed .back{display:none}
+header{display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.eyebrow b{color:var(--accent);font-weight:600}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(40px,8vw,78px);line-height:.92;text-transform:uppercase;margin:0;text-wrap:balance}
+h1 .a{color:var(--ante)} h1 .r{color:var(--retro)}
+.lede{margin:0;max-width:64ch;color:var(--muted);font-size:16px}
+.lede strong{color:var(--fg);font-weight:600}
+
+.studio{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.stage-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.state{display:flex;flex-direction:column;min-width:0}
+.state b{font-family:var(--display);font-weight:700;font-size:24px;text-transform:uppercase;line-height:1.05}
+.state small{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.btn{font:600 13px/1 var(--text);color:var(--fg);background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:9px 14px;cursor:pointer;min-width:92px}
+.btn:hover{border-color:var(--muted)}
+svg.anat{display:block;width:100%;height:auto;max-width:100%}
+.presets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:12px 14px 0;border-top:1px solid var(--line)}
+.pre{font:600 13px/1.1 var(--text);color:var(--muted);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 8px;cursor:pointer}
+.pre[aria-pressed="true"]{color:var(--bg);border-color:transparent}
+.pre[data-k="retro"][aria-pressed="true"]{background:var(--retro)}
+.pre[data-k="tipica"][aria-pressed="true"]{background:var(--fg)}
+.pre[data-k="ante"][aria-pressed="true"]{background:var(--ante)}
+.scrub{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px}
+.scrub label{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+.scrub output{font-family:var(--mono);color:var(--fg);font-variant-numeric:tabular-nums}
+.scrub .ends{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--dim)}
+input[type=range]{width:100%;margin:0;accent-color:var(--fg)}
+
+.side{display:flex;flex-direction:column;gap:14px;min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.panel h2,.panel h3{margin:0;font-family:var(--display);font-weight:700;font-size:24px;text-transform:uppercase;letter-spacing:.02em}
+.note{margin:0;color:var(--muted);font-size:14px;max-width:64ch}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.stat{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.stat .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.stat .v{font-family:var(--display);font-weight:700;font-size:28px;line-height:1;font-variant-numeric:tabular-nums}
+.stat .v small{font-size:15px;color:var(--muted)}
+.stat .t{font-size:12px;color:var(--muted)}
+
+.mgroup{display:flex;flex-direction:column;gap:8px}
+.mgroup h4{margin:0;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.mgroup h4 i{width:12px;height:3px;border-radius:2px;display:inline-block}
+.mrow{display:grid;grid-template-columns:minmax(0,9.5em) minmax(0,1fr) 3.4em;gap:10px;align-items:center;font-size:13.5px}
+.mrow span:first-child{min-width:0}
+.mbar{position:relative;height:10px;background:var(--surface-2);border-radius:5px;overflow:hidden}
+.mbar::after{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--muted)}
+.mbar i{position:absolute;top:0;bottom:0;border-radius:5px}
+.mrow output{font-family:var(--mono);font-size:12px;text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.mends{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--dim);padding-left:calc(9.5em + 10px);padding-right:calc(3.4em + 10px)}
+
+.couples{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.cp{border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px;background:var(--bg);min-width:0}
+.cp.a{box-shadow:inset 0 3px 0 var(--ante)} .cp.r{box-shadow:inset 0 3px 0 var(--retro)}
+.cp h4{margin:0;font-family:var(--display);font-weight:700;font-size:24px;text-transform:uppercase;line-height:1}
+.cp.a h4{color:var(--ante)} .cp.r h4{color:var(--retro)}
+.cp ul{margin:0;padding-left:18px;color:var(--muted);font-size:14px;display:flex;flex-direction:column;gap:4px}
+.cp ul b{color:var(--fg);font-weight:600}
+
+.chain{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.ch{border:1px solid var(--line);border-radius:14px;padding:16px;background:var(--bg);display:flex;flex-direction:column;gap:10px;min-width:0}
+.ch h4{margin:0;font-size:16px;font-weight:700}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0}
+.steps li{display:grid;grid-template-columns:5.6em minmax(0,1fr);gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:14px}
+.steps li:first-child{border-top:0}
+.steps li b{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);padding-top:2px}
+.steps li span{color:var(--fg)}
+
+.train{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.tr{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:var(--bg);display:flex;flex-direction:column;gap:6px;min-width:0}
+.tr .tag{align-self:flex-start;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;border-radius:999px;padding:3px 9px;border:1px solid currentColor}
+.tag.a{color:var(--ante)} .tag.r{color:var(--retro)} .tag.n{color:var(--fg)}
+.tr h4{margin:0;font-size:16px;font-weight:700;line-height:1.25}
+.tr p{margin:0;color:var(--muted);font-size:14px}
+
+.evid{border:1px solid var(--line);border-radius:14px;padding:16px;background:var(--bg);display:flex;flex-direction:column;gap:8px}
+.evid ul{margin:0;padding-left:18px;color:var(--muted);font-size:14px;display:flex;flex-direction:column;gap:6px}
+.evid ul b{color:var(--fg);font-weight:600}
+.refs{margin:0;padding-left:18px;color:var(--muted);font-size:13px;display:flex;flex-direction:column;gap:4px}
+footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+footer b{color:var(--accent);font-weight:600}
+
+@media (max-width:860px){
+  .studio{grid-template-columns:minmax(0,1fr)}
+  .couples,.chain{grid-template-columns:minmax(0,1fr)}
+  .train{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:420px){
+  .stats .v{font-size:24px}
+  .mrow{grid-template-columns:minmax(0,7.6em) minmax(0,1fr) 3.2em;font-size:12.5px}
+  .mends{padding-left:calc(7.6em + 10px);padding-right:calc(3.2em + 10px)}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./" target="_top">← Teoria e Prática</a>
+
+  <header>
+    <div class="eyebrow"><b>MG COACH</b> · Postura e biomecânica</div>
+    <h1><span class="a">Anteversão</span> e <span class="r">retroversão</span> pélvica</h1>
+    <p class="lede">A pelve gira sobre a cabeça dos fêmures. Quando ela inclina para a frente ou para trás, a <strong>lordose lombar</strong>, o <strong>ângulo do quadril</strong> e o <strong>comprimento dos músculos</strong> que se prendem nela mudam juntos. Arraste a pelve e veja cada efeito.</p>
+  </header>
+
+  <noscript><p class="note">Esta animação precisa de JavaScript ativado para funcionar.</p></noscript>
+
+  <div class="studio">
+    <section class="stage" aria-label="Pelve em vista lateral">
+      <div class="stage-head">
+        <div class="state" aria-live="polite"><b id="stName">Faixa típica</b><small id="stSub">leve anteversão, a mais comum</small></div>
+        <button type="button" class="btn" id="play">Pausar</button>
+      </div>
+      <svg class="anat" id="anat" viewBox="0 0 400 520" role="img" aria-label="Vista lateral da pelve, coluna lombar e fêmur, voltada para a direita"></svg>
+      <div class="presets" role="group" aria-label="Posições">
+        <button type="button" class="pre" data-k="retro" aria-pressed="false">Retroversão</button>
+        <button type="button" class="pre" data-k="tipica" aria-pressed="true">Típica</button>
+        <button type="button" class="pre" data-k="ante" aria-pressed="false">Anteversão</button>
+      </div>
+      <div class="scrub">
+        <label for="tilt">Inclinação EIAS–EIPS <output id="tiltOut">10°</output></label>
+        <input type="range" id="tilt" min="-10" max="28" step="0.5" value="10">
+        <div class="ends"><span>← retroversão</span><span>anteversão →</span></div>
+      </div>
+    </section>
+
+    <div class="side">
+      <section class="panel" aria-label="Ângulos">
+        <h2>O que muda</h2>
+        <div class="stats">
+          <div class="stat"><span class="k">Sacro</span><span class="v" id="vSS">40<small>°</small></span><span class="t">inclinação sacral</span></div>
+          <div class="stat"><span class="k">Lombar</span><span class="v" id="vLL">50<small>°</small></span><span class="t" id="tLL">lordose típica</span></div>
+          <div class="stat"><span class="k">Quadril</span><span class="v" id="vHip">0<small>°</small></span><span class="t" id="tHip">posição de referência</span></div>
+        </div>
+        <p class="note" id="stNote"></p>
+      </section>
+
+      <section class="panel" aria-label="Comprimento muscular">
+        <h2>Comprimento dos músculos</h2>
+        <p class="note">Variação em relação à faixa típica. Quem encurta está do lado para onde a pelve gira.</p>
+        <div class="mgroup">
+          <h4 style="color:var(--ante)"><i style="background:var(--ante)"></i>Puxam para a anteversão</h4>
+          <div id="gAnte"></div>
+        </div>
+        <div class="mgroup">
+          <h4 style="color:var(--retro)"><i style="background:var(--retro)"></i>Puxam para a retroversão</h4>
+          <div id="gRetro"></div>
+        </div>
+        <div class="mends"><span>encurta</span><span>alonga</span></div>
+      </section>
+    </div>
+  </div>
+
+  <section class="panel" aria-label="Binário de forças">
+    <h3>Binário de forças da pelve</h3>
+    <p class="note">A pelve funciona como uma gangorra apoiada nos quadris. Dois grupos puxam em lados opostos, um em cima e outro embaixo, e o equilíbrio entre eles define a posição.</p>
+    <div class="couples">
+      <article class="cp a">
+        <h4>Anteversão</h4>
+        <ul>
+          <li><b>Iliopsoas</b> puxa a lombar e a pelve para a frente e para baixo.</li>
+          <li><b>Reto femoral</b> (na EIAI) e <b>tensor da fáscia lata</b> (na EIAS) puxam a frente da pelve para baixo.</li>
+          <li><b>Eretores da espinha</b> e <b>quadrado lombar</b> puxam a parte de trás da pelve para cima.</li>
+        </ul>
+      </article>
+      <article class="cp r">
+        <h4>Retroversão</h4>
+        <ul>
+          <li><b>Reto abdominal</b> e <b>oblíquo externo</b> puxam o púbis para cima.</li>
+          <li><b>Glúteo máximo</b> puxa a parte de trás da pelve para baixo.</li>
+          <li><b>Isquiotibiais</b> puxam o túber isquiático para baixo.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="panel" aria-label="Reações em cadeia">
+    <h3>Reações em cadeia</h3>
+    <p class="note">A pelve liga a coluna aos membros inferiores. Uma mudança nela pode subir para a coluna ou descer para o quadril, o joelho e o pé, e o caminho inverso também acontece. São tendências frequentes, não regras: cada pessoa compensa de um jeito.</p>
+    <div class="chain">
+      <article class="ch">
+        <h4 style="color:var(--ante)">Anteversão acentuada</h4>
+        <ol class="steps">
+          <li><b>Coluna</b><span>A lordose lombar tende a aumentar para manter o tronco ereto.</span></li>
+          <li><b>Quadril</b><span>Fica em flexão em relação ao fêmur e pode se associar à rotação interna do fêmur.</span></li>
+          <li><b>Joelho</b><span>Em algumas pessoas, aparece com joelho em hiperextensão ou valgo.</span></li>
+          <li><b>Pé</b><span>A rotação interna do membro pode favorecer a pronação.</span></li>
+        </ol>
+      </article>
+      <article class="ch">
+        <h4 style="color:var(--retro)">Retroversão acentuada</h4>
+        <ol class="steps">
+          <li><b>Coluna</b><span>A lordose lombar tende a retificar; a coluna torácica pode compensar com mais cifose e a cabeça ir à frente.</span></li>
+          <li><b>Quadril</b><span>Fica em extensão em relação ao fêmur e pode se associar à rotação externa.</span></li>
+          <li><b>Joelho</b><span>Pode aparecer com joelhos levemente flexionados ou, no padrão sway-back, em hiperextensão.</span></li>
+          <li><b>Pé</b><span>A carga tende a ir para o calcanhar.</span></li>
+        </ol>
+      </article>
+    </div>
+  </section>
+
+  <section class="panel" aria-label="No treino">
+    <h3>No treino</h3>
+    <div class="train">
+      <article class="tr"><span class="tag r">retroversão</span><h4>Fundo do agachamento</h4><p>Quando o quadril chega ao limite de flexão, a pelve gira para trás e a lombar flexiona. O ponto em que isso acontece varia com a anatomia do quadril e com a posição dos pés.</p></article>
+      <article class="tr"><span class="tag r">retroversão</span><h4>Fundo do terra, RDL e stiff</h4><p>Isquiotibiais curtos puxam o túber isquiático e antecipam a retroversão. A amplitude útil termina antes de a lombar perder a posição neutra.</p></article>
+      <article class="tr"><span class="tag r">retroversão</span><h4>Topo da elevação pélvica</h4><p>Uma leve retroversão no final ajuda a completar a extensão do quadril com o glúteo, sem terminar o movimento arqueando a lombar.</p></article>
+      <article class="tr"><span class="tag r">retroversão</span><h4>Prancha</h4><p>Inclinar a pelve levemente para trás costuma aumentar a exigência sobre o reto abdominal e os oblíquos.</p></article>
+      <article class="tr"><span class="tag a">anteversão</span><h4>Desenvolvimento acima da cabeça</h4><p>Quando falta mobilidade de ombro ou de coluna torácica, a pessoa compensa arqueando a lombar e antevertendo a pelve.</p></article>
+      <article class="tr"><span class="tag n">neutra</span><h4>Supino com arco</h4><p>O arco lombar com anteversão é uma escolha técnica para encurtar a amplitude e estabilizar as escápulas. Não é postura de rotina.</p></article>
+    </div>
+  </section>
+
+  <section class="panel" aria-label="Evidências">
+    <h3>Postura não é diagnóstico</h3>
+    <div class="evid">
+      <ul>
+        <li><b>A anteversão é o padrão mais comum.</b> Em pessoas sem dor, a inclinação EIAS–EIPS fica em média entre 9° e 13°, com mulheres um pouco acima dos homens.</li>
+        <li><b>A variação entre pessoas é grande.</b> Em radiografias, os valores vão de leve retroversão até mais de 25° de anteversão.</li>
+        <li><b>A ligação com dor é fraca.</b> A postura estática em pé tem relação pobre e inconsistente com sintomas lombares. Por isso, vale mais comparar a pessoa com ela mesma e observar o controle da pelve durante o movimento.</li>
+        <li><b>Alongar sozinho não resolve.</b> Força dos extensores do quadril e controle do core se associam melhor à mobilidade pélvica nas tarefas do que o alongamento isolado do flexor do quadril.</li>
+      </ul>
+      <ol class="refs">
+        <li>Clinical measures of pelvic tilt in physical therapy. International Journal of Sports Physical Therapy (revisão).</li>
+        <li>Herrington L. Assessment of the degree of pelvic tilt within a normal asymptomatic population. Manual Therapy, 2011.</li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>
+    <span><b>MG COACH</b> · Matheus Garrido · @matheusgarrido</span>
+    <span>Modelo didático, vista lateral</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var css = getComputedStyle(document.documentElement);
+  function tok(n){ return css.getPropertyValue(n).trim(); }
+  var C = {bg:tok('--bg'), surface:tok('--surface'), line:tok('--line'), fg:tok('--fg'), muted:tok('--muted'), dim:tok('--dim'),
+           bone:tok('--bone'), ante:tok('--ante'), retro:tok('--retro'), mono:tok('--mono')};
+  var NS = 'http://www.w3.org/2000/svg';
+  var svg = document.getElementById('anat');
+  function el(tag, attrs, parent){ var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); (parent||svg).appendChild(e); return e; }
+
+  // ---------- geometria (px do viewBox; y para baixo; voltado para a direita)
+  var HIP = {x:200, y:300};
+  var BASE = 9.5;                       // inclinação EIAS–EIPS do desenho de referência
+  var SS0 = 40;                         // inclinação sacral na referência
+  var T12 = {x:186, y:92};              // fixo (tórax)
+  var LOC = {                           // pontos da pelve, relativos ao quadril, na referência
+    psis:{x:-58,y:-64}, asis:{x:62,y:-44}, aiis:{x:56,y:-20}, crest:{x:-2,y:-94},
+    pubis:{x:44,y:28}, isch:{x:-22,y:42}, s1:{x:-30,y:-80}, coccyx:{x:-58,y:18},
+    gluO:{x:-64,y:-34}, psoasP:{x:46,y:-6}
+  };
+  var FIX = {                           // pontos fixos (fêmur, tíbia, tórax)
+    lesser:{x:206,y:342}, patella:{x:226,y:462}, gluI:{x:186,y:362}, hamI:{x:186,y:486},
+    xiph:{x:268,y:96}, t12post:{x:150,y:96}
+  };
+  function rot(p, d){ var r = d*Math.PI/180, c = Math.cos(r), s = Math.sin(r); return {x:HIP.x + p.x*c - p.y*s, y:HIP.y + p.x*s + p.y*c}; }
+  function bez(p0,p1,p2,p3,t){ var u = 1-t; return {x:u*u*u*p0.x+3*u*u*t*p1.x+3*u*t*t*p2.x+t*t*t*p3.x, y:u*u*u*p0.y+3*u*u*t*p1.y+3*u*t*t*p2.y+t*t*t*p3.y}; }
+  function bezT(p0,p1,p2,p3,t){ var u = 1-t; return {x:3*u*u*(p1.x-p0.x)+6*u*t*(p2.x-p1.x)+3*t*t*(p3.x-p2.x), y:3*u*u*(p1.y-p0.y)+6*u*t*(p2.y-p1.y)+3*t*t*(p3.y-p2.y)}; }
+  function dist(a,b){ return Math.hypot(a.x-b.x, a.y-b.y); }
+
+  function model(tilt){
+    var d = tilt - BASE, P = {};
+    for (var k in LOC) P[k] = rot(LOC[k], d);
+    var ss = SS0 + d, r = ss*Math.PI/180;
+    var n = {x:Math.sin(r), y:-Math.cos(r)};                 // normal da placa de S1 (para cima e para a frente)
+    var e = {x:Math.cos(r), y:Math.sin(r)};                  // placa terminal, para a frente e para baixo
+    var endT = 10*Math.PI/180, dTop = {x:-Math.sin(endT), y:-Math.cos(endT)};
+    var c0 = P.s1, c1 = {x:c0.x+n.x*48, y:c0.y+n.y*48}, c3 = T12, c2 = {x:T12.x-dTop.x*50, y:T12.y-dTop.y*50};
+    var L3 = bez(c0,c1,c2,c3,0.5), L3t = bezT(c0,c1,c2,c3,0.5), L3n = Math.hypot(L3t.x,L3t.y);
+    var L3a = {x:L3.x + (-L3t.y/L3n)*-14, y:L3.y + (L3t.x/L3n)*-14};
+    // garante o lado anterior (x maior)
+    var alt = {x:L3.x + (L3t.y/L3n)*-14, y:L3.y + (-L3t.x/L3n)*-14}; if (alt.x > L3a.x) L3a = alt;
+    var len = {
+      psoas: 90 + dist(P.psoasP, FIX.lesser),   // ventre que contorna a borda anterior da pelve até o trocânter menor
+      rf: dist(P.aiis, FIX.patella),
+      ere: dist(P.psis, FIX.t12post),
+      ra: dist(P.pubis, FIX.xiph),
+      glu: dist(P.gluO, FIX.gluI),
+      ham: dist(P.isch, FIX.hamI)
+    };
+    return {d:d, P:P, ss:ss, ll:ss+10, curve:[c0,c1,c2,c3], e:e, n:n, L3a:L3a, len:len};
+  }
+  var REF = model(BASE);
+
+  // ---------- montagem do SVG
+  el('defs', {}).innerHTML = '<marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="'+C.muted+'"/></marker>';
+  el('rect', {x:0, y:0, width:400, height:520, fill:C.surface});
+  // tórax fixo (costelas esquemáticas)
+  var thor = el('g', {opacity:'.55'});
+  el('path', {d:'M186,92 C178,60 176,30 182,0', fill:'none', stroke:C.bone, 'stroke-width':10, 'stroke-linecap':'round'}, thor);
+  for (var i=0;i<5;i++){ var y = 8+i*18; el('path', {d:'M182,'+y+' C215,'+(y+6)+' 252,'+(y+22)+' 270,'+(y+46), fill:'none', stroke:C.dim, 'stroke-width':3, 'stroke-linecap':'round'}, thor); }
+  el('text', {x:280, y:30, fill:C.muted, 'font-family':C.mono, 'font-size':12}, thor).textContent = 'tórax';
+  // perna fixa
+  el('path', {d:'M200,300 L208,470', stroke:C.bone, 'stroke-width':20, 'stroke-linecap':'round', opacity:'.9'});
+  el('path', {d:'M208,478 L206,530', stroke:C.bone, 'stroke-width':17, 'stroke-linecap':'round', opacity:'.8'});
+  el('ellipse', {cx:228, cy:462, rx:7, ry:11, fill:C.bone, opacity:'.9'});
+  el('text', {x:222, y:410, fill:C.muted, 'font-family':C.mono, 'font-size':12}).textContent = 'fêmur';
+
+  // camadas dinâmicas
+  var gMus = el('g', {});
+  var gBone = el('g', {});
+  var gLbl = el('g', {});
+  var MUS = [
+    {k:'psoas', nome:'Iliopsoas', g:'ante'},
+    {k:'rf', nome:'Reto femoral', g:'ante'},
+    {k:'ere', nome:'Eretores lombares', g:'ante'},
+    {k:'ra', nome:'Reto abdominal', g:'retro'},
+    {k:'glu', nome:'Glúteo máximo', g:'retro'},
+    {k:'ham', nome:'Isquiotibiais', g:'retro'}
+  ];
+  MUS.forEach(function(m){ m.path = el('path', {fill:'none', stroke:C[m.g], 'stroke-width':5, 'stroke-linecap':'round', 'stroke-linejoin':'round', opacity:'.85'}, gMus); });
+  var pelvis = el('path', {fill:'rgba(217,207,196,.16)', stroke:C.bone, 'stroke-width':2.5, 'stroke-linejoin':'round'}, gBone);
+  var acet = el('circle', {r:15, fill:C.bone}, gBone);
+  var sacrum = el('path', {fill:'rgba(217,207,196,.28)', stroke:C.bone, 'stroke-width':2, 'stroke-linejoin':'round'}, gBone);
+  var verts = []; for (var v=0; v<5; v++) verts.push({b:el('path', {fill:C.bone, opacity:'.95'}, gBone), s:el('path', {stroke:C.bone, 'stroke-width':4, 'stroke-linecap':'round', opacity:'.7'}, gBone)});
+  var lineAP = el('line', {stroke:C.fg, 'stroke-width':1.5, 'stroke-dasharray':'5 5', opacity:'.8'}, gLbl);
+  var horiz = el('line', {stroke:C.muted, 'stroke-width':1, opacity:'.6'}, gLbl);
+  var arc = el('path', {fill:'none', stroke:C.fg, 'stroke-width':1.5}, gLbl);
+  var dA = el('circle', {r:5, fill:C.fg}, gLbl), dP = el('circle', {r:5, fill:C.fg}, gLbl);
+  var tA = el('text', {fill:C.fg, 'font-family':C.mono, 'font-size':12.5, 'font-weight':600}, gLbl); tA.textContent = 'EIAS';
+  var tP = el('text', {fill:C.fg, 'font-family':C.mono, 'font-size':12.5, 'font-weight':600, 'text-anchor':'end'}, gLbl); tP.textContent = 'EIPS';
+  var tAng = el('text', {fill:C.fg, 'font-family':C.mono, 'font-size':15, 'font-weight':600}, gLbl);
+  var ssLine = el('line', {stroke:C.dim, 'stroke-width':1.2, 'stroke-dasharray':'3 4'}, gLbl);
+  var tL = el('text', {fill:C.muted, 'font-family':C.mono, 'font-size':12}, gLbl); tL.textContent = 'lombar';
+  var tS = el('text', {fill:C.muted, 'font-family':C.mono, 'font-size':12, 'text-anchor':'end'}, gLbl); tS.textContent = 'sacro';
+  var rotArrow = el('path', {fill:'none', stroke:C.muted, 'stroke-width':1.6, 'marker-end':'url(#arr)'}, gLbl);
+
+  function pts(a){ return a.map(function(p,i){ return (i?'L':'M')+p.x.toFixed(1)+','+p.y.toFixed(1); }).join(' '); }
+
+  // painel de músculos
+  var rows = {};
+  MUS.forEach(function(m){
+    var host = document.getElementById(m.g === 'ante' ? 'gAnte' : 'gRetro');
+    var row = document.createElement('div'); row.className = 'mrow';
+    row.innerHTML = '<span>'+m.nome+'</span><div class="mbar"><i style="background:var(--'+m.g+')"></i></div><output>0%</output>';
+    host.appendChild(row); rows[m.k] = {bar:row.querySelector('i'), out:row.querySelector('output')};
+  });
+
+  // ---------- render
+  var $ = function(id){ return document.getElementById(id); };
+  var state = {tilt:10, playing:true, t0:null, stateKey:null};
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) state.playing = false;
+
+  function render(){
+    var M = model(state.tilt), P = M.P, d = M.d;
+    // pelve
+    var outline = ['psis','crest','asis'].map(function(k){ return P[k]; });
+    var mid1 = rot({x:58,y:-32}, d), mid2 = rot({x:34,y:-4}, d), mid3 = rot({x:30,y:20}, d), mid4 = rot({x:-36,y:4}, d), mid5 = rot({x:-48,y:-24}, d);
+    var c1 = rot({x:-36,y:-96}, d), c2 = rot({x:34,y:-90}, d);
+    pelvis.setAttribute('d', 'M'+P.psis.x+','+P.psis.y+' Q'+c1.x+','+c1.y+' '+P.crest.x+','+P.crest.y+' Q'+c2.x+','+c2.y+' '+P.asis.x+','+P.asis.y+
+      ' Q'+mid1.x+','+mid1.y+' '+P.aiis.x+','+P.aiis.y+' Q'+mid2.x+','+mid2.y+' '+mid3.x+','+mid3.y+' L'+P.pubis.x+','+P.pubis.y+
+      ' Q'+rot({x:14,y:46},d).x+','+rot({x:14,y:46},d).y+' '+P.isch.x+','+P.isch.y+' Q'+mid4.x+','+mid4.y+' '+mid5.x+','+mid5.y+' Z');
+    acet.setAttribute('cx', HIP.x); acet.setAttribute('cy', HIP.y);
+    // sacro: placa de S1 + corpo até o cóccix
+    var hw = 16, sA = {x:P.s1.x+M.e.x*hw, y:P.s1.y+M.e.y*hw}, sP = {x:P.s1.x-M.e.x*hw, y:P.s1.y-M.e.y*hw};
+    var sMid = rot({x:-40,y:-30}, d), sBack = rot({x:-62,y:-40}, d);
+    sacrum.setAttribute('d', 'M'+sP.x+','+sP.y+' L'+sA.x+','+sA.y+' Q'+sMid.x+','+sMid.y+' '+P.coccyx.x+','+P.coccyx.y+' Q'+sBack.x+','+sBack.y+' '+sP.x+','+sP.y+' Z');
+    // vértebras L5 → L1
+    var cv = M.curve;
+    for (var i=0;i<5;i++){
+      var t = 0.1 + i*0.2, c = bez(cv[0],cv[1],cv[2],cv[3],t), tg = bezT(cv[0],cv[1],cv[2],cv[3],t), tl = Math.hypot(tg.x,tg.y);
+      var u = {x:tg.x/tl, y:tg.y/tl}, w = {x:-u.y, y:u.x}; if (w.x < 0){ w.x = -w.x; w.y = -w.y; }   // w = anterior
+      var hh = 9, ww = 15;
+      var q = [{x:c.x+w.x*ww+u.x*hh,y:c.y+w.y*ww+u.y*hh},{x:c.x+w.x*ww-u.x*hh,y:c.y+w.y*ww-u.y*hh},{x:c.x-w.x*ww-u.x*hh,y:c.y-w.y*ww-u.y*hh},{x:c.x-w.x*ww+u.x*hh,y:c.y-w.y*ww+u.y*hh}];
+      verts[i].b.setAttribute('d', pts(q)+' Z');
+      var sp0 = {x:c.x-w.x*ww, y:c.y-w.y*ww}, sp1 = {x:c.x-w.x*(ww+16)+u.x*4, y:c.y-w.y*(ww+16)+u.y*4};
+      verts[i].s.setAttribute('d', 'M'+sp0.x+','+sp0.y+' L'+sp1.x+','+sp1.y);
+    }
+    // músculos
+    var L = M.len;
+    function setM(k, a){ MUS.filter(function(m){ return m.k === k; })[0].path.setAttribute('d', pts(a)); }
+    setM('psoas', [M.L3a, P.psoasP, FIX.lesser]);
+    setM('rf', [P.aiis, {x:(P.aiis.x+FIX.patella.x)/2+16, y:(P.aiis.y+FIX.patella.y)/2}, FIX.patella]);
+    setM('ere', [P.psis, {x:(P.psis.x+FIX.t12post.x)/2-14, y:(P.psis.y+FIX.t12post.y)/2}, FIX.t12post]);
+    setM('ra', [P.pubis, {x:(P.pubis.x+FIX.xiph.x)/2+26, y:(P.pubis.y+FIX.xiph.y)/2}, FIX.xiph]);
+    setM('glu', [P.gluO, {x:(P.gluO.x+FIX.gluI.x)/2-16, y:(P.gluO.y+FIX.gluI.y)/2+4}, FIX.gluI]);
+    setM('ham', [P.isch, {x:(P.isch.x+FIX.hamI.x)/2-10, y:(P.isch.y+FIX.hamI.y)/2}, FIX.hamI]);
+    // linha EIAS–EIPS + ângulo
+    lineAP.setAttribute('x1', P.psis.x-12); lineAP.setAttribute('y1', P.psis.y - (P.asis.y-P.psis.y)/(P.asis.x-P.psis.x)*12);
+    lineAP.setAttribute('x2', P.asis.x+30); lineAP.setAttribute('y2', P.asis.y + (P.asis.y-P.psis.y)/(P.asis.x-P.psis.x)*30);
+    horiz.setAttribute('x1', P.psis.x); horiz.setAttribute('y1', P.psis.y); horiz.setAttribute('x2', P.psis.x+150); horiz.setAttribute('y2', P.psis.y);
+    var ang = Math.atan2(P.asis.y-P.psis.y, P.asis.x-P.psis.x), R = 56;
+    var ax = P.psis.x+R*Math.cos(ang), ay = P.psis.y+R*Math.sin(ang);
+    arc.setAttribute('d', 'M'+(P.psis.x+R)+','+P.psis.y+' A'+R+','+R+' 0 0 '+(ang>0?1:0)+' '+ax+','+ay);
+    dA.setAttribute('cx', P.asis.x); dA.setAttribute('cy', P.asis.y); dP.setAttribute('cx', P.psis.x); dP.setAttribute('cy', P.psis.y);
+    tA.setAttribute('x', P.asis.x+10); tA.setAttribute('y', P.asis.y-10);
+    tP.setAttribute('x', P.psis.x-10); tP.setAttribute('y', P.psis.y-10);
+    var tv = Math.round(state.tilt);
+    tAng.textContent = (tv > 0 ? tv+'°' : tv < 0 ? tv+'°' : '0°');
+    tAng.setAttribute('x', P.psis.x+R+8); tAng.setAttribute('y', P.psis.y + (ang > 0 ? 18 : -8));
+    // inclinação sacral (horizontal sob a placa)
+    ssLine.setAttribute('x1', P.s1.x-30); ssLine.setAttribute('y1', P.s1.y); ssLine.setAttribute('x2', P.s1.x+34); ssLine.setAttribute('y2', P.s1.y);
+    tL.setAttribute('x', 228); tL.setAttribute('y', 160);
+    tS.setAttribute('x', P.coccyx.x-8); tS.setAttribute('y', P.coccyx.y+4);
+    // seta de rotação conforme o sentido
+    var sgn = d >= 0 ? 1 : -1, r0 = 118, a0 = -95, a1 = -95 + sgn*Math.min(40, 6+Math.abs(d)*2.2);
+    var p0 = {x:HIP.x+r0*Math.cos(a0*Math.PI/180), y:HIP.y+r0*Math.sin(a0*Math.PI/180)}, p1 = {x:HIP.x+r0*Math.cos(a1*Math.PI/180), y:HIP.y+r0*Math.sin(a1*Math.PI/180)};
+    rotArrow.setAttribute('d', 'M'+p0.x+','+p0.y+' A'+r0+','+r0+' 0 0 '+(sgn>0?1:0)+' '+p1.x+','+p1.y);
+    rotArrow.setAttribute('opacity', Math.abs(d) < 1 ? 0 : .9);
+    rotArrow.setAttribute('stroke', d > 0 ? C.ante : C.retro);
+
+    // painel
+    $('tiltOut').textContent = (Math.round(state.tilt*10)/10)+'°';
+    $('tilt').value = state.tilt;
+    $('vSS').innerHTML = Math.round(M.ss)+'<small>°</small>';
+    $('vLL').innerHTML = Math.round(M.ll)+'<small>°</small>';
+    $('tLL').textContent = M.ll < 42 ? 'retificada' : (M.ll > 62 ? 'acentuada' : 'típica');
+    var hip = Math.round(d);
+    $('vHip').innerHTML = (hip > 0 ? '+' : '')+hip+'<small>°</small>';
+    $('tHip').textContent = Math.abs(hip) < 2 ? 'posição de referência' : (hip > 0 ? 'de flexão' : 'de extensão');
+    MUS.forEach(function(m){
+      var pct = (M.len[m.k]/REF.len[m.k]-1)*100, row = rows[m.k];
+      var w = Math.min(50, Math.abs(pct)/14*50);
+      row.bar.style.left = (pct >= 0 ? 50 : 50-w)+'%'; row.bar.style.width = w+'%';
+      row.out.textContent = (pct > 0 ? '+' : '')+pct.toFixed(0)+'%';
+      m.path.setAttribute('stroke-width', (4 + Math.max(0, -pct)*0.35).toFixed(1));
+    });
+    var key = state.tilt < 3 ? 'retro' : (state.tilt > 17 ? 'ante' : 'tipica');
+    if (key !== state.stateKey){
+      state.stateKey = key;
+      var info = {
+        retro:['Retroversão','EIAS no nível ou acima da EIPS','A pelve gira para trás. A lordose lombar diminui, o quadril vai para a extensão e os abdominais, o glúteo máximo e os isquiotibiais ficam encurtados.'],
+        tipica:['Faixa típica','leve anteversão, a mais comum','A maioria das pessoas sem dor tem a EIAS alguns graus abaixo da EIPS. Esta é a referência para as variações de comprimento.'],
+        ante:['Anteversão acentuada','EIAS bem abaixo da EIPS','A pelve gira para a frente. A lordose lombar aumenta, o quadril vai para a flexão e os flexores do quadril e os eretores lombares ficam encurtados.']
+      }[key];
+      $('stName').textContent = info[0]; $('stSub').textContent = info[1]; $('stNote').textContent = info[2];
+      document.querySelectorAll('.pre').forEach(function(b){ b.setAttribute('aria-pressed', b.getAttribute('data-k') === key ? 'true' : 'false'); });
+      $('tilt').style.accentColor = key === 'ante' ? C.ante : (key === 'retro' ? C.retro : C.fg);
+    }
+  }
+
+  // ---------- interação
+  var target = null;
+  function setPlaying(p){ var was = state.playing; state.playing = p; state.t0 = null; $('play').textContent = p ? 'Pausar' : 'Animar'; if (p && !was) requestAnimationFrame(tick); }
+  function tick(ts){
+    if (!state.playing) return;
+    if (state.t0 === null) state.t0 = ts - (Math.asin(Math.max(-1, Math.min(1, (state.tilt-9)/16))) / (2*Math.PI))*6400;
+    var ph = (ts - state.t0)/6400*2*Math.PI;
+    state.tilt = 9 + 16*Math.sin(ph);
+    render(); requestAnimationFrame(tick);
+  }
+  function animateTo(v){
+    setPlaying(false); target = v;
+    if (reduce){ state.tilt = v; render(); return; }
+    var from = state.tilt, t0 = null;
+    function step(ts){ if (target !== v) return; if (t0 === null) t0 = ts; var x = Math.min(1, (ts-t0)/600), e = 1-Math.pow(1-x,3);
+      state.tilt = from + (v-from)*e; render(); if (x < 1) requestAnimationFrame(step); }
+    requestAnimationFrame(step);
+  }
+  $('play').addEventListener('click', function(){ target = null; setPlaying(!state.playing); });
+  $('tilt').addEventListener('input', function(e){ target = null; setPlaying(false); state.tilt = +e.target.value; render(); });
+  document.querySelectorAll('.pre').forEach(function(b){
+    b.addEventListener('click', function(){ animateTo({retro:-6, tipica:10, ante:24}[b.getAttribute('data-k')]); });
+  });
+
+  $('play').textContent = state.playing ? 'Pausar' : 'Animar';
+  render();
+  if (state.playing) requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
